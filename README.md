@@ -22,6 +22,7 @@ source venv/bin/activate
 ```
 call venv/Scripts/activate
 ```
+If successful, you should see (venv) in your terminal. You can exit the environment with ```deactivate```
 
 ## 3. Install dependencies
 
