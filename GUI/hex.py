@@ -7,6 +7,7 @@ import pygame
 
 from constants import MINIMAL_RADIUS, RADIUS
 
+# TODO: Make a Hexagon parent class
 
 class HexagonTile:
 
@@ -55,6 +56,47 @@ class HexagonTile:
         """Renders the hexagon on the screen"""
         pygame.draw.polygon(screen, (150,150,150), self.vertices)
 
-    def render_highlight(self, screen, border_colour) -> None:
-        """Draws a border around the hexagon with the specified colour"""
-        pygame.draw.aalines(screen, border_colour, closed=True, points=self.vertices)
+
+class HexagonOutline:
+
+    def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float]):
+        self.axial_coordinates = axial_coordinates
+        self.position = position
+        self.vertices = self.compute_vertices()
+        self.inner_vertices = self.compute_inner_vertices()
+
+    def compute_vertices(self) -> List[Tuple[float, float]]:
+        """Returns a list of the hexagon's vertices as x, y tuples"""
+        x, y = self.position
+        half_radius = RADIUS / 2
+        # Vertices in counter-clockwise order
+        return [
+            (x, y),
+            (x - MINIMAL_RADIUS, y + half_radius),
+            (x - MINIMAL_RADIUS, y + 3 * half_radius),
+            (x, y + 2 * RADIUS),
+            (x + MINIMAL_RADIUS, y + 3 * half_radius),
+            (x + MINIMAL_RADIUS, y + half_radius),
+        ]
+    
+    def compute_inner_vertices(self) -> List[Tuple[float, float]]:
+        """Returns a list of the hexagon's inner vertices as x, y tuples"""
+        x, y = self.position
+        r = RADIUS * 0.85
+        half_radius = r / 2
+        min_r = r * math.cos(math.radians(30))
+
+        offset = abs(self.vertices[3][1] - (y + 2 * r)) // 2
+        # Vertices in counter-clockwise order
+        return [
+            (x, y + offset),
+            (x - min_r, y + half_radius + offset),
+            (x - min_r, y + 3 * half_radius + offset),
+            (x, y + 2 * r + offset),
+            (x + min_r, y + 3 * half_radius + offset),
+            (x + min_r, y + half_radius + offset),
+        ]
+
+    def render(self, screen) -> None:
+        pygame.draw.aalines(screen, (25, 160, 255), closed=True, points=self.vertices)
+        pygame.draw.aalines(screen, (25, 160, 255), closed=True, points=self.inner_vertices)

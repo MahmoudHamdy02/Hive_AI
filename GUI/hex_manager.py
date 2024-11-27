@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from hex import HexagonTile
+from hex import HexagonTile, HexagonOutline
 
 class HexManager:
     """ Class for managing and rendering hexagon tiles"""
@@ -9,6 +9,7 @@ class HexManager:
         self.radius: float = radius
         self.minimal_radius: float = minimal_radius
         self.hexagons: List[HexagonTile] = []
+        self.outlines: List[HexagonOutline] = []
 
     def __axialToPixels(self, x: int, y: int) -> Tuple[float, float]:
         """ Convert axial coordinates (q,r) to cartesian coordinates (x, y)"""
@@ -41,9 +42,21 @@ class HexManager:
         """
         pass
 
-    def drawOutline(self):
-        """ Draws a hexagon outline at (q,r). Throws an error if a tile or outline already exists in the provided position"""
-        pass
+    def drawOutline(self, q, r):
+        """ 
+            Draws a hexagon outline at (q,r).\n
+            Returns the created outline.\n
+            Throws an error if a tile or outline already exists in the provided position
+        """
+        for outline in self.outlines:
+            if outline.axial_coordinates == (q, r):
+                raise Exception("Outline already exists at specified axial coordinates")
+
+        pixels = self.__axialToPixels(q, r)
+        position = (self.origin[0]+pixels[0], self.origin[1]+pixels[1])
+        outline = HexagonOutline((q,r), position)
+        self.outlines.append(outline)
+        return outline
 
     def removeOutline(self):
         """ Deletes a hexagon outline at (q,r). Throws an error if no outline exists in the provided position"""
@@ -52,3 +65,5 @@ class HexManager:
     def render(self, screen):
         for hexagon in self.hexagons:
             hexagon.render(screen)
+        for outline in self.outlines:
+            outline.render(screen)
