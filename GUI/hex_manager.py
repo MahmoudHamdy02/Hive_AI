@@ -34,15 +34,19 @@ class HexManager:
         self.hexagons.append(hexagon)
         return hexagon
 
-    def removeHexagonTile(self, q, r):
+    def removeHexagonTile(self, q: int, r: int) -> HexagonTile:
         """ 
             Deletes a hexagon at (q,r).\n
             Returns the deleted hexagon.\n
             Throws an error if no tile exists in the provided position.
         """
-        pass
+        for hexagon in self.hexagons:
+            if hexagon.axial_coordinates == (q, r):
+                self.hexagons.remove(hexagon)
+                return hexagon
+        raise Exception("No tile exists at specified axial coordinates")
 
-    def drawOutline(self, q, r):
+    def drawOutline(self, q: int, r: int) -> HexagonOutline:
         """ 
             Draws a hexagon outline at (q,r).\n
             Returns the created outline.\n
@@ -58,9 +62,17 @@ class HexManager:
         self.outlines.append(outline)
         return outline
 
-    def removeOutline(self):
-        """ Deletes a hexagon outline at (q,r). Throws an error if no outline exists in the provided position"""
-        pass
+    def removeOutline(self, q: int, r: int) -> HexagonOutline:
+        """ 
+            Deletes an outline at (q,r).\n
+            Returns the deleted outline.\n
+            Throws an error if no outline exists in the provided position.
+        """
+        for outline in self.outlines:
+            if outline.axial_coordinates == (q, r):
+                self.outlines.remove(outline)
+                return outline
+        raise Exception("No outline exists at specified axial coordinates")
 
     def render(self, screen):
         for hexagon in self.hexagons:
