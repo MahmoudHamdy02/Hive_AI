@@ -81,6 +81,8 @@ class HexagonOutline:
     
     def compute_inner_vertices(self) -> List[Tuple[float, float]]:
         """Returns a list of the hexagon's inner vertices as x, y tuples"""
+        # Draw the same outline again using a smaller radius,
+        # then move it down to the center
         x, y = self.position
         r = RADIUS * 0.85
         half_radius = r / 2
