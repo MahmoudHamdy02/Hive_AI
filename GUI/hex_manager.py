@@ -17,15 +17,19 @@ class HexManager:
             self.radius * (3./2 * y)
         )
     
-    def createHexagonTile(self, q, r) -> HexagonTile:
+    def createHexagonTile(self, q: int, r: int) -> HexagonTile:
         """ 
             Creates and renders a new hexagon at (q,r).\n
             Returns the created hexagon.\n
             Throws an error if a tile or outline already exists in the provided position.
         """
+        for hexagon in self.hexagons:
+            if hexagon.axial_coordinates == (q, r):
+                raise Exception("Tile already exists at specified axial coordinates")
+
         pixels = self.__axialToPixels(q, r)
         position = (self.origin[0]+pixels[0], self.origin[1]+pixels[1])
-        hexagon = HexagonTile(position)
+        hexagon = HexagonTile((q,r), position)
         self.hexagons.append(hexagon)
         return hexagon
 

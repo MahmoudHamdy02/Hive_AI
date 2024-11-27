@@ -10,7 +10,8 @@ from constants import MINIMAL_RADIUS, RADIUS
 
 class HexagonTile:
 
-    def __init__(self, position: Tuple[float, float]):
+    def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float]):
+        self.axial_coordinates = axial_coordinates
         self.position = position
         self.vertices = self.compute_vertices()
 
