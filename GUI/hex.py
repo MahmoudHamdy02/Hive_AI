@@ -14,7 +14,7 @@ class HexagonTile:
     def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float]):
         self.axial_coordinates = axial_coordinates
         self.position = position
-        self.vertices = self.compute_vertices()
+        self.vertices = self.__compute_vertices()
 
     @property
     def centre(self) -> Tuple[float, float]:
@@ -22,7 +22,7 @@ class HexagonTile:
         x, y = self.position
         return (x, y + RADIUS)
 
-    def compute_vertices(self) -> List[Tuple[float, float]]:
+    def __compute_vertices(self) -> List[Tuple[float, float]]:
         """Returns a list of the hexagon's vertices as x, y tuples"""
         x, y = self.position
         half_radius = RADIUS / 2
@@ -36,19 +36,19 @@ class HexagonTile:
             (x + MINIMAL_RADIUS, y + half_radius),
         ]
 
-    def compute_neighbours(self, hexagons: List[HexagonTile]) -> List[HexagonTile]:
+    def __compute_neighbours(self, hexagons: List[HexagonTile]) -> List[HexagonTile]:
         """Returns hexagons whose centres are two minimal radiuses away from self.centre"""
         # could cache results for performance
-        return [hexagon for hexagon in hexagons if self.is_neighbour(hexagon)]
+        return [hexagon for hexagon in hexagons if self.__is_neighbour(hexagon)]
     
-    def is_neighbour(self, hexagon: HexagonTile) -> bool:
+    def __is_neighbour(self, hexagon: HexagonTile) -> bool:
         """Returns True if hexagon centre is approximately
         2 minimal radiuses away from own centre
         """
         distance = math.dist(hexagon.centre, self.centre)
         return math.isclose(distance, 2 * MINIMAL_RADIUS, rel_tol=0.05)
     
-    def collide_with_point(self, point: Tuple[float, float]) -> bool:
+    def __collide_with_point(self, point: Tuple[float, float]) -> bool:
         """Returns True if distance from centre to point is less than horizontal_length"""
         return math.dist(point, self.centre) < MINIMAL_RADIUS
     
@@ -62,10 +62,10 @@ class HexagonOutline:
     def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float]):
         self.axial_coordinates = axial_coordinates
         self.position = position
-        self.vertices = self.compute_vertices()
-        self.inner_vertices = self.compute_inner_vertices()
+        self.vertices = self.__compute_vertices()
+        self.inner_vertices = self.__compute_inner_vertices()
 
-    def compute_vertices(self) -> List[Tuple[float, float]]:
+    def __compute_vertices(self) -> List[Tuple[float, float]]:
         """Returns a list of the hexagon's vertices as x, y tuples"""
         x, y = self.position
         half_radius = RADIUS / 2
@@ -79,7 +79,7 @@ class HexagonOutline:
             (x + MINIMAL_RADIUS, y + half_radius),
         ]
     
-    def compute_inner_vertices(self) -> List[Tuple[float, float]]:
+    def __compute_inner_vertices(self) -> List[Tuple[float, float]]:
         """Returns a list of the hexagon's inner vertices as x, y tuples"""
         # Draw the same outline again using a smaller radius,
         # then move it down to the center
