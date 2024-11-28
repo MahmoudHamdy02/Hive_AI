@@ -23,7 +23,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 running = True
 
-bg_image = pygame.image.load("images/bg.jpg")
+bg_image = pygame.image.load("GUI/images/bg.jpg")
 bg_image = pygame.transform.scale(bg_image, (640, 1280))
 
 while running:
