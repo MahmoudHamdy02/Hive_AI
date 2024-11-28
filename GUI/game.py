@@ -18,6 +18,9 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 running = True
 
+bg_image = pygame.image.load("GUI/images/bg.jpg")
+bg_image = pygame.transform.scale(bg_image, (640, 1280))
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -27,6 +30,10 @@ while running:
 
     # RENDER GAME HERE
     screen.fill((0,0,0))
+
+    # HACK: render bg twice side by side to avoid low resolution
+    screen.blit(bg_image, (0,0))
+    screen.blit(bg_image, (640,0))
     
     hex_manager.render(screen)
 
