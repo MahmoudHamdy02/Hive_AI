@@ -51,6 +51,7 @@ class HexagonTile(Hexagon):
     def render(self, screen) -> None:
         """Renders the hexagon on the screen"""
         pygame.draw.polygon(screen, (150,150,150), self.vertices)
+        pygame.draw.aalines(screen, (25, 25, 25), closed=True, points=self.vertices)
 
 
 class HexagonOutline(Hexagon):

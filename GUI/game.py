@@ -4,6 +4,9 @@ from constants import *
 
 hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
 hex_manager.createHexagonTile(0,0)
+hex_manager.createHexagonTile(-1,0)
+hex_manager.createHexagonTile(0,-1)
+hex_manager.createHexagonTile(-1,-1)
 hex_manager.createHexagonTile(0,1)
 hex_manager.createHexagonTile(2,2)
 hex_manager.removeHexagonTile(2,2)
