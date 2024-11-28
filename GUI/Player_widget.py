@@ -1,7 +1,10 @@
 import pygame
 from constants import *
+import insects_widget
 class PlayerWidget:
+
     def __init__(self,name: str, color: tuple,insects: int):
+        
         self.player_name = name
         self.player_color = color
         #self.player_score = self.player.score
@@ -33,6 +36,13 @@ class PlayerWidget:
         # Render the player's name
         name_text = pygame.font.SysFont("Arial", 20).render(f"Name: {self.player_name}", True, (255, 255, 255))
         screen.blit(name_text, (rect_x + 10, rect_y + 10))
+
+        for i in range(1,self.player_insect_count+1):
+            insect = insects_widget.InsectWidget("Ant",self.player_color,1,(rect_x+10,rect_y+40*i+(i-1)*INSECT_BOX_Y))
+            insect.render(screen)
+        
+       
+
 
     
     
