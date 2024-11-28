@@ -52,6 +52,7 @@ class HexManager:
             Returns the created outline.\n
             Throws an error if a tile or outline already exists in the provided position
         """
+        # Can be drawn on top of tiles
         for outline in self.outlines:
             if outline.axial_coordinates == (q, r):
                 raise Exception("Outline already exists at specified axial coordinates")
@@ -75,6 +76,7 @@ class HexManager:
         raise Exception("No outline exists at specified axial coordinates")
 
     def render(self, screen):
+        # Render outlines last so they are not hidden under tiles
         for hexagon in self.hexagons:
             hexagon.render(screen)
         for outline in self.outlines:
