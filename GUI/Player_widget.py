@@ -22,9 +22,11 @@ class PlayerWidget:
         if self.player_color == (255, 0, 0):  # Red color
             rect_width = 250
             rect_x = 0  # Align to the left side of the screen
+            self.flag = 1
         else:
             rect_width = 250
             rect_x = WIDTH-250
+            self.flag = 0
 
         rect_y = 0
         rect_height = HEIGHT
@@ -38,9 +40,10 @@ class PlayerWidget:
         screen.blit(name_text, (rect_x + 10, rect_y + 10))
 
         for i in range(1,self.player_insect_count+1):
-            insect = insects_widget.InsectWidget("Ant",self.player_color,1,(rect_x+10,rect_y+40*i+(i-1)*INSECT_BOX_Y))
+            insect = insects_widget.InsectWidget("Ant",self.flag,1,(rect_x+10,rect_y+40*i+(i-1)*INSECT_BOX_Y))
             insect.render(screen)
-        
+            count_text = pygame.font.SysFont("Arial", 24).render(f"x{1}", True, (0, 0, 0))  
+            screen.blit(count_text, (rect_x+10 + INSECT_BOX_X-30, INSECT_BOX_Y+5))
        
 
 

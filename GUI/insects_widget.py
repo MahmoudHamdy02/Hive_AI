@@ -9,38 +9,44 @@ class InsectWidget:
         self.insectPosition = position
         self.image = None  # Default image initialization
 
-        if self.insectColor == 1 and self.insectCount > 0:
+        if self.insectColor == 1 and self.insectCount:
             if self.insectName == "Ant":
-                self.image = pygame.image.load("GUI/images/b_insects/b-ant.png")
-                print(self.insectCount)
+                self.image = pygame.image.load("images/b_insects/b-ant.png")
             elif self.insectName == "bee":
-                self.image = pygame.image.load("GUI/images/b_insects/b-bee.png")
+                self.image = pygame.image.load("images/b_insects/b-bee.png")
             elif self.insectName == "beetle":
-                self.image = pygame.image.load("GUI/images/b_insects/b-beetle.png")
+                self.image = pygame.image.load("images/b_insects/b-beetle.png")
             elif self.insectName == "hopper":
-                self.image = pygame.image.load("GUI/images/b_insects/b-hopper.png")
+                self.image = pygame.image.load("images/b_insects/b-hopper.png")
             elif self.insectName == "spider":
-                self.image = pygame.image.load("GUI/images/b_insects/b-spider.png")
+                self.image = pygame.image.load("images/b_insects/b-spider.png")
 
-        elif self.insectColor == 0 and self.insectCount > 0:
+        elif self.insectColor == 0 and self.insectCount:
             if self.insectName == "Ant":
-                self.image = pygame.image.load("GUI/images/w_insects/W-ant.png")
+                self.image = pygame.image.load("images/w_insects/W-ant.png")
             elif self.insectName == "bee":
-                self.image = pygame.image.load("GUI/images/w_insects/w-bee.png")
+                self.image = pygame.image.load("images/w_insects/w-bee.png")
             elif self.insectName == "beetle":
-                self.image = pygame.image.load("GUI/images/w_insects/w-beetle.png")
+                self.image = pygame.image.load("images/w_insects/w-beetle.png")
             elif self.insectName == "hopper":
-                self.image = pygame.image.load("GUI/images/w_insects/w-hopper.png")
+                self.image = pygame.image.load("images/w_insects/w-hopper.png")
             elif self.insectName == "spider":
-                self.image = pygame.image.load("GUI/images/w_insects/w-spider.png")
+                self.image = pygame.image.load("images/w_insects/w-spider.png")
 
         if self.image:  # Ensure image is not None
-            self.image = pygame.transform.scale(self.image, (20, 20))
+            self.image = pygame.transform.scale(self.image, (110, 110))
 
     # Add function to re-render the count of insects
     def render(self, screen):
         # Draw the background rectangle
         pygame.draw.rect(screen, (255, 255, 255), (self.insectPosition[0], self.insectPosition[1], INSECT_BOX_X, INSECT_BOX_Y))
         # Draw the image if available
+        
         if self.image:
-            screen.blit(self.image, (self.insectPosition[0] + 10, self.insectPosition[1] + 10))
+            # Center the image within the rectangle
+            img_x = self.insectPosition[0] + (INSECT_BOX_X - self.image.get_width()) // 2
+            img_y = self.insectPosition[1] + (INSECT_BOX_Y - self.image.get_height()) // 2
+            screen.blit(self.image, (img_x-55, img_y))
+            count_text = pygame.font.SysFont("Arial", 24).render(f"x{self.insectcount}", True, (0, 0, 0))  
+            screen.blit(count_text, (self.insectPosition[0] + INSECT_BOX_X-30, INSECT_BOX_Y+5))
+            # it is displayed in the first box only
