@@ -64,7 +64,7 @@ def start_game():
                     for tile in hex_manager.outlines:  # Assuming `vAntMoves` contains hexagonal tiles
                         if tile.point_in_polygon(position):
                         # Move the insect to this valid tile
-                            position=tile.position
+                            position=tile.axial_coordinates
                             hex_manager.removeOutline(position[0],position[1])
                             hex_manager.add_insect(position, selected_insect, selected_player.player_color)  # Add insect to tile
                             selected_player.player_insects[selected_insect] -= 1  # Decrement insect count

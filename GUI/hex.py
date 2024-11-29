@@ -36,7 +36,7 @@ class Hexagon(ABC):
     def __collide_with_point(self, point: Tuple[float, float]) -> bool:
         """Returns True if distance from centre to point is less than horizontal_length"""
         return math.dist(point, self.centre) < MINIMAL_RADIUS
-    def point_in_polygon(self, point: Tuple) -> bool:
+    def point_in_polygon(self, point: Tuple[float, float]) -> bool:
         """Check if a point (x, y) is inside the hexagon polygon"""
         x, y = point
         vertices = self.vertices
@@ -63,9 +63,9 @@ class Hexagon(ABC):
 
 class HexagonTile(Hexagon):
 
-    def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float]):
+    def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float], insect = None):
         super().__init__(axial_coordinates, position)
-        self.insect=None
+        self.insect=insect
 
     def render(self, screen) -> None:
         """Renders the hexagon on the screen"""
