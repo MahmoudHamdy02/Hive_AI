@@ -23,7 +23,7 @@ class InsectWidget:
 
         elif self.insectColor == 0 and self.insectCount:
             if self.insectName == "Ant":
-                self.image = pygame.image.load("images/w_insects/W-ant.png")
+                self.image = pygame.image.load("images/w_insects/w-ant.png")
             elif self.insectName == "bee":
                 self.image = pygame.image.load("images/w_insects/w-bee.png")
             elif self.insectName == "beetle":
@@ -47,6 +47,6 @@ class InsectWidget:
             img_x = self.insectPosition[0] + (INSECT_BOX_X - self.image.get_width()) // 2
             img_y = self.insectPosition[1] + (INSECT_BOX_Y - self.image.get_height()) // 2
             screen.blit(self.image, (img_x-55, img_y))
-            count_text = pygame.font.SysFont("Arial", 24).render(f"x{self.insectcount}", True, (0, 0, 0))  
+            count_text = pygame.font.SysFont("Arial", 24).render(f"x{self.insectCount}", True, (0, 0, 0))  
             screen.blit(count_text, (self.insectPosition[0] + INSECT_BOX_X-30, INSECT_BOX_Y+5))
             # it is displayed in the first box only
