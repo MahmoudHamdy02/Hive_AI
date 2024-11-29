@@ -1,29 +1,51 @@
+from Piece import Grasshopper, Beetle, Ant, Bee, Spider
+from Player import Player, Color
+from typing import Tuple
+
 class HiveBoard:
     def __init__(self):
         self.board = {}  # Maps (q, r) to (piece, player)
-        self.current_player = "white"
-        self.pieces = {"white": {"bee": 1, "ant": 3, "grasshopper": 3, "beetle": 2}, 
-                       "black": {"bee": 1, "ant": 3, "grasshopper": 3, "beetle": 2}}
+        self.white = Player(Color.WHITE)
+        self.black = Player(Color.BLACK)
+        self.current_player = self.white  # White starts first
+        self.pieces = {
+            self.white: {
+                "bee": [Bee(self.white) for _ in range(1)],
+                "ant": [Ant(self.white) for _ in range(3)],
+                "grasshopper": [Grasshopper(self.white) for _ in range(3)],
+                "beetle": [Beetle(self.white) for _ in range(2)],
+                "spider": [Spider(self.white) for _ in range(2)]
+            },
+            self.black: {
+                "bee": [Bee(self.black) for _ in range(1)],
+                "ant": [Ant(self.black) for _ in range(3)],
+                "grasshopper": [Grasshopper(self.black) for _ in range(3)],
+                "beetle": [Beetle(self.black) for _ in range(2)],
+                "spider": [Spider(self.black) for _ in range(2)]
+            }
+        }
         self.turn_count = 0  # Track the number of turns for the Queen Bee placement rule
 
             # 0 ant 1 ant 2 ant 3 grass 4 bee
             
-    def add_piece(self, piece, q, r):
-        if (q, r) in self.board:
-            print(f"({q}, {r}) is already occupied!")
-            return
+    def hasPieceAt(self, q, r):
+        return ((q,r) in self.grid and len(self.grid[(q,r)]) > 0)
+    
+    def add_piece(self, piece_type, q, r) -> Tuple[bool, str]:
+        if self.hasPieceAt(q, r):
+            return (False, "Cannot place piece at ({q}, {r}): hex is already occupied.")
 
-        if piece not in self.pieces[self.current_player] or self.pieces[self.current_player][piece] <= 0:
-            print(f"No more {piece}s available for {self.current_player}.")
+        if piece_type not in self.pieces[self.current_player] or len(self.pieces[self.current_player][piece_type]) <= 0:
+            print(f"No more {piece_type}s available for {self.current_player}.")
             return
         # Needed to be checked 
         # Check for no two-hex rule: player cannot place the first piece on the second turn.
-        if self.turn_count == 1 and (piece == 'bee' and self.pieces[self.current_player]['bee'] == 1):
+        if self.turn_count == 1 and (piece_type == 'bee' and len(self.pieces[self.current_player]['bee']) == 1):
             print(f"Cannot place a piece on a hex adjacent to another piece. This violates the no-two-hex rule.")
             return
         
         # Ensure the Queen Bee must be placed by turn 4 but can be placed before.
-        if self.turn_count >= 3 and self.pieces[self.current_player]["bee"] == 1 and piece!= 'bee':
+        if self.turn_count >= 3 and len(self.pieces[self.current_player]["bee"]) == 1 and piece_type!= 'bee':
             print("Queen Bee must be placed by the end of your fourth turn!")
             return
 

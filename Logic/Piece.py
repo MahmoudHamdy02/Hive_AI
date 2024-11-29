@@ -23,6 +23,22 @@ class Piece:
         """
         self.position = (q, r)
 
+    def getNeighbors(self, board: Board) -> list:
+        """
+        Returns a list of all neighboring pieces
+
+        """
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, -1), (-1, 1)]
+        neighbors = []
+        for dq, dr in directions:
+            q, r = self.position[0]+dq, self.position[1]+dr
+            if board.hasPieceAt(q, r):
+                neighbors.append((q, r))
+        return neighbors
+    
+
+        
+
 class Grasshopper(Piece):
     def __init__(self, owner, position=None):
         """
@@ -49,3 +65,23 @@ class Grasshopper(Piece):
                     moves.append((q, r))
                 jumped = False
         return moves
+    
+class Ant(Piece):
+    def __init__(self, owner, position=None):
+        """
+        Initializes an Ant Piece
+
+        """
+        super().__init__(owner, position)
+
+class Beetle(Piece):
+    def __init__(self, owner, position=None):
+        super().__init__(owner, position)
+
+class Spider(Piece):
+    def __init__(self, owner, position=None):
+        super().__init__(owner, position)
+
+class Bee(Piece):
+    def __init__(self, owner, position=None):
+        super().__init__(owner, position)

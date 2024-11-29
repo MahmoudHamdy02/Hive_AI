@@ -11,7 +11,10 @@ class Board:
         self.grid[piece.position].remove(piece)
         self.addPiece(piece, q, r)
         piece.move(q, r)
-        
+
     def hasPieceAt(self, q,r) -> bool:
         return ((q,r) in self.grid and len(self.grid[(q,r)]) > 0)
+    
+    def getPieceAt(self, q, r):
+        return self.grid[(q,r)][-1]
     
