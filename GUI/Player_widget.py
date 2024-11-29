@@ -3,7 +3,7 @@ from constants import *
 import insects_widget
 class PlayerWidget:
 
-    def __init__(self,name: str, color: tuple,insects: int):
+    def __init__(self,name: str, color: tuple,insects: dict):
         
         self.player_name = name
         self.player_color = color
@@ -38,12 +38,13 @@ class PlayerWidget:
         # Render the player's name
         name_text = pygame.font.SysFont("Arial", 20).render(f"Name: {self.player_name}", True, (255, 255, 255))
         screen.blit(name_text, (rect_x + 10, rect_y + 10))
-
-        for i in range(1,self.player_insect_count+1):
-            insect = insects_widget.InsectWidget("Ant",self.flag,1,(rect_x+10,rect_y+40*i+(i-1)*INSECT_BOX_Y))
+        i=1
+        for insect_name, count in self.player_insects.items():
+            insect = insects_widget.InsectWidget(insect_name,self.flag,count,(rect_x+10,rect_y+40*i+(i-1)*INSECT_BOX_Y))
             insect.render(screen)
-            count_text = pygame.font.SysFont("Arial", 24).render(f"x{1}", True, (0, 0, 0))  
-            screen.blit(count_text, (rect_x+10 + INSECT_BOX_X-30, INSECT_BOX_Y+5))
+            # count_text = pygame.font.SysFont("Arial", 24).render(f"x{1}", True, (0, 0, 0))  
+            # screen.blit(count_text, (rect_x+10 + INSECT_BOX_X-30, INSECT_BOX_Y+5))
+            i+=1
        
 
 
