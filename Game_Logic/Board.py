@@ -1,21 +1,21 @@
+from Cell import Cell
+from Piece import Piece
+
 class Board:
     def __init__(self) -> None:
         self.grid = {} # (q, r): [Piece1, Piece2, ...]}
 
-    def addPiece(self, piece, q, r) -> None:
+    def addPiece(self, piece: Piece, q: int, r: int) -> None:
         if (q,r) not in self.grid:
-            self.grid[(q,r)] = []
-        self.grid[(q,r)].append(piece)
+            self.grid[(q,r)] = Cell()
+        self.grid[(q,r)].addPiece(piece)
 
-    def movePiece(self, piece, q, r) -> None:
-        self.grid[piece.position].remove(piece)
+    def movePiece(self, piece: Piece, q, r) -> None:
+        self.grid[piece.position].removePiece(piece)
         self.addPiece(piece, q, r)
-        piece.move(q, r)
         
     def hasPieceAt(self, q,r) -> bool:
         return ((q,r) in self.grid and len(self.grid[(q,r)]) > 0)
-    
-
     
     def get_neighbors(self, q: int, r: int) -> list:
         """
@@ -36,5 +36,3 @@ class Board:
         neighbors = [(q + dq, r + dr) for dq, dr in neighbor_offsets]
 
         return neighbors
-
-    
