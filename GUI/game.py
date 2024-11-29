@@ -17,14 +17,16 @@ hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
 #hex_manager.createHexagonTile(0,-1)
 hex_manager.createHexagonTile(-1,-1)
 hex_manager.createHexagonTile(0,1)
+
 #hex_manager.createHexagonTile(2,2)
 #hex_manager.removeHexagonTile(2,2)
-hex_manager.drawOutline(1,1)
-hex_manager.drawOutline(1,0)
-hex_manager.drawOutline(2,2)
-hex_manager.removeOutline(2,2)
+#hex_manager.drawOutline(1,1)
+#hex_manager.drawOutline(1,0)
+hex_manager.createHexagonTile(2,2)
 
-vAntMoves=[(0,0),(-1,0),(2,2)]
+vAntMoves=[(0,0),(-1,0),(2,0)]
+for i in vAntMoves:
+    hex_manager.drawOutline(i[0],i[1])
 def start_game():
     
     # pygame setup
@@ -59,10 +61,12 @@ def start_game():
                     selected_insect = selected_player.handle_click(position)
                  # Check if clicking a board position to move the insect
                 elif selected_insect:
-                    for tile in vAntMoves:  # Assuming `vAntMoves` contains hexagonal tiles
-                        if tile.point_in_polygon(position):  # Check if the mouse is inside the hexagon
+                    for tile in hex_manager.outlines:  # Assuming `vAntMoves` contains hexagonal tiles
+                        if tile.point_in_polygon(position):
                         # Move the insect to this valid tile
-                            HexManager.add_insect(tile, selected_insect, selected_player.player_color)  # Add insect to tile
+                            position=tile.position
+                            hex_manager.removeOutline(position[0],position[1])
+                            hex_manager.add_insect(position, selected_insect, selected_player.player_color)  # Add insect to tile
                             selected_player.player_insects[selected_insect] -= 1  # Decrement insect count
                             selected_insect = None  # Reset selected insect
                             selected_player = None  # Reset selected player

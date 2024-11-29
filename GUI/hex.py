@@ -13,7 +13,6 @@ class Hexagon(ABC):
         self.axial_coordinates = axial_coordinates
         self.position = position
         self.vertices = self.__compute_vertices()
-
     @property
     def centre(self) -> Tuple[float, float]:
         """Centre of the hexagon"""
@@ -37,7 +36,7 @@ class Hexagon(ABC):
     def __collide_with_point(self, point: Tuple[float, float]) -> bool:
         """Returns True if distance from centre to point is less than horizontal_length"""
         return math.dist(point, self.centre) < MINIMAL_RADIUS
-    def point_in_polygon(self, point: Tuple[float, float]) -> bool:
+    def point_in_polygon(self, point: Tuple) -> bool:
         """Check if a point (x, y) is inside the hexagon polygon"""
         x, y = point
         vertices = self.vertices
@@ -71,11 +70,11 @@ class HexagonTile(Hexagon):
     def render(self, screen) -> None:
         """Renders the hexagon on the screen"""
         if self.insect:
-            pygame.draw.polygon(screen, (255,0,0), self.vertices)
-            pygame.draw.aalines(screen, (255, 0, 0), closed=True, points=self.vertices)
+           pygame.draw.polygon(screen, (255,0,0), self.vertices)
+           pygame.draw.aalines(screen, (255, 0, 0), closed=True, points=self.vertices)
         else:
-            pygame.draw.polygon(screen, (150,150,150), self.vertices)
-            pygame.draw.aalines(screen, (25, 25, 25), closed=True, points=self.vertices)
+           pygame.draw.polygon(screen, (150,150,150), self.vertices)
+           pygame.draw.aalines(screen, (25, 25, 25), closed=True, points=self.vertices)
 
 
 
