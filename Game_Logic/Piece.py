@@ -49,3 +49,5 @@ class Grasshopper(Piece):
                     moves.append((q, r))
                 jumped = False
         return moves
+
+    class Spider(Piece):
