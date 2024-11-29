@@ -1,5 +1,6 @@
 import pygame
 import pygame_menu
+from game import start_game
 pygame.init()
 surface = pygame.display.set_mode((600, 400))
 def set_difficulty(value, difficulty):
@@ -38,8 +39,9 @@ def create_menu2():
     menu2.add.button('Back', get_main_menu)
     menu2.mainloop(surface)
 def start_the_game():
-    # Do the job here !
-    pass
+    start_game()
+    #pygame.quit() it closes the game but there is an error because it doesnt close the menus correctly
+    
 # menu.add.selector('Difficulty :', [('Hard', 1), ('Medium', 2),('Easy', 3)], onchange=set_difficulty)
 
 menu = pygame_menu.Menu('Welcome', 600, 400,

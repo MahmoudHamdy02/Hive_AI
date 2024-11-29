@@ -52,6 +52,7 @@ class HexManager:
             Returns the created outline.\n
             Throws an error if a tile or outline already exists in the provided position
         """
+        # Can be drawn on top of tiles
         for outline in self.outlines:
             if outline.axial_coordinates == (q, r):
                 raise Exception("Outline already exists at specified axial coordinates")
@@ -74,7 +75,16 @@ class HexManager:
                 return outline
         raise Exception("No outline exists at specified axial coordinates")
 
+
+    def add_insect(self,tile, insect_name, color):
+        """
+        Place an insect on this tile.
+        """
+        if not tile in self.hexagons:
+            self.createHexagonTile(tile[0], tile[1])
+        self.hexagons[tile].insect = {"name": insect_name, "color": color}
     def render(self, screen):
+        # Render outlines last so they are not hidden under tiles
         for hexagon in self.hexagons:
             hexagon.render(screen)
         for outline in self.outlines:
