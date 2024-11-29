@@ -75,6 +75,14 @@ class HexManager:
                 return outline
         raise Exception("No outline exists at specified axial coordinates")
 
+
+    def add_insect(self,tile, insect_name, color):
+        """
+        Place an insect on this tile.
+        """
+        if not tile in self.hexagons:
+            self.createHexagonTile(tile[0], tile[1])
+        self.hexagons[tile].insect = {"name": insect_name, "color": color}
     def render(self, screen):
         # Render outlines last so they are not hidden under tiles
         for hexagon in self.hexagons:

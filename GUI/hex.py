@@ -37,7 +37,26 @@ class Hexagon(ABC):
     def __collide_with_point(self, point: Tuple[float, float]) -> bool:
         """Returns True if distance from centre to point is less than horizontal_length"""
         return math.dist(point, self.centre) < MINIMAL_RADIUS
-    
+    def point_in_polygon(self, point: Tuple[float, float]) -> bool:
+        """Check if a point (x, y) is inside the hexagon polygon"""
+        x, y = point
+        vertices = self.vertices
+        n = len(vertices)
+        inside = False
+
+        p1x, p1y = vertices[0]
+        for i in range(n + 1):
+            p2x, p2y = vertices[i % n]
+            if y > min(p1y, p2y):
+                if y <= max(p1y, p2y):
+                    if x <= max(p1x, p2x):
+                        if p1y != p2y:
+                            xinters = (y - p1y) * (p2x - p1x) / (p2y - p1y) + p1x
+                        if p1x == p2x or x <= xinters:
+                            inside = not inside
+            p1x, p1y = p2x, p2y
+        return inside
+
     @abstractmethod
     def render(self):
         pass
@@ -47,11 +66,17 @@ class HexagonTile(Hexagon):
 
     def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float]):
         super().__init__(axial_coordinates, position)
+        self.insect=None
 
     def render(self, screen) -> None:
         """Renders the hexagon on the screen"""
-        pygame.draw.polygon(screen, (150,150,150), self.vertices)
-        pygame.draw.aalines(screen, (25, 25, 25), closed=True, points=self.vertices)
+        if self.insect:
+            pygame.draw.polygon(screen, (255,0,0), self.vertices)
+            pygame.draw.aalines(screen, (255, 0, 0), closed=True, points=self.vertices)
+        else:
+            pygame.draw.polygon(screen, (150,150,150), self.vertices)
+            pygame.draw.aalines(screen, (25, 25, 25), closed=True, points=self.vertices)
+
 
 
 class HexagonOutline(Hexagon):
