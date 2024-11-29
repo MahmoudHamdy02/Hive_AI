@@ -75,10 +75,16 @@ class Ant(Piece):
             """Depth-first search to find all reachable positions."""
             for neighbor in board.get_neighbors(*position):
                 if neighbor not in visited and not board.hasPieceAt(*neighbor):
+
                     neighbors = board.get_neighbors(*neighbor)
+                    occupied_neighbors = sum(1 for n in neighbors if board.hasPieceAt(*n))
+
                     visited.add(neighbor)
-                    valid_moves.add(neighbor)
-                    if all( not board.hasPieceAt(*neighbor) for neighbor in neighbors):
+
+                    if (occupied_neighbors <= 3 and occupied_neighbors>0 ):
+                        valid_moves.add(neighbor)
+
+                    if occupied_neighbors != 0:
                         dfs(neighbor)
                    
 
