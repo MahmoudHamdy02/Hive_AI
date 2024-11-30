@@ -86,5 +86,4 @@ class Spider(Piece):
             next_positions = current_positions
         #next_positions.pop()
         # Return all unique positions that can be reached in exactly 3 steps
-      
-        return list(final_positions)
+        return [path for pos, path in next_positions]
