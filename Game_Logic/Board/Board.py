@@ -20,7 +20,6 @@ class Board:
     def getNeighbors(self, position:tuple) -> list:
         """
         Returns a list of all neighboring pieces
-
         """
 
         directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, -1), (-1, 1)]
