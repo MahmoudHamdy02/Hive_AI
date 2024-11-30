@@ -23,6 +23,7 @@ class Board:
         Returns a list of all neighboring pieces
 
         """
+
         directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, -1), (-1, 1)]
         neighbors = []
         for dq, dr in directions:
@@ -44,4 +45,7 @@ class Board:
             if not self.hasPieceAt(q, r):
                 free_places2.append((q, r))
         common_positions = list(set(free_places1) & set(free_places2))
-        return common_positions
+        if common_positions:
+            return common_positions
+        else:
+            return None

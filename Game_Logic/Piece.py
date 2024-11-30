@@ -59,6 +59,7 @@ class Grasshopper(Piece):
         return moves
 
 
+
 class Spider(Piece):
     def __init__(self, owner, position=None):
         super().__init__(owner, position)
@@ -67,23 +68,23 @@ class Spider(Piece):
         """
         Returns a list of all possible moves for the Spider by moving exactly three steps.
         """
-        visited = set()
-        current_positions = [(self.position, [])]  # Track position and path
+        visited = set()  # To track visited positions and prevent loops
+        next_positions = [(self.position, [])]  # Track position and path
 
-        init_pos=self.position
-        next_pos = [init_pos]
-        list_of_neighbors = []
-        for i in range(3):
-            for pos in next_pos:
-                list_of_neighbors=board.getNeighbors(pos)
-                for neighbors in list_of_neighbors:
-                    next_pos.append(board.commonspace(pos,tuple(neighbors)))
-
-
-
-                next_pos.pop()
-        return next_pos
-
-
-
-
+        for i in range(3):  # Perform exactly 3 steps
+            current_positions = []
+            for pos, path in next_positions:
+                neighbors = board.getNeighbors(pos)
+                for neighbor in neighbors:
+                    # Check for a common space and ensure the neighbor is not visited
+                    common_spaces = board.commonspace(pos, neighbor)
+                    if common_spaces:
+                        for comm in common_spaces:
+                            if comm not in visited:
+                                visited.add(comm)
+                                current_positions.append((comm, path + [comm]))
+            next_positions = current_positions
+        #next_positions.pop()
+        # Return all unique positions that can be reached in exactly 3 steps
+      
+        return list(final_positions)
