@@ -20,6 +20,13 @@ class Cell:
         """
         self.pieces.remove(piece)
 
+    def getPieces(self):
+        """
+        Returns the pieces in the cell
+
+        """
+        return self.pieces
+
     def __len__(self):
         return len(self.pieces)
         

@@ -21,6 +21,13 @@ class Piece:
         """
         raise NotImplementedError("getMoves() must be implemented by subclass")
     
+    def getOwner(self) -> Player:
+        """
+        Returns the owner of the piece
+
+        """
+        return self.owner
+    
     def move(self, q, r):
         """
         Moves the piece to the specified position

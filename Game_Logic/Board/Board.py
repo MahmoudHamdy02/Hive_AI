@@ -48,3 +48,9 @@ class Board:
             return common_positions
         else:
             return None
+
+    def getGrid(self):
+        return self.grid
+    
+    def getPieceAt(self, q, r):
+        return self.grid[(q,r)].getPieces()
