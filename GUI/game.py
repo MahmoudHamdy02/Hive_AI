@@ -66,8 +66,8 @@ def start_game():
                         # Move the insect to this valid tile
                             position=tile.axial_coordinates
                             hex_manager.removeOutline(position[0],position[1])
-                            hex_manager.createHexagonTile(position[0], position[1], selected_insect, selected_player.player_color)  # Add insect to tile
-                            selected_player.player_insects[selected_insect] -= 1  # Decrement insect count
+                            hex_manager.createHexagonTile(position[0], position[1], selected_insect, selected_player.color)  # Add insect to tile
+                            selected_player.insects[selected_insect] -= 1  # Decrement insect count
                             selected_insect = None  # Reset selected insect
                             selected_player = None  # Reset selected player
                             break
