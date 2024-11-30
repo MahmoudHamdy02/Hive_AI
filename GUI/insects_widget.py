@@ -23,8 +23,8 @@ class InsectWidget:
         
         # Draw the background rectangle
         pygame.draw.rect(screen, (255, 255, 255), (self.position[0], self.position[1], INSECT_BOX_X, INSECT_BOX_Y))
+
         # Draw the image if available
-        
         if self.image:
             # Center the image within the rectangle
             img_x = self.position[0] + (INSECT_BOX_X - self.image.get_width()) // 2

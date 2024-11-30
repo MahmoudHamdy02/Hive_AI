@@ -75,7 +75,7 @@ class HexManager:
                 return outline
         raise Exception("No outline exists at specified axial coordinates")
         
-    def render(self, screen):
+    def render(self, screen) -> None:
         # Render outlines last so they are not hidden under tiles
         for hexagon in self.hexagons:
             hexagon.render(screen)
