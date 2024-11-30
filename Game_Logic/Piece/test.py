@@ -1,3 +1,8 @@
+import sys
+import os
+
+# Add the root directory of the project to the sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 
 from Game_Logic.Board.Board import Board
 from Game_Logic.Player.Player import Player,Color
