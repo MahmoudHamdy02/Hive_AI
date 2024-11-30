@@ -1,3 +1,5 @@
+import Piece
+
 class Board:
     def __init__(self) -> None:
         self.grid = {} # (q, r): [Piece1, Piece2, ...]}
@@ -14,4 +16,32 @@ class Board:
         
     def hasPieceAt(self, q,r) -> bool:
         return ((q,r) in self.grid and len(self.grid[(q,r)]) > 0)
-    
+
+
+    def getNeighbors(self, piece: Piece) -> list:
+        """
+        Returns a list of all neighboring pieces
+
+        """
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, -1), (-1, 1)]
+        neighbors = []
+        for dq, dr in directions:
+            q, r = piece.position[0] + dq, piece.position[1] + dr
+            if self.hasPieceAt(q, r):
+                neighbors.append((q, r))
+        return neighbors
+
+    def commonspace(self,piece1, piece2)->list:
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, -1), (-1, 1)]
+        free_places1=[]
+        free_places2=[]
+        for dq,dr in directions:
+            q, r = piece1.position[0] + dq, piece1.position[1] + dr
+            if not self.hasPieceAt(q, r):
+                free_places1.append((q, r))
+        for dq,dr in directions:
+            q, r = piece2.position[0] + dq, piece2.position[1] + dr
+            if not self.hasPieceAt(q, r):
+                free_places2.append((q, r))
+        common_positions = list(set(free_places1) & set(free_places2))
+        return common_positions
