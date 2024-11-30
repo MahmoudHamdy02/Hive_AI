@@ -1,5 +1,9 @@
-from Game_Logic.Board.Board import Board
-from Game_Logic.Player.Player import Player
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from Game_Logic.Board.Board import Board
+    from Game_Logic.Player.Player import Player
 
 class Piece:
     def __init__(self, owner, position=None):
