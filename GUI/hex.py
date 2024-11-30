@@ -7,12 +7,15 @@ import pygame
 
 from constants import MINIMAL_RADIUS, RADIUS
 
-# Abstract class
+
 class Hexagon(ABC):
+    """Abstract parent class for hexagon tiles and outlines"""
+
     def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float]):
         self.axial_coordinates = axial_coordinates
         self.position = position
         self.vertices = self.__compute_vertices()
+
     @property
     def centre(self) -> Tuple[float, float]:
         """Centre of the hexagon"""
@@ -32,11 +35,8 @@ class Hexagon(ABC):
             (x + MINIMAL_RADIUS, y + 3 * half_radius),
             (x + MINIMAL_RADIUS, y + half_radius),
         ]
-    
-    def __collide_with_point(self, point: Tuple[float, float]) -> bool:
-        """Returns True if distance from centre to point is less than horizontal_length"""
-        return math.dist(point, self.centre) < MINIMAL_RADIUS
-    def point_in_polygon(self, point: Tuple[float, float]) -> bool:
+
+    def contains_point(self, point: Tuple[float, float]) -> bool:
         """Check if a point (x, y) is inside the hexagon polygon"""
         x, y = point
         vertices = self.vertices
@@ -62,10 +62,12 @@ class Hexagon(ABC):
 
 
 class HexagonTile(Hexagon):
+    """ Hexagon tile that represents an insect piece """
 
-    def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float], insect = None):
+    def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float], insect: str = None, color: str = None):
         super().__init__(axial_coordinates, position)
         self.insect=insect
+        self.color=color
 
     def render(self, screen) -> None:
         """Renders the hexagon on the screen"""
@@ -79,6 +81,7 @@ class HexagonTile(Hexagon):
 
 
 class HexagonOutline(Hexagon):
+    """ Hexagon outline that represents a legal move for a piece"""
 
     def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float]):
         super().__init__(axial_coordinates, position)

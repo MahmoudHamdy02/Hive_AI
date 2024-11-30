@@ -18,7 +18,7 @@ class HexManager:
             self.radius * (3./2 * y)
         )
     
-    def createHexagonTile(self, q: int, r: int, insect = None) -> HexagonTile:
+    def createHexagonTile(self, q: int, r: int, insect = None, color = None) -> HexagonTile:
         """ 
             Creates and renders a new hexagon at (q,r).\n
             Returns the created hexagon.\n
@@ -30,7 +30,7 @@ class HexManager:
 
         pixels = self.__axialToPixels(q, r)
         position = (self.origin[0]+pixels[0], self.origin[1]+pixels[1])
-        hexagon = HexagonTile((q,r), position, insect)
+        hexagon = HexagonTile((q,r), position, insect, color)
         self.hexagons.append(hexagon)
         return hexagon
 
@@ -73,16 +73,7 @@ class HexManager:
             if outline.axial_coordinates == (q, r):
                 self.outlines.remove(outline)
                 return outline
-        #raise Exception("No outline exists at specified axial coordinates")
-
-
-    def add_insect(self,position, insect_name, color):
-        """
-        Place an insect on this tile.
-        """
-        
-        insect = {"name": insect_name, "color": color}
-        tile=self.createHexagonTile(position[0], position[1], insect)
+        raise Exception("No outline exists at specified axial coordinates")
         
     def render(self, screen):
         # Render outlines last so they are not hidden under tiles

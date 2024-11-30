@@ -1,9 +1,12 @@
+from typing import Tuple
 import pygame
 from constants import *
 import insects_widget
+
+
 class PlayerWidget:
 
-    def __init__(self,name: str, color: tuple,insects: dict):
+    def __init__(self,name: str, color: Tuple[float, float, float],insects: dict):
         
         self.player_name = name
         self.player_color = color
@@ -13,7 +16,7 @@ class PlayerWidget:
         self.postion = (10, 10)
         self.insectsBoxes={}
         
-    def render(self, screen):
+    def render(self, screen) -> None:
         """
         Render the player widget on the screen.
 
@@ -55,15 +58,17 @@ class PlayerWidget:
             # Store the box in the dictionary
             self.insectsBoxes[insect_name] = insect_box
             i+=1
-    def handle_click(self, position):
+
+    def handle_click(self, position) -> str | None:
         """
         Check if the click is within any insect box.
+        
         :param position: (x, y) position of the mouse click.
         :return: The name of the clicked insect, or None if no box was clicked.
         """
         for insect_name, rect in self.insectsBoxes.items():
             if rect.collidepoint(position):
-                print( insect_name)
+                print(insect_name)
                 return insect_name
         return None
        

@@ -48,25 +48,25 @@ def start_game():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type==pygame.MOUSEBUTTONDOWN:
-                position = event.pos
+                mouse_pos = event.pos
 
                 # Check if a player widget was clicked
-                if pygame.Rect(0, 0, 250, HEIGHT).collidepoint(position):  # Player 1 area
+                if pygame.Rect(0, 0, 250, HEIGHT).collidepoint(mouse_pos):  # Player 1 area
                     selected_player = player1
-                elif pygame.Rect(WIDTH - 250, 0, 250, HEIGHT).collidepoint(position):  # Player 2 area
+                elif pygame.Rect(WIDTH - 250, 0, 250, HEIGHT).collidepoint(mouse_pos):  # Player 2 area
                     selected_player = player2
 
                 # Check if clicking an insect box
                 if selected_player and not selected_insect:
-                    selected_insect = selected_player.handle_click(position)
+                    selected_insect = selected_player.handle_click(mouse_pos)
                  # Check if clicking a board position to move the insect
                 elif selected_insect:
                     for tile in hex_manager.outlines:  # Assuming `vAntMoves` contains hexagonal tiles
-                        if tile.point_in_polygon(position):
+                        if tile.contains_point(mouse_pos):
                         # Move the insect to this valid tile
                             position=tile.axial_coordinates
                             hex_manager.removeOutline(position[0],position[1])
-                            hex_manager.add_insect(position, selected_insect, selected_player.player_color)  # Add insect to tile
+                            hex_manager.createHexagonTile(position[0], position[1], selected_insect, selected_player.player_color)  # Add insect to tile
                             selected_player.player_insects[selected_insect] -= 1  # Decrement insect count
                             selected_insect = None  # Reset selected insect
                             selected_player = None  # Reset selected player
@@ -83,7 +83,8 @@ def start_game():
         hex_manager.render(screen)
         player1.render(screen)
         player2.render(screen)
-        # flip() the display to put your work on screen
+
+        # Render the changes on the screen
         pygame.display.flip()
 
         clock.tick(60)  # limits FPS to 60

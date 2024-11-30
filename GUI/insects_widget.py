@@ -37,7 +37,7 @@ class InsectWidget:
             self.image = pygame.transform.scale(self.image, (110, 110))
 
     # Add function to re-render the count of insects
-    def render(self, screen):
+    def render(self, screen) -> None:
         
         # Draw the background rectangle
         pygame.draw.rect(screen, (255, 255, 255), (self.insectPosition[0], self.insectPosition[1], INSECT_BOX_X, INSECT_BOX_Y))
