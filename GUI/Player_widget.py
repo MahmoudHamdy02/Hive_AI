@@ -15,6 +15,12 @@ class PlayerWidget:
         self.insect_count = 5
         self.postion = (10, 10)
         self.insectsBoxes={}
+        if self.color == (255, 0, 0):  # Red color
+
+            self.flag = Color.Black
+        else:
+
+            self.flag = Color.White
         
     def render(self, screen) -> None:
         """
@@ -27,11 +33,9 @@ class PlayerWidget:
         if self.color == (255, 0, 0):  # Red color
             rect_width = 250
             rect_x = 0  # Align to the left side of the screen
-            self.flag = Color.Black
         else:
             rect_width = 250
             rect_x = WIDTH-250
-            self.flag = Color.White
 
         rect_y = 0
         rect_height = HEIGHT

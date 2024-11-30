@@ -79,14 +79,14 @@ def start_game():
                             if  filled_tile:
                                 hex_manager.removeOutline(q, r)
                                 filled_tile.insect2 = selected_insect
-                                filled_tile.color2 = current_player.color
+                                filled_tile.color2 = current_player.flag
                                 selected_insect = None  # Reset selected insect
                                 current_player = player2 if current_player == player1 else player1  # Reset selected player
                                 break
 
                             else:
                                 hex_manager.removeOutline(q, r)
-                                hex_manager.createHexagonTile(q, r, selected_insect, current_player.color)  # Add insect to tile
+                                hex_manager.createHexagonTile(q, r, selected_insect, current_player.flag)  # Add insect to tile
                                 current_player.insects[selected_insect] -= 1  # Decrement insect count
                                 selected_insect = None  # Reset selected insect
                                 current_player = player2 if current_player == player1 else player1  # Reset selected player
