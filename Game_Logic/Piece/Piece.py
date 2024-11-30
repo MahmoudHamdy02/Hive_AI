@@ -1,4 +1,5 @@
-import Player, Board
+from Game_Logic.Board.Board import Board
+from Game_Logic.Player.Player import Player
 
 class Piece:
     def __init__(self, owner, position=None):

@@ -1,5 +1,5 @@
-from Cell import Cell
-from Piece import Piece
+from Game_Logic.Piece.Piece import Piece
+from Game_Logic.Board.Cell import Cell
 
 class Board:
     def __init__(self) -> None:

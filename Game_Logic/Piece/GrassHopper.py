@@ -1,3 +1,5 @@
+from Game_Logic.Piece.Piece import Piece
+
 class Grasshopper(Piece):
     def __init__(self, owner, position=None):
         """

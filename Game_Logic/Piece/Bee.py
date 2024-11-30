@@ -1,3 +1,5 @@
+from Game_Logic.Piece.Piece import Piece
+
 class Bee(Piece):
     def __init__(self, owner, position=None):
         """
