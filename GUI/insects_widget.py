@@ -10,28 +10,10 @@ class InsectWidget:
         self.image = None  # Default image initialization
 
         if self.insectColor == Color.Black and self.insectCount:
-            if self.insectName == "ant":
-                self.image = pygame.image.load(IMAGES_PATH_2+"/b_insects/b-ant.png")
-            elif self.insectName == "bee":
-                self.image = pygame.image.load(IMAGES_PATH_2+"/b_insects/b-bee.png")
-            elif self.insectName == "beetle":
-                self.image = pygame.image.load(IMAGES_PATH_2+"/b_insects/b-beetle.png")
-            elif self.insectName == "hopper":
-                self.image = pygame.image.load(IMAGES_PATH_2+"/b_insects/b-hopper.png")
-            elif self.insectName == "spider":
-                self.image = pygame.image.load(IMAGES_PATH_2+"/b_insects/b-spider.png")
+            self.image = pygame.image.load(IMAGES_PATH_2+f"/b_insects/b-{self.insectName}.png")
 
         elif self.insectColor == Color.White and self.insectCount:
-            if self.insectName == "ant":
-                self.image = pygame.image.load(IMAGES_PATH_2+"/w_insects/w-ant.png")
-            elif self.insectName == "bee":
-                self.image = pygame.image.load(IMAGES_PATH_2+"/w_insects/w-bee.png")
-            elif self.insectName == "beetle":
-                self.image = pygame.image.load(IMAGES_PATH_2+"/w_insects/w-beetle.png")
-            elif self.insectName == "hopper":
-                self.image = pygame.image.load(IMAGES_PATH_2+"/w_insects/w-hopper.png")
-            elif self.insectName == "spider":
-                self.image = pygame.image.load(IMAGES_PATH_2+"/w_insects/w-spider.png")
+            self.image = pygame.image.load(IMAGES_PATH_2+f"/w_insects/w-{self.insectName}.png")
 
         if self.image:  # Ensure image is not None
             self.image = pygame.transform.scale(self.image, (110, 110))
