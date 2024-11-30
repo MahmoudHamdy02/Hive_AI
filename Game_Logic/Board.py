@@ -18,7 +18,7 @@ class Board:
         return ((q,r) in self.grid and len(self.grid[(q,r)]) > 0)
 
 
-    def getNeighbors(self, piece: Piece) -> list:
+    def getNeighbors(self, position:tuple) -> list:
         """
         Returns a list of all neighboring pieces
 
@@ -26,21 +26,21 @@ class Board:
         directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, -1), (-1, 1)]
         neighbors = []
         for dq, dr in directions:
-            q, r = piece.position[0] + dq, piece.position[1] + dr
+            q, r = position[0] + dq, position[1] + dr
             if self.hasPieceAt(q, r):
                 neighbors.append((q, r))
         return neighbors
 
-    def commonspace(self,piece1, piece2)->list:
+    def commonspace(self,position1:tuple, position2:tuple)->list:
         directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, -1), (-1, 1)]
         free_places1=[]
         free_places2=[]
         for dq,dr in directions:
-            q, r = piece1.position[0] + dq, piece1.position[1] + dr
+            q, r = position1[0] + dq, position1[1] + dr
             if not self.hasPieceAt(q, r):
                 free_places1.append((q, r))
         for dq,dr in directions:
-            q, r = piece2.position[0] + dq, piece2.position[1] + dr
+            q, r = position2[0] + dq, position2[1] + dr
             if not self.hasPieceAt(q, r):
                 free_places2.append((q, r))
         common_positions = list(set(free_places1) & set(free_places2))
