@@ -1,1 +1,2 @@
-point_in_polygon
+
+                                hex_manager.removeOutline(q

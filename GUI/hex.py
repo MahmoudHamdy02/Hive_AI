@@ -66,12 +66,17 @@ class HexagonTile(Hexagon):
 
     def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float], insect: str = None, color: str = None):
         super().__init__(axial_coordinates, position)
-        self.insect=insect
-        self.color=color
+        self.insect1=insect
+        self.color1=color
+        self.insect2=None
+        self.color2=None
 
     def render(self, screen) -> None:
         """Renders the hexagon on the screen"""
-        if self.insect:
+        if self.insect1 and self.insect2:
+           pygame.draw.polygon(screen, (255,255,0), self.vertices)
+           pygame.draw.aalines(screen, (255, 255, 0), closed=True, points=self.vertices)
+        elif self.insect1 and not self.insect2:
            pygame.draw.polygon(screen, (255,0,0), self.vertices)
            pygame.draw.aalines(screen, (255, 0, 0), closed=True, points=self.vertices)
         else:

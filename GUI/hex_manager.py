@@ -24,12 +24,13 @@ class HexManager:
             Returns the created hexagon.\n
             Throws an error if a tile or outline already exists in the provided position.
         """
-        for hexagon in self.hexagons:
-            if hexagon.axial_coordinates == (q, r):
-                raise Exception("Tile already exists at specified axial coordinates")
+        # for hexagon in self.hexagons:
+        #     if hexagon.axial_coordinates == (q, r):
+        #         raise Exception("Tile already exists at specified axial coordinates")
 
         pixels = self.__axialToPixels(q, r)
         position = (self.origin[0]+pixels[0], self.origin[1]+pixels[1])
+        
         hexagon = HexagonTile((q,r), position, insect, color)
         self.hexagons.append(hexagon)
         return hexagon
@@ -74,7 +75,11 @@ class HexManager:
                 self.outlines.remove(outline)
                 return outline
         raise Exception("No outline exists at specified axial coordinates")
-        
+    def checkTile(self, q: int, r: int) : 
+        for hexagon in self.hexagons:
+            if hexagon.axial_coordinates == (q, r):
+                return hexagon
+        return None
     def render(self, screen) -> None:
         # Render outlines last so they are not hidden under tiles
         for hexagon in self.hexagons:
