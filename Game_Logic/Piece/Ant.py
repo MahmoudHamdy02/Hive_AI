@@ -26,11 +26,12 @@ class Ant(Piece):
 
             for neighbor in board.getNeighbors(position):
                 nextPositions = board.commonspace(position, neighbor)
-                valid_moves.add(nextPositions)
-                for pos in nextPositions:
-                    if pos not in visited:
-                        visited.add(pos)
-                        dfs(pos)
+                if nextPositions:
+                    valid_moves.update(nextPositions)
+                    for pos in nextPositions:
+                        if pos not in visited:
+                            visited.add(pos)
+                            dfs(pos)
         
         # Start DFS from the current position
         visited.add(self.position)
