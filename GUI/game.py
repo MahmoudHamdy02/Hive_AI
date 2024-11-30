@@ -55,10 +55,14 @@ def start_game():
             elif event.type==pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
 
+                # TODO: Place first piece automatically at (0, 0)
+
+                # TODO: Detect clicking the placed board pieces
+
                 # This currently force the turn order
                 # TODO: A turn must be skipped if there are no available moves
 
-                # Check if player area 1 or 2 was clicked
+                # Check if player area 1 or 2 was clicked in the correct turn
                 # If yes, get the clicked insect
                 if current_player == player1 and pygame.Rect(0, 0, 250, HEIGHT).collidepoint(mouse_pos) or current_player == player2 and pygame.Rect(WIDTH - 250, 0, 250, HEIGHT).collidepoint(mouse_pos):
                     selected_insect = current_player.handle_click(mouse_pos)
@@ -67,7 +71,7 @@ def start_game():
                 if selected_insect:
                     for tile in hex_manager.outlines:  # Assuming `vAntMoves` contains hexagonal tiles
                         if tile.contains_point(mouse_pos):
-                        # Move the insect to this valid tile
+                            # Move the insect to this valid tile
                             q, r=tile.axial_coordinates
                             hex_manager.removeOutline(q, r)
                             hex_manager.createHexagonTile(q, r, selected_insect, current_player.color)  # Add insect to tile
