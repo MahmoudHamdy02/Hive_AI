@@ -20,23 +20,17 @@ class Ant(Piece):
         visited = set()
         valid_moves = set()
 
+
         def dfs(position):
             """Depth-first search to find all reachable positions."""
-            for neighbor in board.get_neighbors(*position):
-                if neighbor not in visited and not board.hasPieceAt(*neighbor):
 
-                    neighbors = board.get_neighbors(*neighbor)
-                    occupied_neighbors = sum(1 for n in neighbors if board.hasPieceAt(*n))
-
-                    visited.add(neighbor)
-
-                    if (occupied_neighbors <= 3 and occupied_neighbors>0 ):
-                        valid_moves.add(neighbor)
-
-                    if occupied_neighbors != 0:
-                        dfs(neighbor)
-                   
-
+            for neighbor in board.getNeighbors(self.position):
+                nextPositions = board.commonspace(position, neighbor)
+                valid_moves.add(nextPositions)
+                for pos in nextPositions:
+                    visited.add(pos)
+                    dfs(pos)
+        
         # Start DFS from the current position
         visited.add(self.position)
         dfs(self.position)
