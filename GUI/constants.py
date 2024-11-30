@@ -1,5 +1,5 @@
 import math
-
+from enum import Enum
 
 WIDTH = 1280
 HEIGHT = 720
@@ -12,3 +12,5 @@ IMAGES_PATH_1 = "images/"
 IMAGES_PATH_2 = "GUI/images/"
 INSECT_BOX_X=230
 INSECT_BOX_Y=100
+
+Color = Enum("Color", [("Black", 0), ("White", 1)])

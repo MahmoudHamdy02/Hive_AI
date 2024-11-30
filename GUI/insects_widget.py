@@ -4,12 +4,12 @@ from constants import *
 class InsectWidget:
     def __init__(self, name: str, color: int, count: int, position: tuple):
         self.insectName = name
-        self.insectColor = color  # 0: white, 1: black
+        self.insectColor = color
         self.insectCount = count
         self.insectPosition = position
         self.image = None  # Default image initialization
 
-        if self.insectColor == 1 and self.insectCount:
+        if self.insectColor == Color.Black and self.insectCount:
             if self.insectName == "ant":
                 self.image = pygame.image.load(IMAGES_PATH_2+"/b_insects/b-ant.png")
             elif self.insectName == "bee":
@@ -21,7 +21,7 @@ class InsectWidget:
             elif self.insectName == "spider":
                 self.image = pygame.image.load(IMAGES_PATH_2+"/b_insects/b-spider.png")
 
-        elif self.insectColor == 0 and self.insectCount:
+        elif self.insectColor == Color.White and self.insectCount:
             if self.insectName == "ant":
                 self.image = pygame.image.load(IMAGES_PATH_2+"/w_insects/w-ant.png")
             elif self.insectName == "bee":

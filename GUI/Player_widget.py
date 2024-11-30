@@ -27,11 +27,11 @@ class PlayerWidget:
         if self.player_color == (255, 0, 0):  # Red color
             rect_width = 250
             rect_x = 0  # Align to the left side of the screen
-            self.flag = 1
+            self.flag = Color.Black
         else:
             rect_width = 250
             rect_x = WIDTH-250
-            self.flag = 0
+            self.flag = Color.White
 
         rect_y = 0
         rect_height = HEIGHT
