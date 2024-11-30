@@ -10,29 +10,26 @@ class Ant(Piece):
         super().__init__(owner, position)
 
     def getMoves(self, board) -> list:
-        """
-        Returns a list of all valid moves for the Ant.
-        
-        """
         if self.position is None:
-            return []  
+            return []
 
         visited = set()
         valid_moves = set()
 
-
         def dfs(position):
             """Depth-first search to find all reachable positions."""
-
             for neighbor in board.getNeighbors(position):
+                print(f"Neighbor: {neighbor}")  # Debugging line
                 nextPositions = board.commonspace(position, neighbor)
-                valid_moves.add(nextPositions)
-                for pos in nextPositions:
-                    if pos not in visited:
-                        visited.add(pos)
-                        dfs(pos)
-        
-        # Start DFS from the current position
+                print(f"nextPositions: {nextPositions}")  # Debugging line
+                if nextPositions:
+                    valid_moves.update(nextPositions)
+                    for pos in nextPositions:
+                        if pos not in visited:
+                            print(f"visiting pos: {pos}")  # Debugging line
+                            visited.add(pos)
+                            dfs(pos)
+
         visited.add(self.position)
         dfs(self.position)
 
