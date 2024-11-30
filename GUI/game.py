@@ -3,16 +3,18 @@ from hex_manager import HexManager
 from constants import *
 from Player_widget import PlayerWidget
 
-player_dict = {
-    "ant": 2,
-    "bee": 2,
-    "spider": 3,
-    "hopper": 7, 
-    "beetle": 1
-}
+# Get a copy of the dict to avoid pass-by-sharing
+def get_player_dict():
+    return {
+        "ant": 2,
+        "bee": 2,
+        "spider": 3,
+        "hopper": 7, 
+        "beetle": 1
+    }
 
-player1 = PlayerWidget("Player 1",(255, 0, 0) , player_dict)
-player2 = PlayerWidget("salma waleed",(0, 0, 255) , player_dict)
+player1 = PlayerWidget("Player 1",(255, 0, 0) , get_player_dict())
+player2 = PlayerWidget("salma waleed",(0, 0, 255) , get_player_dict())
 hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
 #hex_manager.createHexagonTile(0,0)
 #hex_manager.createHexagonTile(-1,0)
