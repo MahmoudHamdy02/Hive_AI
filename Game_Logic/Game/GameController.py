@@ -31,7 +31,7 @@ class GameController:
         potential_moves = piece_classes[piece].get_moves(self.board, position)
 
         # Filter the moves using the MoveFilter class
-        return MoveFilter.filter_moves(self.board, potential_moves)
+        return MoveFilter.filter_moves(self.board, potential_moves,position)
     
         
 

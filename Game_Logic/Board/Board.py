@@ -1,5 +1,6 @@
 from Game_Logic.Piece.Piece import Piece
 from Game_Logic.Board.Cell import Cell
+from Game_Logic.Game.MoveFilter import MoveFilter
 
 class Board:
     def __init__(self) -> None:
@@ -53,3 +54,4 @@ class Board:
     
     def getPieceAt(self, q, r):
         return self.grid[(q,r)].getPieces()
+    

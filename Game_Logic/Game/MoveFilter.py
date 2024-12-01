@@ -9,120 +9,150 @@ class MoveFilter:
         return [(q + dq, r + dr) for dq, dr in MoveFilter.ADJACENT_HEXES]
     
     @staticmethod
-    def check_hive_continuity(board, move):
-        if not board:
+    def check_hive_continuity(board, target_position,current_position=None):
+       
+        if not board or not board.grid:
+            return True  # If the board is empty, any move is valid.
+
+
+        # Get the piece to be moved
+        piece = board.grid[current_position]
+
+        def is_hive_continuous():
+            visited = set()
+            start = next(iter(board.grid.keys()))  # Get the first hex in the grid
+
+            def dfs(node):
+                visited.add(node)
+                for neighbor in MoveFilter.get_adjacent_hexes(*node):
+                    if neighbor in board.grid and neighbor not in visited:
+                        dfs(neighbor)
+
+            dfs(start)
+            return len(visited) == len(board.grid)
+
+        # Temporarily apply the move
+        board.grid.pop(current_position)  # Remove the piece from its current position
+        board.grid[target_position] = piece  # Place the piece at the new position
+
+        # Check continuity
+        is_continuous = is_hive_continuous()
+
+        
+
+        return is_continuous
+
+
+
+    
+    @staticmethod
+    def can_slide_out( current_q, current_r,board):
+        """
+        Checks if the Ant can slide out from its current position.
+        The Ant can slide out if there are no pieces blocking its path in any of the adjacent hexes.
+        """
+        # Check if the Ant is surrounded by pieces, meaning it cannot move.
+        number_of_empty_cells=0
+        for dq, dr in MoveFilter.ADJACENT_HEXES:
+            adjacent_q = current_q + dq
+            adjacent_r = current_r + dr
+
+            # If there's no piece in this adjacent hex, the Ant can slide out
+            if not board.hasPieceAt(adjacent_q, adjacent_r):
+                number_of_empty_cells=number_of_empty_cells+1
+                
+
+        # If the Ant is surrounded by pieces in all adjacent hexes, it cannot move.
+        if number_of_empty_cells >= 2:
             return True
-
-        visited = set()
-        start = next(iter(board.grid.keys()))
-
-        def dfs(node):
-            visited.add(node)
-            for neighbor in MoveFilter.get_adjacent_hexes(*node):
-                if neighbor in board and neighbor not in visited:
-                    dfs(neighbor)
-
-        dfs(start)
-        return len(visited) == len(board)
+        else :
+            return False
+        
 
     @staticmethod
-    def can_slide_out(q, r, board):
+    def can_slide_in(target_q, target_r, board):
         """
-        Check if a piece can slide out of its position. A piece can slide if it is not
-        surrounded by two or more occupied hexes on opposite sides.
+        Checks if a piece can slide into the target position.
+        A piece can slide into the position if it is surrounded by fewer than 5 neighbors.
+
+        :param target_q: The q-coordinate of the target hex.
+        :param target_r: The r-coordinate of the target hex.
+        :param board: The current board state.
+        :return: True if the piece can slide into the position, False otherwise.
         """
-        adjacent = MoveFilter.get_adjacent_hexes(q, r)
-        occupied_neighbors = [(nq, nr) for nq, nr in adjacent if (nq, nr) in board]
-        if len(occupied_neighbors) < 2:
-            return True  # Not surrounded enough to block sliding
+        # Count the number of occupied neighbors around the target position
+        occupied_neighbors = 0
 
-        for i in range(len(occupied_neighbors)):
-            hex1 = occupied_neighbors[i]
-            hex2 = occupied_neighbors[(i + 1) % len(occupied_neighbors)]
-            if (hex1[0] - q, hex1[1] - r) != (-hex2[0] + q, -hex2[1] + r):
-                return True  # Gaps exist between neighbors; sliding is possible
+        for dq, dr in MoveFilter.ADJACENT_HEXES:
+            adjacent_q = target_q + dq
+            adjacent_r = target_r + dr
 
-        return False
+            # Check if there is a piece in this adjacent hex
+            if board.hasPieceAt(adjacent_q, adjacent_r):
+                occupied_neighbors += 1
 
-    @staticmethod
-    def _can_add_piece(piece, q, r, board, pieces, current_player, turn_count):
-        if (q, r) in board:
-            return False
-
-        if piece not in pieces[current_player] or pieces[current_player][piece] <= 0:
-            return False
-
-        if turn_count >= 3 and pieces[current_player]["bee"] == 1 and piece != 'bee':
-            return False
-
-        if board and not any((nq, nr) in board for nq, nr in MoveFilter.get_adjacent_hexes(q, r)):
-            return False
-
-        if turn_count > 1:
-            if any(
-                board.get((nq, nr), (None, None))[1] != current_player
-                for nq, nr in MoveFilter.get_adjacent_hexes(q, r)
-                if (nq, nr) in board
-            ):
+            # If already surrounded by 5 or more neighbors, return False early
+            if occupied_neighbors >= 5:
                 return False
 
+        # If fewer than 5 neighbors are occupied, the piece can slide in
         return True
-
+    
     @staticmethod
-    def _can_move_piece(current_pos, q, r, board, current_player):
-        if current_pos not in board or (q, r) in board:
-            return False
+    def is_it_sliding(current_position, move, board):
+        """
+        Determines if a move is a sliding move.
+        
+        A sliding move occurs when the piece moves to a neighboring hex that is empty, 
+        and it is connected to the current position by sliding over an occupied neighboring piece.
 
-        piece, player = board[current_pos]
-        if player != current_player:
-            return False
+        Args:
+        - current_position (tuple): The current position of the piece (q, r).
+        - move (tuple): The move to check (target position) (q, r).
+        - board (Board): The game board instance, which contains the grid and pieces.
 
-        if piece == "grasshopper":
-            return MoveFilter._is_valid_grasshopper_move(current_pos, q, r, board)
-        elif piece == "beetle":
-            return True  # Beetle can move one hex and on top
-        elif not MoveFilter.can_slide_out(*current_pos, board):
-            return False
+        Returns:
+        - bool: True if the move is a sliding move, False otherwise.
+        """
 
-        board.pop(current_pos)
-        hive_connected = MoveFilter.is_hive_connected(board)
-        board[current_pos] = (piece, player)
-
-        return hive_connected
-
-    @staticmethod
-    def get_valid_moves_for_piece(piece, current_pos, board, pieces, current_player, turn_count):
-        q, r = current_pos
-
-        if piece == "bee":
-            possible_moves = MoveFilter.possible_moves_bee(q, r)
-        elif piece == "grasshopper":
-            possible_moves = MoveFilter.get_grasshopper_moves(q, r)
-        elif piece == "ant":
-            possible_moves = MoveFilter.get_ant_moves(q, r)
-        elif piece == "beetle":
-            possible_moves = MoveFilter.get_beetle_moves(q, r)
+        
+        # Get empty neighbors of the current position (x)
+        x = []
+        q, r = current_position
+        for dq, dr in MoveFilter.ADJACENT_HEXES:
+            adjacent_q, adjacent_r = q + dq, r + dr
+            if not board.hasPieceAt(adjacent_q, adjacent_r):  # Check if the adjacent cell is empty
+                x.append((adjacent_q, adjacent_r))
+        
+        # Get occupied neighbors of the current position
+        occupied_neighbors = []
+        for dq, dr in MoveFilter.ADJACENT_HEXES:
+            adjacent_q, adjacent_r = q + dq, r + dr
+            if board.hasPieceAt(adjacent_q, adjacent_r):  # Check if the adjacent cell is occupied
+                occupied_neighbors.append((adjacent_q, adjacent_r))
+        
+        # Get the empty neighbors of each occupied neighbor (y)
+        y = []
+        for occupied_q, occupied_r in occupied_neighbors:
+            for dq, dr in MoveFilter.ADJACENT_HEXES:
+                adjacent_q, adjacent_r = occupied_q + dq, occupied_r + dr
+                if not board.hasPieceAt(adjacent_q, adjacent_r):  # Check if it's empty
+                    y.append((adjacent_q, adjacent_r))
+        
+        # Find the intersection of x and y
+        intersection = set(x).intersection(y)
+        
+        # Check if the move is in the intersection of x and y
+        if move in intersection:
+            return True  # It's a sliding move
         else:
-            print(f"Unknown piece type: {piece}")
-            return []
+            return False  # It's not a sliding move
 
-        valid_moves = MoveFilter.validate_moves_list(current_pos, possible_moves, piece, board, pieces, current_player, turn_count)
-        return valid_moves
 
-    @staticmethod
-    def validate_moves_list(current_pos, possible_moves, piece, board, pieces, current_player, turn_count):
-        valid_moves = []
-        for nq, nr in possible_moves:
-            if current_pos is None:
-                if MoveFilter._can_add_piece(piece, nq, nr, board, pieces, current_player, turn_count):
-                    valid_moves.append((nq, nr))
-            else:
-                if MoveFilter._can_move_piece(current_pos, nq, nr, board, current_player):
-                    valid_moves.append((nq, nr))
-        return valid_moves
+          
 
     @staticmethod
-    def filter_moves(board, moves):
+    def filter_moves(board, moves,current_position):
         """
         Filters moves based on multiple rules: hive continuity, sliding, and any other game rules.
         
@@ -133,24 +163,54 @@ class MoveFilter:
         Returns:
         - list: List of valid moves that pass all checks.
         """
-        valid_moves = []
+        valid_move_sequences = []
+        
+        cq,cr=current_position
+        #each element is a list of paths 
 
-        for move in moves:
-            q, r = move
+         # [1,2,3] -> [[1],[2],[3]]
+         #[[1,2,3],[1,2,3]] -> [[1,2,3],[1,2,3]]
+
+         # If moves is a 1D list, convert it into a 2D list for easier processing
+        if all(isinstance(move, tuple) for move in moves):
+            moves = [[move] for move in moves]
+
+               
+        for move_sequence in moves:
+            valid_sequence = True
+            temporary_position=current_position
+        
+        # Check each inner move in the spider's move sequence
+            for move in move_sequence:
+                q,r = move
             
-            # Check hive continuity
-            if not MoveFilter.check_hive_continuity(board, move):
-                continue
+                # Check hive continuity
+                if not MoveFilter.check_hive_continuity(board, move,temporary_position):
+                    valid_sequence = False
+                    temporary_position=move
+                    break  # Stop checking further moves in this sequence
+                
+                temporary_position=move
 
-            # Check specific game rules (optional rule-checking example)
-            if not MoveFilter.check_other_rules(board, move):
-                continue
 
-            # Check if a piece can slide out (based on the current hex status)
-            if board.grid.get((q, r)) and not MoveFilter.can_slide_out(q, r, board):
-                continue
+                # Check if a piece can slide out (based on the current hex status)
+                if board.hasPieceAt((q, r)):
+                    valid_sequence = False
+                    break
+
+                if not MoveFilter.can_slide_out(cq, cr, board) or not MoveFilter.can_slide_in(q, r, board):
+                    valid_sequence = False
+                    break
+                if not MoveFilter.is_it_sliding(current_position, move, board):
+                    valid_sequence = False
+                    break
 
             # If all checks pass, append the move to valid moves
-            valid_moves.append(move)
+            if valid_sequence:
+                valid_move_sequences.append(move_sequence)
+            # Restore the board
+            piece = board.grid[temporary_position]
+            board.grid.pop(temporary_position)  # Remove the piece from the new position
+            board.grid[current_position] = piece  # Restore the piece to its original position    
 
-        return valid_moves
+        return valid_move_sequences
