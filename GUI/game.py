@@ -13,8 +13,8 @@ def get_player_dict():
         "beetle": 1
     }
 
-player1 = PlayerWidget("Player 1",(255, 0, 0) , get_player_dict())
-player2 = PlayerWidget("salma waleed",(0, 0, 255) , get_player_dict())
+player1 = PlayerWidget("Player 1",(255, 0, 0) , get_player_dict(), Color.Black)
+player2 = PlayerWidget("salma waleed",(0, 0, 255) , get_player_dict(), Color.White)
 hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
 #hex_manager.createHexagonTile(0,0)
 #hex_manager.createHexagonTile(-1,0)
@@ -81,14 +81,14 @@ def start_game():
                             if  filled_tile:
                                 hex_manager.removeOutline(q, r)
                                 filled_tile.insect2 = selected_insect
-                                filled_tile.color2 = current_player.flag
+                                filled_tile.color2 = current_player.color
                                 selected_insect = None  # Reset selected insect
                                 current_player = player2 if current_player == player1 else player1  # Reset selected player
                                 break
 
                             else:
                                 hex_manager.removeOutline(q, r)
-                                hex_manager.createHexagonTile(q, r, selected_insect, current_player.flag)  # Add insect to tile
+                                hex_manager.createHexagonTile(q, r, selected_insect, current_player.color)  # Add insect to tile
                                 if not board_flag:
                                     current_player.insects[selected_insect] -= 1  # Decrement insect count
                                 selected_insect = None  # Reset selected insect
@@ -99,7 +99,7 @@ def start_game():
                 else:
                     for tile in hex_manager.hexagons:
                         if tile.contains_point(mouse_pos):
-                            if tile.insect and tile.color == current_player.flag:
+                            if tile.insect and tile.color == current_player.color:
                                 selected_insect = tile.insect
                                 tile.insect = None
                                 tile.color = None
