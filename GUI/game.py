@@ -59,8 +59,6 @@ def start_game():
 
                 # TODO: Place first piece automatically at (0, 0)
 
-                # TODO: Detect clicking the placed board pieces
-
                 # This currently force the turn order
                 # TODO: A turn must be skipped if there are no available moves
 
@@ -80,8 +78,6 @@ def start_game():
                             filled_tile = hex_manager.getTile(q, r)
                             if  filled_tile:
                                 hex_manager.removeOutline(q, r)
-                                filled_tile.insect2 = selected_insect
-                                filled_tile.color2 = current_player.color
                                 selected_insect = None  # Reset selected insect
                                 current_player = player2 if current_player == player1 else player1  # Reset selected player
                                 break

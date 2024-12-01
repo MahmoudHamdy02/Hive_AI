@@ -69,6 +69,11 @@ class HexagonTile(Hexagon):
         self.color=color
         self.insect=insect
         self.image = None
+        if self.insect:
+            c = "b" if self.color == Color.Black else "w"
+            self.image = pygame.image.load(IMAGES_PATH_2+f"/{c}_insects/{c}-{self.insect}.png")
+            self.image = pygame.transform.scale(self.image, (105, 105))
+            self.image = pygame.transform.rotate(self.image, 90)
 
     def render(self, screen) -> None:
         """Renders the hexagon on the screen"""
@@ -76,11 +81,6 @@ class HexagonTile(Hexagon):
         pygame.draw.polygon(screen, (150,150,150), self.vertices)
         pygame.draw.aalines(screen, (25, 25, 25), closed=True, points=self.vertices)
         if self.insect:
-            c = "b" if self.color == Color.Black else "w"
-            self.image = pygame.image.load(IMAGES_PATH_2+f"/{c}_insects/{c}-{self.insect}.png")
-            self.image = pygame.transform.scale(self.image, (105, 105))
-            self.image = pygame.transform.rotate(self.image, 90)
-
             screen.blit(self.image, (self.position[0]-53 , self.position[1] ))
 
         
