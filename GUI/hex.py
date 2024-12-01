@@ -2,7 +2,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 import math
 from typing import List, Tuple
-
+from constants import *
 import pygame
 
 from constants import MINIMAL_RADIUS, RADIUS
@@ -70,18 +70,40 @@ class HexagonTile(Hexagon):
         self.color1=color
         self.insect2=None
         self.color2=None
+        self.image1 = None
+        self.image2 = None
 
     def render(self, screen) -> None:
         """Renders the hexagon on the screen"""
-        if self.insect1 and self.insect2:
-           pygame.draw.polygon(screen, (255,255,0), self.vertices)
-           pygame.draw.aalines(screen, (255, 255, 0), closed=True, points=self.vertices)
-        elif self.insect1 and not self.insect2:
-           pygame.draw.polygon(screen, (255,0,0), self.vertices)
-           pygame.draw.aalines(screen, (255, 0, 0), closed=True, points=self.vertices)
+
+        pygame.draw.polygon(screen, (150,150,150), self.vertices)
+        pygame.draw.aalines(screen, (25, 25, 25), closed=True, points=self.vertices)
+        if self.color1 == Color.Black:
+            self.image1 = pygame.image.load(IMAGES_PATH_2+f"/b_insects/b-{self.insect1}.png")
+        elif self.color1 == Color.White:
+            self.image1 = pygame.image.load(IMAGES_PATH_2+f"/w_insects/w-{self.insect1}.png")
         else:
-           pygame.draw.polygon(screen, (150,150,150), self.vertices)
-           pygame.draw.aalines(screen, (25, 25, 25), closed=True, points=self.vertices)
+            self.image1 = None
+        if self.color2 == Color.Black:
+            self.image2 = pygame.image.load(IMAGES_PATH_2+f"/b_insects/b-{self.insect2}.png")
+        elif self.color2 == Color.White and self.count:
+            self.image2 = pygame.image.load(IMAGES_PATH_2+f"/w_insects/w-{self.insect2}.png")
+        else:
+            self.image2 = None
+            
+        if self.image1:
+            self.image1 = pygame.transform.scale(self.image1, (105, 105))
+            self.image1 = pygame.transform.rotate(self.image1, 90)
+
+            screen.blit(self.image1, (self.position[0]-53 , self.position[1] ))
+
+        if self.image2:
+            self.image2 = pygame.transform.scale(self.image2, (100, 100))
+            self.image2 = pygame.transform.rotate(self.image2, 90)
+
+            screen.blit(self.image2, (self.position[0]-50 , self.position[1] ))
+        
+
 
 
 

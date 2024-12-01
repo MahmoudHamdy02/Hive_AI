@@ -26,7 +26,11 @@ hex_manager.createHexagonTile(0,1)
 #hex_manager.removeHexagonTile(2,2)
 #hex_manager.drawOutline(1,1)
 hex_manager.drawOutline(2,2)
-hex_manager.createHexagonTile(2,2).insect1="ant"
+hex_manager.drawOutline(2,1)
+hex_manager.drawOutline(0,2)
+tile_test=hex_manager.createHexagonTile(2,2)
+tile_test.insect1="ant"
+tile_test.color1=1
 
 
 vAntMoves=[(0,0),(-1,0),(2,0)]
@@ -46,7 +50,7 @@ def start_game():
 
     selected_insect = None  # To track the selected insect
     current_player = player1
-
+    board_flag = False
     while running:
         # poll for events
         # pygame.QUIT event means the user clicked X to close your window
@@ -67,6 +71,7 @@ def start_game():
                 # If yes, get the clicked insect
                 if current_player == player1 and pygame.Rect(0, 0, 250, HEIGHT).collidepoint(mouse_pos) or current_player == player2 and pygame.Rect(WIDTH - 250, 0, 250, HEIGHT).collidepoint(mouse_pos):
                     selected_insect = current_player.handle_click(mouse_pos)
+                    board_flag = False
 
                  # Check if clicking a board position to move the insect
                 if selected_insect:
@@ -87,7 +92,8 @@ def start_game():
                             else:
                                 hex_manager.removeOutline(q, r)
                                 hex_manager.createHexagonTile(q, r, selected_insect, current_player.flag)  # Add insect to tile
-                                current_player.insects[selected_insect] -= 1  # Decrement insect count
+                                if not board_flag:
+                                    current_player.insects[selected_insect] -= 1  # Decrement insect count
                                 selected_insect = None  # Reset selected insect
                                 current_player = player2 if current_player == player1 else player1  # Reset selected player
                                 break
@@ -96,14 +102,20 @@ def start_game():
                 else:
                     for tile in hex_manager.hexagons:
                         if tile.contains_point(mouse_pos):
-                            if tile.insect2:
+                            if tile.insect2 and tile.color2 == current_player.flag:
                                 selected_insect = tile.insect2
-                                pass
-                            else:
+                                tile.insect2 = None
+                                tile.color2 = None
+                                board_flag = True
+                            elif tile.insect1 and tile.color1 == current_player.flag:
                                 selected_insect = tile.insect1
+                                tile.insect1 = None
+                                tile.color1 = None
+                                board_flag = True
+
                     if selected_insect:
+                        print("current player "+current_player.name)
                         print("from the board  "+selected_insect)
-                    selected_insect = None  # Reset selected insect
  
 
                                 
