@@ -13,8 +13,7 @@ def get_player_dict():
         "beetle": 1
     }
 
-player1 = PlayerWidget("Player 1",(255, 0, 0) , get_player_dict(), Color.Black)
-player2 = PlayerWidget("salma waleed",(0, 0, 255) , get_player_dict(), Color.White)
+
 hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
 #hex_manager.createHexagonTile(0,0)
 #hex_manager.createHexagonTile(-1,0)
@@ -34,8 +33,10 @@ vAntMoves=[(0,0),(-1,0),(2,0)]
 for i in vAntMoves:
     hex_manager.drawOutline(i[0],i[1])
 
-def start_game():
-    
+def start_game(game_parameters):
+    print(game_parameters)
+    player1 = PlayerWidget(game_parameters["name_1"],(255, 0, 0) , get_player_dict(), Color.Black)
+    player2 = PlayerWidget(game_parameters["name_2"],(0, 0, 255) , get_player_dict(), Color.White)  
     # pygame setup
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -150,4 +151,4 @@ def start_game():
         pygame.display.flip()
 
         clock.tick(60)  # limits FPS to 60
-start_game()
+# start_game()
