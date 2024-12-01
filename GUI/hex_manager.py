@@ -18,6 +18,10 @@ class HexManager:
             self.radius * (3./2 * y)
         )
     
+    def addHexagonTile(self, tile: HexagonTile) -> HexagonTile:
+        self.hexagons.append(tile)
+        return tile
+    
     def createHexagonTile(self, q: int, r: int, insect = None, color = None) -> HexagonTile:
         """ 
             Creates and renders a new hexagon at (q,r).\n
@@ -76,7 +80,7 @@ class HexManager:
                 return outline
         raise Exception("No outline exists at specified axial coordinates")
 
-    def checkTile(self, q: int, r: int) -> HexagonTile | None: 
+    def getTile(self, q: int, r: int) -> HexagonTile | None: 
         """ Returns the tile at the specified position if exists, otherwise returns None"""
         for hexagon in self.hexagons:
             if hexagon.axial_coordinates == (q, r):

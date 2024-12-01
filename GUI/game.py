@@ -28,9 +28,6 @@ hex_manager.createHexagonTile(0,1)
 hex_manager.drawOutline(2,2)
 hex_manager.drawOutline(2,1)
 hex_manager.drawOutline(0,2)
-tile_test=hex_manager.createHexagonTile(2,2)
-tile_test.insect1="ant"
-tile_test.color1=1
 
 
 vAntMoves=[(0,0),(-1,0),(2,0)]
@@ -74,13 +71,13 @@ def start_game():
                     board_flag = False
                     continue
 
-                 # Check if clicking a board position to move the insect
+                # Check if clicking a board position to move the insect
                 if selected_insect:
                     for outline in hex_manager.outlines:  # Assuming `vAntMoves` contains hexagonal tiles
                         if outline.contains_point(mouse_pos):
                             # Move the insect to this valid tile
-                            q, r=outline.axial_coordinates
-                            filled_tile = hex_manager.checkTile(q, r)
+                            q, r = outline.axial_coordinates
+                            filled_tile = hex_manager.getTile(q, r)
                             if  filled_tile:
                                 hex_manager.removeOutline(q, r)
                                 filled_tile.insect2 = selected_insect
@@ -102,15 +99,10 @@ def start_game():
                 else:
                     for tile in hex_manager.hexagons:
                         if tile.contains_point(mouse_pos):
-                            if tile.insect2 and tile.color2 == current_player.flag:
-                                selected_insect = tile.insect2
-                                tile.insect2 = None
-                                tile.color2 = None
-                                board_flag = True
-                            elif tile.insect1 and tile.color1 == current_player.flag:
-                                selected_insect = tile.insect1
-                                tile.insect1 = None
-                                tile.color1 = None
+                            if tile.insect and tile.color == current_player.flag:
+                                selected_insect = tile.insect
+                                tile.insect = None
+                                tile.color = None
                                 board_flag = True
 
                     if selected_insect:
