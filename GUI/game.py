@@ -72,14 +72,14 @@ def start_game():
                 if current_player == player1 and pygame.Rect(0, 0, 250, HEIGHT).collidepoint(mouse_pos) or current_player == player2 and pygame.Rect(WIDTH - 250, 0, 250, HEIGHT).collidepoint(mouse_pos):
                     selected_insect = current_player.handle_click(mouse_pos)
                     board_flag = False
+                    continue
 
                  # Check if clicking a board position to move the insect
                 if selected_insect:
-                    for tile in hex_manager.outlines:  # Assuming `vAntMoves` contains hexagonal tiles
-                        if tile.contains_point(mouse_pos):
-                            
+                    for outline in hex_manager.outlines:  # Assuming `vAntMoves` contains hexagonal tiles
+                        if outline.contains_point(mouse_pos):
                             # Move the insect to this valid tile
-                            q, r=tile.axial_coordinates
+                            q, r=outline.axial_coordinates
                             filled_tile = hex_manager.checkTile(q, r)
                             if  filled_tile:
                                 hex_manager.removeOutline(q, r)
@@ -97,8 +97,8 @@ def start_game():
                                 selected_insect = None  # Reset selected insect
                                 current_player = player2 if current_player == player1 else player1  # Reset selected player
                                 break
+
                 # detect if the board was clicked
-                
                 else:
                     for tile in hex_manager.hexagons:
                         if tile.contains_point(mouse_pos):
