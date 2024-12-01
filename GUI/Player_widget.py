@@ -6,21 +6,15 @@ import insects_widget
 
 class PlayerWidget:
 
-    def __init__(self,name: str, color: Tuple[float, float, float],insects: dict):
+    def __init__(self,name: str, border_color: Tuple[float, float, float],insects: dict, color: int):
         
         self.name = name
-        self.color = color
-        #self.player_score = self.player.score
+        self.border_color = border_color
         self.insects = insects
+        self.color = color
         self.insect_count = 5
         self.postion = (10, 10)
         self.insectsBoxes={}
-        if self.color == (255, 0, 0):  # Red color
-
-            self.flag = Color.Black
-        else:
-
-            self.flag = Color.White
         
     def render(self, screen) -> None:
         """
@@ -29,8 +23,8 @@ class PlayerWidget:
         :param screen: The pygame screen object.
         """
         self.insectsBoxes={}
-        # Determine the position and size based on player color
-        if self.color == (255, 0, 0):  # Red color
+        # Determine the position and size based on player border_color
+        if self.border_color == (255, 0, 0):  # Red border_color
             rect_width = 250
             rect_x = 0  # Align to the left side of the screen
         else:
@@ -42,7 +36,7 @@ class PlayerWidget:
 
         # Draw the background for the widget
         pygame.draw.rect(screen, (50, 50, 50), (rect_x, rect_y, rect_width, rect_height))  # A gray background
-        pygame.draw.rect(screen, self.color, (rect_x, rect_y, rect_width, rect_height), 3)  # Border with player color
+        pygame.draw.rect(screen, self.border_color, (rect_x, rect_y, rect_width, rect_height), 3)  # Border with player border_color
 
         # Render the player's name
         name_text = pygame.font.SysFont("Arial", 20).render(f"Name: {self.name}", True, (255, 255, 255))
@@ -54,7 +48,7 @@ class PlayerWidget:
             box_y = rect_y + 40 * i + (i - 1) * INSECT_BOX_Y
             insect_box = pygame.Rect(box_x, box_y, INSECT_BOX_X, INSECT_BOX_Y)
 
-            insect = insects_widget.InsectWidget(insect_name,self.flag,count,(box_x,box_y))
+            insect = insects_widget.InsectWidget(insect_name,self.color,count,(box_x,box_y))
             insect.render(screen)
             # count_text = pygame.font.SysFont("Arial", 24).render(f"x{1}", True, (0, 0, 0))  
             # screen.blit(count_text, (rect_x+10 + INSECT_BOX_X-30, INSECT_BOX_Y+5))

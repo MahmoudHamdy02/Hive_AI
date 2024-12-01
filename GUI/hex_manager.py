@@ -75,11 +75,14 @@ class HexManager:
                 self.outlines.remove(outline)
                 return outline
         raise Exception("No outline exists at specified axial coordinates")
-    def checkTile(self, q: int, r: int) : 
+
+    def getTile(self, q: int, r: int) -> HexagonTile | None: 
+        """ Returns the tile at the specified position if exists, otherwise returns None"""
         for hexagon in self.hexagons:
             if hexagon.axial_coordinates == (q, r):
                 return hexagon
         return None
+
     def render(self, screen) -> None:
         # Render outlines last so they are not hidden under tiles
         for hexagon in self.hexagons:
