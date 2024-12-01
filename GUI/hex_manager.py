@@ -18,10 +18,6 @@ class HexManager:
             self.radius * (3./2 * y)
         )
     
-    def addHexagonTile(self, tile: HexagonTile) -> HexagonTile:
-        self.hexagons.append(tile)
-        return tile
-    
     def createHexagonTile(self, q: int, r: int, insect = None, color = None) -> HexagonTile:
         """ 
             Creates and renders a new hexagon at (q,r).\n

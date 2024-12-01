@@ -45,7 +45,10 @@ def start_game():
     bg_image = pygame.image.load("GUI/images/bg.jpg")
     bg_image = pygame.transform.scale(bg_image, (640, 1280))
 
-    selected_insect = None  # To track the selected insect
+    current_state: State = State.Nothing_selected
+    selected_tile = None
+
+    new_insect = None  # To track the selected insect
     current_player = player1
     board_flag = False
     while running:
@@ -61,52 +64,75 @@ def start_game():
 
                 # This currently force the turn order
                 # TODO: A turn must be skipped if there are no available moves
+                # Create end_turn() function to handle logic
 
-                # Check if player area 1 or 2 was clicked in the correct turn
-                # If yes, get the clicked insect
-                if current_player == player1 and pygame.Rect(0, 0, 250, HEIGHT).collidepoint(mouse_pos) or current_player == player2 and pygame.Rect(WIDTH - 250, 0, 250, HEIGHT).collidepoint(mouse_pos):
-                    selected_insect = current_player.handle_click(mouse_pos)
-                    board_flag = False
-                    continue
+                # TODO: Create a visual effect to indicate a piece is selected
 
-                # Check if clicking a board position to move the insect
-                if selected_insect:
-                    for outline in hex_manager.outlines:  # Assuming `vAntMoves` contains hexagonal tiles
-                        if outline.contains_point(mouse_pos):
-                            # Move the insect to this valid tile
-                            q, r = outline.axial_coordinates
-                            filled_tile = hex_manager.getTile(q, r)
-                            if  filled_tile:
-                                hex_manager.removeOutline(q, r)
-                                selected_insect = None  # Reset selected insect
-                                current_player = player2 if current_player == player1 else player1  # Reset selected player
-                                break
+                if current_state == State.Nothing_selected:
+                    # Check if player area 1 or 2 was clicked in the correct turn
+                    # If yes, get the clicked insect
+                    if current_player == player1 and pygame.Rect(0, 0, 250, HEIGHT).collidepoint(mouse_pos) or current_player == player2 and pygame.Rect(WIDTH - 250, 0, 250, HEIGHT).collidepoint(mouse_pos):
+                        new_insect = current_player.handle_click(mouse_pos)
+                        current_state = State.New_piece_selected
+                        print(current_state)
+                        continue
 
-                            else:
-                                hex_manager.removeOutline(q, r)
-                                hex_manager.createHexagonTile(q, r, selected_insect, current_player.color)  # Add insect to tile
-                                if not board_flag:
-                                    current_player.insects[selected_insect] -= 1  # Decrement insect count
-                                selected_insect = None  # Reset selected insect
-                                current_player = player2 if current_player == player1 else player1  # Reset selected player
-                                break
-
-                # detect if the board was clicked
-                else:
+                    # Select existing tile from board
                     for tile in hex_manager.hexagons:
-                        if tile.contains_point(mouse_pos):
-                            if tile.insect and tile.color == current_player.color:
-                                selected_insect = tile.insect
-                                tile.insect = None
-                                tile.color = None
-                                board_flag = True
+                        if tile.contains_point(mouse_pos) and tile.color == current_player.color:
+                            selected_tile = tile
+                            current_state = State.Existing_piece_selected
+                            print(current_state, selected_tile.insect)
+                            break
 
-                    if selected_insect:
-                        print("current player "+current_player.name)
-                        print("from the board  "+selected_insect)
- 
+                elif current_state == State.New_piece_selected:
+                    # If another new piece is clicked, select it instead
+                    if current_player == player1 and pygame.Rect(0, 0, 250, HEIGHT).collidepoint(mouse_pos) or current_player == player2 and pygame.Rect(WIDTH - 250, 0, 250, HEIGHT).collidepoint(mouse_pos):
+                        new_insect = current_player.handle_click(mouse_pos)
+                        print(current_state)
+                        continue
 
-                                
+                    # Place new piece
+                    for outline in hex_manager.outlines:
+                        if outline.contains_point(mouse_pos):
+                            q, r = outline.axial_coordinates
+                            hex_manager.removeOutline(q, r)
+                            hex_manager.createHexagonTile(q, r, new_insect, current_player.color)
+                            current_player.insects[new_insect] -= 1  # Decrement insect count
+                            current_player = player2 if current_player == player1 else player1
+                            new_insect = None
+                            current_state = State.Nothing_selected
+                    print(current_state)
+                elif current_state == State.Existing_piece_selected:
+                    # If another tile is clicked, select it instead
+                    tile_clicked = False
+                    for tile in hex_manager.hexagons:
+                        if tile.contains_point(mouse_pos) and tile.color == current_player.color:
+                            tile_clicked = True
+                            selected_tile = tile
+                            current_state = State.Existing_piece_selected
+                            print(current_state, selected_tile.insect)
+                            break
+
+                    # Move selected tile to clicked outline
+                    outline_clicked = False
+                    for outline in hex_manager.outlines:
+                        if outline.contains_point(mouse_pos):
+                            outline_clicked = True
+                            q, r = outline.axial_coordinates
+                            hex_manager.removeOutline(q, r)
+                            tile_q, tile_r = selected_tile.axial_coordinates
+                            hex_manager.removeHexagonTile(tile_q, tile_r)
+                            hex_manager.createHexagonTile(q, r, selected_tile.insect, current_player.color)
+                            selected_tile = None
+                            current_player = player2 if current_player == player1 else player1
+                            current_state = State.Nothing_selected
+
+                    # If neither tile nor outline is clicked, remove selection
+                    if tile_clicked == False and outline_clicked == False:
+                        selected_tile = None
+                        current_state = State.Nothing_selected
+                    print(current_state)                                
 
 
         # RENDER GAME HERE
