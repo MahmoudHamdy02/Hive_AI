@@ -35,9 +35,14 @@ for i in vAntMoves:
     hex_manager.drawOutline(i[0],i[1])
 
 def start_game(game_parameters: GameParameters):
-    print(game_parameters)
-    player1 = PlayerWidget(game_parameters.name1,(255, 0, 0) , get_player_dict(), Color.Black)
-    player2 = PlayerWidget(game_parameters.name2,(0, 0, 255) , get_player_dict(), Color.White)  
+    name1 = name2 = "Computer"
+    if game_parameters.selected_mode == 2 or game_parameters.selected_mode == 3:
+        name1 = game_parameters.name1
+    if game_parameters.selected_mode == 3:
+        name2 = game_parameters.name2
+    
+    player1 = PlayerWidget(name1, (255, 0, 0) , get_player_dict(), Color.Black)
+    player2 = PlayerWidget(name2, (0, 0, 255) , get_player_dict(), Color.White)  
     # pygame setup
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
