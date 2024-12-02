@@ -6,14 +6,14 @@ if TYPE_CHECKING:
     from Game_Logic.Player.Player import Player
 
 class Piece:
-    # def __init__(self, owner, position=None):
-    def __init__(self)-> None:
+    def __init__(self, owner, position=None):
+    
         """
         Initializes a Generic Hive Piece
 
         """
-        # self.owner: Player = owner
-        # self.position: tuple = position
+        self.owner: Player = owner
+        self.position: tuple = position
 
     def getMoves(self, board: Board) -> list:
         """

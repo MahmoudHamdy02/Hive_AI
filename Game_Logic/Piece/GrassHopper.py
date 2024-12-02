@@ -1,12 +1,11 @@
 from Game_Logic.Piece.Piece import Piece
 
 class Grasshopper(Piece):
-    def __init__(self)-> None:
+    def __init__(self, owner, position=None):
         """
         Initializes an Ant Piece
-
         """
-        super().__init__()
+        super().__init__(owner, position)
     def getMoves(self, board) -> list:
         """
         Returns a list of all possible moves for the Grasshopper

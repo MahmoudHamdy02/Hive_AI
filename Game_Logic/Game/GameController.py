@@ -6,13 +6,18 @@ from Game_Logic.Piece.Bee import Bee
 from Game_Logic.Piece.Spider import Spider
 
 class GameController:
-    def _init_(self, board):
+    def _init_(self, board,status):
         """
         Initializes the game controller with a game board.
         """
         self.board = board
+        self.status=status
 
-    def get_valid_moves(self, piece, position):
+
+    def get_valid_adds():
+        pass
+
+    def get_valid_moves(self, piece):
         """
         Gets valid moves for a specific piece at a given position.
         Delegates move generation to the piece class and validation to MoveFilter.
@@ -28,10 +33,10 @@ class GameController:
             raise ValueError(f"Unknown piece type: {piece}")
 
         # Get the potential moves from the piece class
-        potential_moves =piece.get_moves(self.board, position)
+        potential_moves =piece.get_moves(self.board)
 
         # Filter the moves using the MoveFilter class
-        return MoveFilter.filter_moves(self.board, potential_moves,position)
+        return MoveFilter.filter_moves(self.board, potential_moves)
     
     def move_piece(board, move,current_position,piece,current_player,self,status):
         if move in self.get_valid_moves(piece,current_position):

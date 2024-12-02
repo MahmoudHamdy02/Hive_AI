@@ -1,12 +1,11 @@
 from Game_Logic.Piece.Piece import Piece
 
 class Bee(Piece):
-    def __init__(self)-> None:
+    def __init__(self, owner, position=None):
         """
-        Initializes a Bee Piece.
-        The Bee moves one space in any direction.
+        Initializes an Ant Piece
         """
-        super().__init__()
+        super().__init__(owner, position)
 
     def getMoves(self, board) -> list:
         """
