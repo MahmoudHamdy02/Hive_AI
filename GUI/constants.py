@@ -15,3 +15,4 @@ INSECT_BOX_Y=100
 
 Color = Enum("Color", [("Black", 0), ("White", 1)])
 State = Enum("State", [("Nothing_selected", 0),("New_piece_selected", 1),("Existing_piece_selected", 2)])
+Gamemode = Enum("Gamemode", [("CvC", 0),("PvC", 1),("PvP", 2)])

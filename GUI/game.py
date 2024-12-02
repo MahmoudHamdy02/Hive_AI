@@ -2,6 +2,7 @@ import pygame
 from hex_manager import HexManager
 from constants import *
 from Player_widget import PlayerWidget
+from GameParameters import GameParameters
 
 # Get a copy of the dict to avoid pass-by-sharing
 def get_player_dict():
@@ -13,8 +14,6 @@ def get_player_dict():
         "beetle": 1
     }
 
-player1 = PlayerWidget("Player 1",(255, 0, 0) , get_player_dict(), Color.Black)
-player2 = PlayerWidget("salma waleed",(0, 0, 255) , get_player_dict(), Color.White)
 hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
 #hex_manager.createHexagonTile(0,0)
 #hex_manager.createHexagonTile(-1,0)
@@ -29,12 +28,19 @@ hex_manager.drawOutline(2,2)
 hex_manager.drawOutline(2,1)
 hex_manager.drawOutline(0,2)
 
-
 vAntMoves=[(0,0),(-1,0),(2,0)]
 for i in vAntMoves:
     hex_manager.drawOutline(i[0],i[1])
 
-def start_game():
+def start_game(game_parameters: GameParameters):
+    name1 = name2 = "Computer"
+    if game_parameters.selected_mode == Gamemode.PvP or game_parameters.selected_mode == Gamemode.PvC:
+        name1 = game_parameters.name1
+    if game_parameters.selected_mode == Gamemode.PvP:
+        name2 = game_parameters.name2
+    
+    player1 = PlayerWidget(name1, (255, 0, 0) , get_player_dict(), Color.Black)
+    player2 = PlayerWidget(name2, (0, 0, 255) , get_player_dict(), Color.White)  
     
     # pygame setup
     pygame.init()
@@ -50,7 +56,7 @@ def start_game():
 
     new_insect = None  # To track the selected insect
     current_player = player1
-    board_flag = False
+
     while running:
         # poll for events
         # pygame.QUIT event means the user clicked X to close your window
@@ -81,6 +87,7 @@ def start_game():
                     for tile in hex_manager.hexagons:
                         if tile.contains_point(mouse_pos) and tile.color == current_player.color:
                             selected_tile = tile
+                            tile.selected = True
                             current_state = State.Existing_piece_selected
                             print(current_state, selected_tile.insect)
                             break
@@ -109,6 +116,8 @@ def start_game():
                     for tile in hex_manager.hexagons:
                         if tile.contains_point(mouse_pos) and tile.color == current_player.color:
                             tile_clicked = True
+                            selected_tile.selected = False
+                            tile.selected = True
                             selected_tile = tile
                             current_state = State.Existing_piece_selected
                             print(current_state, selected_tile.insect)
@@ -130,6 +139,7 @@ def start_game():
 
                     # If neither tile nor outline is clicked, remove selection
                     if tile_clicked == False and outline_clicked == False:
+                        selected_tile.selected = False
                         selected_tile = None
                         current_state = State.Nothing_selected
                     print(current_state)                                
@@ -150,4 +160,4 @@ def start_game():
         pygame.display.flip()
 
         clock.tick(60)  # limits FPS to 60
-start_game()
+# start_game()
