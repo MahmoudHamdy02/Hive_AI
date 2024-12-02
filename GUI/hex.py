@@ -66,8 +66,9 @@ class HexagonTile(Hexagon):
 
     def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float], insect: str = None, color: int = None):
         super().__init__(axial_coordinates, position)
-        self.color=color
-        self.insect=insect
+        self.selected = False
+        self.color = color
+        self.insect = insect
         self.image = None
         if self.insect:
             c = "b" if self.color == Color.Black else "w"
@@ -81,10 +82,11 @@ class HexagonTile(Hexagon):
         pygame.draw.polygon(screen, (150,150,150), self.vertices)
         pygame.draw.aalines(screen, (25, 25, 25), closed=True, points=self.vertices)
         if self.insect:
+            if self.selected:
+                self.image.set_alpha(128)
+            else:
+                self.image.set_alpha(255)
             screen.blit(self.image, (self.position[0]-53 , self.position[1] ))
-
-        
-
 
 
 
