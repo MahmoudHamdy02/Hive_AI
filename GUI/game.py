@@ -2,6 +2,7 @@ import pygame
 from hex_manager import HexManager
 from constants import *
 from Player_widget import PlayerWidget
+from GameParameters import GameParameters
 
 # Get a copy of the dict to avoid pass-by-sharing
 def get_player_dict():
@@ -33,10 +34,10 @@ vAntMoves=[(0,0),(-1,0),(2,0)]
 for i in vAntMoves:
     hex_manager.drawOutline(i[0],i[1])
 
-def start_game(game_parameters):
+def start_game(game_parameters: GameParameters):
     print(game_parameters)
-    player1 = PlayerWidget(game_parameters["name_1"],(255, 0, 0) , get_player_dict(), Color.Black)
-    player2 = PlayerWidget(game_parameters["name_2"],(0, 0, 255) , get_player_dict(), Color.White)  
+    player1 = PlayerWidget(game_parameters.name1,(255, 0, 0) , get_player_dict(), Color.Black)
+    player2 = PlayerWidget(game_parameters.name2,(0, 0, 255) , get_player_dict(), Color.White)  
     # pygame setup
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
