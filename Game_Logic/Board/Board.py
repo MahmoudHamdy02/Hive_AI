@@ -9,9 +9,10 @@ class Board:
         if (q,r) not in self.grid:
             self.grid[(q,r)] = Cell()
         self.grid[(q,r)].addPiece(piece)
+        piece.position = (q,r)
 
     def movePiece(self, piece: Piece, q, r) -> None:
-        self.grid[piece.position].removePiece(piece)
+        self.grid[piece.position].removePiece()
         self.addPiece(piece, q, r)
         
     def hasPieceAt(self, q,r) -> bool:

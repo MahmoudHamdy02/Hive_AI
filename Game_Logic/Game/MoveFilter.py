@@ -31,7 +31,7 @@ class MoveFilter:
             return len(visited) == len(board.grid)
 
         # Temporarily apply the move
-        board.movePiece(piece, target_position)
+        board.movePiece(piece, *target_position)
 
         # board.grid.pop(current_position)  # Remove the piece from its current position
         # board.grid[target_position] = piece  # Place the piece at the new position
@@ -185,6 +185,19 @@ class MoveFilter:
             for move in move_sequence:
                 q,r = move
             
+
+                # Check if a piece can slide out (based on the current hex status)
+                if board.hasPieceAt(q, r):
+                    valid_sequence = False
+                    break
+
+                if not MoveFilter.can_slide_out(cq, cr, board) or not MoveFilter.can_slide_in(q, r, board):
+                    valid_sequence = False
+                    break
+                # if not MoveFilter.is_it_sliding(current_position, move, board):
+                #     valid_sequence = False
+                #     break
+
                 # Check hive continuity
                 if not MoveFilter.check_hive_continuity(board, move,temporary_position):
                     valid_sequence = False
@@ -193,30 +206,16 @@ class MoveFilter:
                 
                 temporary_position=move
 
-
-                # Check if a piece can slide out (based on the current hex status)
-                if board.hasPieceAt((q, r)):
-                    valid_sequence = False
-                    break
-
-                if not MoveFilter.can_slide_out(cq, cr, board) or not MoveFilter.can_slide_in(q, r, board):
-                    valid_sequence = False
-                    break
-                if not MoveFilter.is_it_sliding(current_position, move, board):
-                    valid_sequence = False
-                    break
-
             # If all checks pass, append the move to valid moves
             if valid_sequence:
-                valid_move_sequences.append(move_sequence)
+                valid_move_sequences.append(move_sequence[-1])
             # Restore the board
             piece = board.getPieceAt(*temporary_position)
-            board.movePiece(piece, current_position)
+            board.movePiece(piece, *current_position)
 
             # piece = board.grid[temporary_position]
             # board.grid.pop(temporary_position)  # Remove the piece from the new position
             # board.grid[current_position] = piece  # Restore the piece to its original position    
-
         return valid_move_sequences
 
 

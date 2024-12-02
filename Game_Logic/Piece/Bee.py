@@ -1,4 +1,5 @@
 from Game_Logic.Piece.Piece import Piece
+from Game_Logic.Game.MoveFilter import MoveFilter
 
 class Bee(Piece):
     def __init__(self, owner, position=None):
@@ -22,6 +23,7 @@ class Bee(Piece):
             for dq, dr in directions:
                 nq, nr = q + dq, r + dr
                 if not board.hasPieceAt(nq, nr):  # The Bee can't move to a square with a piece
-                    moves.append((nq, nr))
+                    if MoveFilter.is_it_sliding(self.position, (nq, nr), board):
+                        moves.append((nq, nr))
 
         return moves

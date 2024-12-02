@@ -41,7 +41,7 @@ controller.add_piece('ant', (0, -2))
 
 #PLayer2
 print(controller.get_valid_moves((0, 2)))
-# controller.move_piece((0, 2), (1, -1))
+controller.move_piece((0, 2), (0,-3))
 
 
 # # PLayer1

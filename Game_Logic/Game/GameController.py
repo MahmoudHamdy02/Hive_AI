@@ -54,13 +54,14 @@ class GameController:
         # Get the potential moves from the piece class
         piece = self.board.getPieceAt(position[0], position[1])
         potential_moves =piece.getMoves(self.board)
-        print(potential_moves, piece)
+        # print(potential_moves, piece)
 
         # Filter the moves using the MoveFilter class
         return MoveFilter.filter_moves(self.board, potential_moves, position)
     
     def move_piece(self, position, move):
         piece = self.board.getPieceAt(position[0], position[1])
+            
         if move in self.get_valid_moves(position):
              self.board.movePiece(piece, move[0], move[1])
              self.status.nextTurn()
@@ -71,7 +72,6 @@ class GameController:
     def add_piece(self, piece_type: str, target_position):
             q,r=target_position
 
-            print()
             if len(self.status.getCurrentPlayer().get_remaining_pieces()[piece_type]) <= 0:
                 print(f"No more {piece_type}s available for {self.status.current_player}.")
                 return

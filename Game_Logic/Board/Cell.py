@@ -13,12 +13,12 @@ class Cell:
         """
         self.pieces.append(piece)
 
-    def removePiece(self, piece):
+    def removePiece(self):
         """
         Removes a piece from the cell
 
         """
-        self.pieces.pop(piece)
+        self.pieces.pop()
 
     def getPieces(self):
         """
