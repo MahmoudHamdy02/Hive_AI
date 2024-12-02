@@ -7,8 +7,7 @@ class GameStatus:
         self.players = [whitePlayer, blackPlayer]
         self.current_player = whitePlayer
         self.winner = None
-        self.pieces = {"white": {"bee": 1, "ant": 3, "grasshopper": 3, "beetle": 2}, 
-                       "black": {"bee": 1, "ant": 3, "grasshopper": 3,"beetle": 2}}
+    
 
 
 

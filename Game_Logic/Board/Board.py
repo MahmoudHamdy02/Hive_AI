@@ -52,6 +52,6 @@ class Board:
     def getGrid(self):
         return self.grid
     
-    def getPieceAt(self, q, r):
-        return self.grid[(q,r)].getPieces()
+    # def getPieceAt(self, q, r):
+    #     return self.grid[(q,r)].getPieces()
     

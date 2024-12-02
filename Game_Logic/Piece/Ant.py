@@ -2,12 +2,12 @@ from Game_Logic.Piece.Piece import Piece
 
 class Ant(Piece):
 
-    def __init__(self, owner, position=None):
+    def __init__(self)-> None:
         """
         Initializes an Ant Piece
 
         """
-        super().__init__(owner, position)
+        super().__init__()
 
     def getMoves(self, board) -> list:
         """

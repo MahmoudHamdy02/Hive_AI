@@ -1,8 +1,12 @@
 from Game_Logic.Piece.Piece import Piece
 from Game_Logic.Board.Board import Board
 class Spider(Piece):
-    def __init__(self, owner, position=None):
-        super().__init__(owner, position)
+    def __init__(self)-> None:
+        """
+        Initializes an Ant Piece
+
+        """
+        super().__init__()
 
     def getMoves(self, board:Board) -> list:
         """

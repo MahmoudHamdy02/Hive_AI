@@ -1,12 +1,12 @@
 from Game_Logic.Piece.Piece import Piece
 
 class Beetle(Piece):
-    def __init__(self, owner, position=None):
+    def __init__(self)-> None:
         """
         Initializes a Beetle Piece
 
         """
-        super().__init__(owner, position)
+        super().__init__()
 
     def getMoves(self, board) -> list:
         """
