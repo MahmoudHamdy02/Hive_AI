@@ -4,7 +4,7 @@ from Game_Logic.Game.MoveFilter import MoveFilter
 
 class Board:
     def __init__(self) -> None:
-        self.grid = {} # (q, r): [Piece1, Piece2, ...]}
+        self.grid = {} # (q, r): [Piece1, Piece2, ...]}   
 
     def addPiece(self, piece: Piece, q: int, r: int) -> None:
         if (q,r) not in self.grid:

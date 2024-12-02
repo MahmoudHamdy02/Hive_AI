@@ -18,14 +18,14 @@ class Cell:
         Removes a piece from the cell
 
         """
-        self.pieces.remove(piece)
+        self.pieces.pop(piece)
 
     def getPieces(self):
         """
         Returns the pieces in the cell
 
         """
-        return self.pieces
+        return self.pieces[-1]
 
     def __len__(self):
         return len(self.pieces)

@@ -1,4 +1,4 @@
-from Game_Logic.Piece.Bee import Bee
+from Game_Logic.Piece import Bee
 
 class GameStatus:
     def __init__(self, board, whitePlayer, blackPlayer):

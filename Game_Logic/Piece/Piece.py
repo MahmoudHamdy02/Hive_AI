@@ -29,6 +29,13 @@ class Piece:
         """
         return self.owner
     
+    def getPosition(self) -> tuple:
+        """
+        Returns the current position of the piece
+
+        """
+        return self.position
+    
     def move(self, q, r):
         """
         Moves the piece to the specified position

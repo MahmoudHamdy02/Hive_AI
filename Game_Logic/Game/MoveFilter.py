@@ -1,6 +1,3 @@
-from Game_Logic.Board.Board import Board
-
-
 class MoveFilter:
     
     ADJACENT_HEXES = [(1, 0), (0, 1), (-1, 1), (-1, 0), (0, -1), (1, -1)]
@@ -17,7 +14,8 @@ class MoveFilter:
 
 
         # Get the piece to be moved
-        piece = board.grid[current_position]
+        piece = board.getPieceAt(*current_position)
+        # piece = board.grid[current_position]
 
         def is_hive_continuous():
             visited = set()
@@ -33,8 +31,10 @@ class MoveFilter:
             return len(visited) == len(board.grid)
 
         # Temporarily apply the move
-        board.grid.pop(current_position)  # Remove the piece from its current position
-        board.grid[target_position] = piece  # Place the piece at the new position
+        board.movePiece(piece, target_position)
+
+        # board.grid.pop(current_position)  # Remove the piece from its current position
+        # board.grid[target_position] = piece  # Place the piece at the new position
 
         # Check continuity
         is_continuous = is_hive_continuous()
@@ -210,9 +210,12 @@ class MoveFilter:
             if valid_sequence:
                 valid_move_sequences.append(move_sequence)
             # Restore the board
-            piece = board.grid[temporary_position]
-            board.grid.pop(temporary_position)  # Remove the piece from the new position
-            board.grid[current_position] = piece  # Restore the piece to its original position    
+            piece = board.getPieceAt(*temporary_position)
+            board.movePiece(piece, current_position)
+
+            # piece = board.grid[temporary_position]
+            # board.grid.pop(temporary_position)  # Remove the piece from the new position
+            # board.grid[current_position] = piece  # Restore the piece to its original position    
 
         return valid_move_sequences
 

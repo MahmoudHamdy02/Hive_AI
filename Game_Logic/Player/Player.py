@@ -1,10 +1,6 @@
 from Game_Logic.Player.Color import Color
 from  Game_Logic.Piece.PieceType import PieceType
-from Game_Logic.Piece.Ant import Ant
-from Game_Logic.Piece.Bee import  Bee
-from Game_Logic.Piece.Beetle import Beetle
-from Game_Logic.Piece.GrassHopper import Grasshopper
-from Game_Logic.Piece.Spider import Spider
+from Game_Logic.Piece import Bee, Ant, Beetle, Grasshopper, Spider
 
 class Player:
     def __init__(self, color: Color):
@@ -15,11 +11,11 @@ class Player:
         #                          PieceType.GRASSHOPPER: 3,
         #                          PieceType.ANT: 3 }
         self.remainingPieces = {
+            "bee" : [Bee(self) for _ in range(1)],
             "ant" : [Ant(self) for _ in range(3)],
             "beetle" : [Beetle(self) for _ in range(2)],
             "grasshopper" : [Grasshopper(self) for _ in range(3)],
             "spider" : [Spider(self) for _ in range(2)],
-            "bee" : [Bee(self) for _ in range(1)]
         }
         self.positions = []
     def get_remaining_pieces(self):
