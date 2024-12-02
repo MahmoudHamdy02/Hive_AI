@@ -36,9 +36,9 @@ for i in vAntMoves:
 
 def start_game(game_parameters: GameParameters):
     name1 = name2 = "Computer"
-    if game_parameters.selected_mode == 2 or game_parameters.selected_mode == 3:
+    if game_parameters.selected_mode == Gamemode.PvP or game_parameters.selected_mode == Gamemode.PvC:
         name1 = game_parameters.name1
-    if game_parameters.selected_mode == 3:
+    if game_parameters.selected_mode == Gamemode.PvP:
         name2 = game_parameters.name2
     
     player1 = PlayerWidget(name1, (255, 0, 0) , get_player_dict(), Color.Black)

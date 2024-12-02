@@ -32,13 +32,13 @@ def get_main_menu():
 # Now you can use `selected_mode` later in your code after the user interacts with the menu.
 def create_menu2():
     menu2 = pygame_menu.Menu('Welcome', WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_BLUE)
-    if game_parameters.selected_mode == 1:
+    if game_parameters.selected_mode == Gamemode.CvC:
         menu2.add.selector('Difficulty for Computer 1:', [('Hard', 1), ('Medium', 2),('Easy', 3)], default = game_parameters.difficulty1, onchange=set_difficulty1)
         menu2.add.selector('Difficulty for Computer 2:', [('Hard', 1), ('Medium', 2),('Easy', 3)], default = game_parameters.difficulty2, onchange=set_difficulty2)
-    elif game_parameters.selected_mode == 2:
+    elif game_parameters.selected_mode == Gamemode.PvC:
         menu2.add.text_input('Player 1 :', default=game_parameters.name1, onchange=set_name1)
         menu2.add.selector('Difficulty :', [('Hard', 1), ('Medium', 2),('Easy', 3)], default = game_parameters.difficulty1, onchange=set_difficulty1)
-    elif game_parameters.selected_mode == 3:
+    elif game_parameters.selected_mode == Gamemode.PvP:
         menu2.add.text_input('Player 1 :', default=game_parameters.name1, onchange=set_name1)
         menu2.add.text_input('Player 2 :', default=game_parameters.name2, onchange=set_name2)
 
@@ -53,7 +53,7 @@ def start_the_game():
 
 menu = pygame_menu.Menu('Welcome', WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_BLUE)
 
-menu.add.selector('Mode :', [('Computer vs Computer', 1), ('Human vs Computer', 2),('Human vs Human', 3)], onchange=set_mode)
+menu.add.selector('Mode :', [('Player vs Player', Gamemode.PvP), ('Player vs Computer', Gamemode.PvC), ('Computer vs Computer', Gamemode.CvC)], onchange=set_mode)
 
 menu.add.button('Next', create_menu2)
 menu.add.button('Quit', pygame_menu.events.EXIT)
