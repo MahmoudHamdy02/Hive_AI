@@ -17,11 +17,11 @@ from Game_Logic.Game.GameController import GameController
 # Get a copy of the dict to avoid pass-by-sharing
 def get_player_dict():
     return {
-        "ant": 2,
-        "bee": 2,
-        "spider": 3,
-        "grasshopper": 7, 
-        "beetle": 1
+        "ant": 3,
+        "bee": 1,
+        "spider": 2,
+        "grasshopper": 3, 
+        "beetle": 2
     }
 
 hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
@@ -106,8 +106,12 @@ def start_game(game_parameters: GameParameters):
                     for tile in hex_manager.hexagons:
                         if tile.contains_point(mouse_pos) and tile.color == current_player.color:
                             selected_tile = tile
-                            tile.selected = True
-                            current_state = State.Existing_piece_selected
+                            moveOutlines=controller.get_valid_moves(tile.axial_coordinates)
+                            if len(moveOutlines) >0:
+                                tile.selected = True
+                                current_state = State.Existing_piece_selected
+                                for i in moveOutlines:
+                                    hex_manager.drawOutline(i[0],i[1])
                             print(current_state, selected_tile.insect)
                             break
 
@@ -139,8 +143,13 @@ def start_game(game_parameters: GameParameters):
                         if tile.contains_point(mouse_pos) and tile.color == current_player.color:
                             tile_clicked = True
                             selected_tile.selected = False
-                            tile.selected = True
                             selected_tile = tile
+                            hex_manager.removeAllOutlines()
+                            moveOutlines=controller.get_valid_moves(tile.axial_coordinates)
+                            if len(moveOutlines) >0:
+                                tile.selected = True
+                                for i in moveOutlines:
+                                    hex_manager.drawOutline(i[0],i[1])
                             current_state = State.Existing_piece_selected
                             print(current_state, selected_tile.insect)
                             break
@@ -151,7 +160,8 @@ def start_game(game_parameters: GameParameters):
                         if outline.contains_point(mouse_pos):
                             outline_clicked = True
                             q, r = outline.axial_coordinates
-                            hex_manager.removeOutline(q, r)
+                            controller.move_piece(selected_tile.axial_coordinates, (q, r))
+                            hex_manager.removeAllOutlines()
                             tile_q, tile_r = selected_tile.axial_coordinates
                             hex_manager.removeHexagonTile(tile_q, tile_r)
                             hex_manager.createHexagonTile(q, r, selected_tile.insect, current_player.color)
@@ -163,6 +173,7 @@ def start_game(game_parameters: GameParameters):
                     if tile_clicked == False and outline_clicked == False:
                         selected_tile.selected = False
                         selected_tile = None
+                        hex_manager.removeAllOutlines()
                         current_state = State.Nothing_selected
                     print(current_state)                                
 
