@@ -15,11 +15,14 @@ class GameController:
         self.status = GameStatus(self.board, self.white_player, self.black_player)
 
 
-    def get_valid_adds(self):
+    def get_valid_adds(self, piece_type: str):
         if self.status.turn_count == 0:
             return [(0, 0)]
         valid_adds = []
         valid = True
+        if self.status.turn_count >= 7 and len(self.status.getCurrentPlayer().get_remaining_pieces()["bee"]) == 1 and piece_type!= 'bee':
+            print("Queen Bee must be placed by the end of your fourth turn!")
+            return None
         for position in self.board.getGrid().keys(): 
             for empty_neighbour in MoveFilter.get_adjacent_hexes(position[0], position[1]):
                 if not self.board.hasPieceAt(empty_neighbour[0], empty_neighbour[1]):
@@ -82,9 +85,7 @@ class GameController:
             #     return
             
             # Ensure the Queen Bee must be placed by turn 4 but can be placed before.
-            if self.status.turn_count >= 7 and len(self.status.getCurrentPlayer().get_remaining_pieces()["bee"]) == 1 and piece_type!= 'bee':
-                print("Queen Bee must be placed by the end of your fourth turn!")
-                piece_type = "bee"
+                # piece_type = "bee"
 
             # if self.board and not any((nq, nr) in self.board.grid.keys for nq, nr in MoveFilter.get_adjacent_hexes(q, r)):
             #     print(f"Cannot place piece at ({q}, {r}): must be adjacent to an existing piece.")
@@ -120,7 +121,10 @@ class GameController:
         return False
     
     def get_current_player(self):
-        return self.status.getCurrentPlayer()
+        if self.status.getCurrentPlayer() == self.white_player:
+            return 1
+        elif self.status.getCurrentPlayer() == self.black_player:
+            return 2
     
     def get_winner(self):
         if self.status.check_victory():
