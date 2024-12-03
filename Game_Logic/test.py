@@ -49,6 +49,6 @@ controller.move_piece((0, 2), (0,-3))
 # print(controller.get_valid_adds())
 # controller.add_piece('ant', (0, 4))
 
-
+print(controller.hasPlay())
 
 

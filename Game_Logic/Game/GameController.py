@@ -106,3 +106,26 @@ class GameController:
             self.board.addPiece(piece, q, r)
             print(f"{self.status.getCurrentPlayer().get_color} placed {piece} at {target_position}.")
             self.status.nextTurn()
+
+    def hasPlay(self) -> bool:
+        for piece in self.status.getCurrentPlayer().get_remaining_pieces().values():
+            if len(piece) > 0:
+                return True
+            
+        for (q, r) in self.board.getGrid().keys():
+            for piece in self.board.getPieceAt(q, r):
+                if ((piece.getOwner() == self.status.getCurrentPlayer()) and self.get_valid_moves() > 0):
+                    return True
+                
+        return False
+    
+    def get_current_player(self):
+        return self.status.getCurrentPlayer()
+    
+    def get_winner(self):
+        if self.status.check_victory():
+            if self.status.getCurrentPlayer() == self.white_player:
+                return 1
+            elif self.status.getCurrentPlayer() == self.black_player:
+                return 2
+        return 0
