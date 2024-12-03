@@ -116,7 +116,7 @@ class GameController:
             for piece in self.board.getPieceAt(q, r):
                 if ((piece.getOwner() == self.status.getCurrentPlayer()) and self.get_valid_moves() > 0):
                     return True
-                
+        self.status.nextTurn()
         return False
     
     def get_current_player(self):
