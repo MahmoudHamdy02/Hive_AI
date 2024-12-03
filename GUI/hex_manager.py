@@ -56,7 +56,7 @@ class HexManager:
         # Can be drawn on top of tiles
         for outline in self.outlines:
             if outline.axial_coordinates == (q, r):
-                raise Exception("Outline already exists at specified axial coordinates")
+                raise Exception("Outline already exists at specified axial coordinates"+str(q)+" "+str(r)+" ")
 
         pixels = self.__axialToPixels(q, r)
         position = (self.origin[0]+pixels[0], self.origin[1]+pixels[1])
@@ -75,7 +75,8 @@ class HexManager:
                 self.outlines.remove(outline)
                 return outline
         raise Exception("No outline exists at specified axial coordinates")
-
+    def removeAllOutlines(self) -> None:
+        self.outlines = []
     def getTile(self, q: int, r: int) -> HexagonTile | None: 
         """ Returns the tile at the specified position if exists, otherwise returns None"""
         for hexagon in self.hexagons:

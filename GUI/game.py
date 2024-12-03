@@ -1,8 +1,18 @@
+import sys
+import os
+
+# Add the root directory of the project to the sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
+
+
+
 import pygame
 from hex_manager import HexManager
 from constants import *
 from Player_widget import PlayerWidget
 from GameParameters import GameParameters
+
+from Game_Logic.Game.GameController import GameController
 
 # Get a copy of the dict to avoid pass-by-sharing
 def get_player_dict():
@@ -10,7 +20,7 @@ def get_player_dict():
         "ant": 2,
         "bee": 2,
         "spider": 3,
-        "hopper": 7, 
+        "grasshopper": 7, 
         "beetle": 1
     }
 
@@ -18,19 +28,20 @@ hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
 #hex_manager.createHexagonTile(0,0)
 #hex_manager.createHexagonTile(-1,0)
 #hex_manager.createHexagonTile(0,-1)
-hex_manager.createHexagonTile(-1,-1)
-hex_manager.createHexagonTile(0,1)
+#hex_manager.createHexagonTile(-1,-1)
+#hex_manager.createHexagonTile(0,1)
 
 #hex_manager.createHexagonTile(2,2)
 #hex_manager.removeHexagonTile(2,2)
 #hex_manager.drawOutline(1,1)
-hex_manager.drawOutline(2,2)
-hex_manager.drawOutline(2,1)
-hex_manager.drawOutline(0,2)
+#hex_manager.drawOutline(2,2)
+#hex_manager.drawOutline(2,1)
+#hex_manager.drawOutline(0,2)
 
+controller=GameController()
 vAntMoves=[(0,0),(-1,0),(2,0)]
-for i in vAntMoves:
-    hex_manager.drawOutline(i[0],i[1])
+#for i in vAntMoves:
+    #hex_manager.drawOutline(i[0],i[1])
 
 def start_game(game_parameters: GameParameters):
     name1 = name2 = "Computer"
@@ -79,7 +90,15 @@ def start_game(game_parameters: GameParameters):
                     # If yes, get the clicked insect
                     if current_player == player1 and pygame.Rect(0, 0, 250, HEIGHT).collidepoint(mouse_pos) or current_player == player2 and pygame.Rect(WIDTH - 250, 0, 250, HEIGHT).collidepoint(mouse_pos):
                         new_insect = current_player.handle_click(mouse_pos)
-                        current_state = State.New_piece_selected
+                        print(hex_manager.outlines)
+                        moveOutlines=controller.get_valid_adds(new_insect)
+                        print(moveOutlines)
+                        if len(moveOutlines) >0:
+                            current_state = State.New_piece_selected
+                            for i in moveOutlines:
+                                hex_manager.drawOutline(i[0],i[1])
+
+
                         print(current_state)
                         continue
 
@@ -103,9 +122,12 @@ def start_game(game_parameters: GameParameters):
                     for outline in hex_manager.outlines:
                         if outline.contains_point(mouse_pos):
                             q, r = outline.axial_coordinates
-                            hex_manager.removeOutline(q, r)
+                            hex_manager.removeAllOutlines()
+                            
                             hex_manager.createHexagonTile(q, r, new_insect, current_player.color)
+                            controller.add_piece(new_insect, (q, r))
                             current_player.insects[new_insect] -= 1  # Decrement insect count
+                            #if not controller.hasPlay():
                             current_player = player2 if current_player == player1 else player1
                             new_insect = None
                             current_state = State.Nothing_selected
@@ -160,4 +182,4 @@ def start_game(game_parameters: GameParameters):
         pygame.display.flip()
 
         clock.tick(60)  # limits FPS to 60
-# start_game()
+start_game(GameParameters())
