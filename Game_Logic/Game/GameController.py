@@ -37,7 +37,7 @@ class GameController:
                             valid_adds.append(empty_neighbour)
                     else:
                         valid_adds.append(empty_neighbour)
-        return valid_adds
+        return list(set(valid_adds))
 
     def get_valid_moves(self, position):
         """
