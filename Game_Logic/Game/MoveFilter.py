@@ -28,7 +28,7 @@ class MoveFilter:
                         dfs(neighbor)
 
             dfs(start)
-            return len(visited) == len(board.grid)
+            return len(visited) == len(board.grid.keys())
 
         # Temporarily apply the move
         board.movePiece(piece, *target_position)
@@ -187,9 +187,9 @@ class MoveFilter:
             
 
                 # Check if a piece can slide out (based on the current hex status)
-                if board.hasPieceAt(q, r):
-                    valid_sequence = False
-                    break
+                # if board.hasPieceAt(q, r):
+                #     valid_sequence = False
+                #     break
 
                 if not MoveFilter.can_slide_out(cq, cr, board) or not MoveFilter.can_slide_in(q, r, board):
                     valid_sequence = False

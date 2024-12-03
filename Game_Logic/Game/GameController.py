@@ -20,7 +20,7 @@ class GameController:
             return [(0, 0)]
         valid_adds = []
         valid = True
-        if self.status.turn_count >= 7 and len(self.status.getCurrentPlayer().get_remaining_pieces()["bee"]) == 1 and piece_type!= 'bee':
+        if self.status.turn_count >= 6 and len(self.status.getCurrentPlayer().get_remaining_pieces()["bee"]) == 1 and piece_type!= 'bee':
             print("Queen Bee must be placed by the end of your fourth turn!")
             return None
         for position in self.board.getGrid().keys(): 
@@ -28,8 +28,8 @@ class GameController:
                 if not self.board.hasPieceAt(empty_neighbour[0], empty_neighbour[1]):
                     if self.status.turn_count > 1: 
                         q,r=empty_neighbour
+                        valid = True
                         for piece_neighbour in self.board.getNeighbors((q, r)):
-                            valid = True
                             piece_neighbour = self.board.getPieceAt(piece_neighbour[0], piece_neighbour[1])
                             if piece_neighbour.getOwner() != self.status.getCurrentPlayer():
                                 valid = False
@@ -55,6 +55,8 @@ class GameController:
         #     raise ValueError(f"Unknown piece type: {piece}")
 
         # Get the potential moves from the piece class
+        if len(self.status.getCurrentPlayer().get_remaining_pieces()["bee"]) == 1:
+            return []
         piece = self.board.getPieceAt(position[0], position[1])
         potential_moves =piece.getMoves(self.board)
         # print(potential_moves, piece)
