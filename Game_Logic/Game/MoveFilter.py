@@ -19,16 +19,20 @@ class MoveFilter:
 
         def is_hive_continuous():
             visited = set()
-            start = next(iter(board.grid.keys()))  # Get the first hex in the grid
+            iterator = iter(board.grid.keys())
+            start = next(iterator)  # Get the first hex in the grid
+            while not board.hasPieceAt(*start):
+                start = next(iterator)
 
             def dfs(node):
                 visited.add(node)
                 for neighbor in MoveFilter.get_adjacent_hexes(*node):
-                    if neighbor in board.grid and neighbor not in visited:
+                    if board.hasPieceAt(*neighbor) and neighbor not in visited:
                         dfs(neighbor)
 
             dfs(start)
-            return len(visited) == len(board.grid)
+            print(len(visited), board.noOfPieces)
+            return len(visited) == board.noOfPieces
 
         # Temporarily apply the move
         board.movePiece(piece, *target_position)
@@ -70,34 +74,84 @@ class MoveFilter:
             return False
         
 
+    # @staticmethod
+    # def can_slide_in(target_q, target_r, board):
+    #     """
+    #     Checks if a piece can slide into the target position.
+    #     A piece can slide into the position if it is surrounded by fewer than 5 neighbors.
+
+    #     :param target_q: The q-coordinate of the target hex.
+    #     :param target_r: The r-coordinate of the target hex.
+    #     :param board: The current board state.
+    #     :return: True if the piece can slide into the position, False otherwise.
+    #     """
+    #     # Count the number of occupied neighbors around the target position
+    #     occupied_neighbors = 0
+
+    #     for dq, dr in MoveFilter.ADJACENT_HEXES:
+    #         adjacent_q = target_q + dq
+    #         adjacent_r = target_r + dr
+
+    #         # Check if there is a piece in this adjacent hex
+    #         if board.hasPieceAt(adjacent_q, adjacent_r):
+    #             occupied_neighbors += 1
+
+    #         # If already surrounded by 5 or more neighbors, return False early
+    #         if occupied_neighbors >= 5:
+    #             return False
+
+    #     # If fewer than 5 neighbors are occupied, the piece can slide in
+    #     return True
+    
+    # @staticmethod
+    # def can_slide_in(target_q, target_r, board):
+    #     """
+    #     Checks if a piece can slide into the target position.
+    #     A piece can slide into the position if it is surrounded by fewer than 5 neighbors.
+    #     """
+    #     neighbors = MoveFilter.get_adjacent_hexes(target_q, target_r)
+    #     occupied_neighbors = 0
+
+    #     for i in range(len(neighbors)):
+    #         left = neighbors[i]
+    #         right = neighbors[(i + 2) % len(neighbors)]  # Wraps around to create pairs
+
+            
+    #         if board.hasPieceAt(*left) and board.hasPieceAt(*right):
+    #             return False  
+
+            
+    #         if board.hasPieceAt(*left):
+    #             occupied_neighbors += 1
+
+            
+    #         if occupied_neighbors >= 5:
+    #             return False
+    
+        # return True  # Move is valid if it passes all checks
+  
+    
     @staticmethod
     def can_slide_in(target_q, target_r, board):
         """
         Checks if a piece can slide into the target position.
         A piece can slide into the position if it is surrounded by fewer than 5 neighbors.
-
-        :param target_q: The q-coordinate of the target hex.
-        :param target_r: The r-coordinate of the target hex.
-        :param board: The current board state.
-        :return: True if the piece can slide into the position, False otherwise.
         """
-        # Count the number of occupied neighbors around the target position
-        occupied_neighbors = 0
+        neighbors = MoveFilter.get_adjacent_hexes(target_q, target_r)
+        
+        # Check if the target position is in the list of neighbors
+        for i, (neighbor_q, neighbor_r) in enumerate(neighbors):
+            if target_q == neighbor_q and target_r == neighbor_r:
+                # Find the left and right neighbors in the circular list
+                left = neighbors[i - 1] if i - 1 >= 0 else neighbors[-1]
+                right = neighbors[(i + 1) % len(neighbors)]
+                
+                # Check if the adjacent positions on the left and right are valid for a move
+                if not board.hasPieceAt(left[0], left[1]) and not board.hasPieceAt(right[0], right[1]):
+                    return True
+        
+        return False  # Move is invalid if it doesn't pass the checks
 
-        for dq, dr in MoveFilter.ADJACENT_HEXES:
-            adjacent_q = target_q + dq
-            adjacent_r = target_r + dr
-
-            # Check if there is a piece in this adjacent hex
-            if board.hasPieceAt(adjacent_q, adjacent_r):
-                occupied_neighbors += 1
-
-            # If already surrounded by 5 or more neighbors, return False early
-            if occupied_neighbors >= 5:
-                return False
-
-        # If fewer than 5 neighbors are occupied, the piece can slide in
-        return True
     
     @staticmethod
     def is_it_sliding(current_position, move, board):
@@ -181,15 +235,15 @@ class MoveFilter:
             valid_sequence = True
             temporary_position=current_position
         
-        # Check each inner move in the spider's move sequence
+            # Check each inner move in the spider's move sequence
             for move in move_sequence:
                 q,r = move
             
 
                 # Check if a piece can slide out (based on the current hex status)
-                if board.hasPieceAt(q, r):
-                    valid_sequence = False
-                    break
+                # if board.hasPieceAt(q, r):
+                #     valid_sequence = False
+                #     break
 
                 if not MoveFilter.can_slide_out(cq, cr, board) or not MoveFilter.can_slide_in(q, r, board):
                     valid_sequence = False
@@ -200,6 +254,7 @@ class MoveFilter:
 
                 # Check hive continuity
                 if not MoveFilter.check_hive_continuity(board, move,temporary_position):
+                    # print("hive continuity False")
                     valid_sequence = False
                     temporary_position=move
                     break  # Stop checking further moves in this sequence

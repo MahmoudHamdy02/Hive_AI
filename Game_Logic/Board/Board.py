@@ -4,6 +4,7 @@ from Game_Logic.Board.Cell import Cell
 class Board:
     def __init__(self) -> None:
         self.grid = {} # (q, r): [Piece1, Piece2, ...]}   
+        self.noOfPieces = 0
 
     def addPiece(self, piece: Piece, q: int, r: int) -> None:
         if (q,r) not in self.grid:
@@ -16,7 +17,7 @@ class Board:
         self.addPiece(piece, q, r)
         
     def hasPieceAt(self, q,r) -> bool:
-        return ((q,r) in self.grid and len(self.grid[(q,r)]) > 0)
+        return ((q,r) in self.grid.keys() and len(self.grid[(q,r)]) > 0)
 
     def getNeighbors(self, position:tuple) -> list:
         """
