@@ -23,7 +23,9 @@ class GameController:
         if self.status.turn_count >= 6 and len(self.status.getCurrentPlayer().get_remaining_pieces()["bee"]) == 1 and piece_type!= 'bee':
             print("Queen Bee must be placed by the end of your fourth turn!")
             return None
-        for position in self.board.getGrid().keys(): 
+        for position in self.board.getGrid().keys():
+            if not self.board.hasPieceAt(position[0], position[1]):
+                continue
             for empty_neighbour in MoveFilter.get_adjacent_hexes(position[0], position[1]):
                 if not self.board.hasPieceAt(empty_neighbour[0], empty_neighbour[1]):
                     if self.status.turn_count > 1: 
@@ -107,6 +109,7 @@ class GameController:
             # current_player.add_position(target_position)
             # current_player.update_remaining_pieces(piece)
             self.board.addPiece(piece, q, r)
+            self.board.noOfPieces += 1
             print(f"{self.status.getCurrentPlayer().get_color} placed {piece} at {target_position}.")
             self.status.nextTurn()
 

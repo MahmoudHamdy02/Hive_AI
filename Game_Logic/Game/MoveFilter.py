@@ -19,16 +19,20 @@ class MoveFilter:
 
         def is_hive_continuous():
             visited = set()
-            start = next(iter(board.grid.keys()))  # Get the first hex in the grid
+            iterator = iter(board.grid.keys())
+            start = next(iterator)  # Get the first hex in the grid
+            while not board.hasPieceAt(*start):
+                start = next(iterator)
 
             def dfs(node):
                 visited.add(node)
                 for neighbor in MoveFilter.get_adjacent_hexes(*node):
-                    if neighbor in board.grid and neighbor not in visited:
+                    if board.hasPieceAt(*neighbor) and neighbor not in visited:
                         dfs(neighbor)
 
             dfs(start)
-            return len(visited) == len(board.grid.keys())
+            print(len(visited), board.noOfPieces)
+            return len(visited) == board.noOfPieces
 
         # Temporarily apply the move
         board.movePiece(piece, *target_position)
@@ -181,7 +185,7 @@ class MoveFilter:
             valid_sequence = True
             temporary_position=current_position
         
-        # Check each inner move in the spider's move sequence
+            # Check each inner move in the spider's move sequence
             for move in move_sequence:
                 q,r = move
             
@@ -200,6 +204,7 @@ class MoveFilter:
 
                 # Check hive continuity
                 if not MoveFilter.check_hive_continuity(board, move,temporary_position):
+                    # print("hive continuity False")
                     valid_sequence = False
                     temporary_position=move
                     break  # Stop checking further moves in this sequence
