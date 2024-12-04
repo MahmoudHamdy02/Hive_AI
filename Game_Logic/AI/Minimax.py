@@ -3,31 +3,39 @@
 # maximizing player can get
 import math
 
-def minimax (curDepth, nodeIndex,maxTurn, scores,targetDepth):
 
-	# base case : targetDepth reached
-	if (curDepth == targetDepth): 
-		return scores[nodeIndex]
-	
-	if (maxTurn):
-		return max(minimax(curDepth + 1, nodeIndex * 2, 
-					False, scores, targetDepth), 
-				minimax(curDepth + 1, nodeIndex * 2 + 1, 
-					False, scores, targetDepth))
-	
-	else:
-		return min(minimax(curDepth + 1, nodeIndex * 2, 
-					True, scores, targetDepth), 
-				minimax(curDepth + 1, nodeIndex * 2 + 1, 
-					True, scores, targetDepth))
-	
-# Driver code
-scores = [3, 5, 2, 9, 12, 5, 23, 23]
+def AIturn(self):
+    #try every single move he could do
+    score=minimax()
+    #undo the move
+    if (score>bestscore):
+        bestscore = score
+        bestmove = move
 
-treeDepth = math.log(len(scores), 2)
 
-print("The optimal value is : ", end = "")
-print(minimax(0, 0, False, scores, treeDepth))
 
-# This code is contributed
-# by rootshadow
+def minimax(board,depth,ismaxmise)->score:
+    #score=nom of pieces around opposite 's queen - number of pieces around my queen 
+    score=board.count_pieces_around_opposite_queen() - board.count_pieces_around_my_queen()
+    #if it's a leaf node, return the score
+    Status=check_victory()
+    if (Status==):
+          return score
+
+    
+    #if maximizing player
+    if (ismaxmise):
+        bestscore=-10000000
+        #try every single move he could do
+        score=minimax(board,depth+1,False)
+        #undo move
+        bestscore=max(score,bestscore)
+        return bestscore
+    else:
+        bestscore=10000000
+        #try every single move the opp could do
+        score=minimax(board,depth+1,True)
+        #undo move
+        bestscore=min(score,bestscore)
+        
+        return bestscore
