@@ -11,9 +11,9 @@ class Agent(ABC):
 
     def __init__(self,  gameController: GameController, agentColor: Color):
         self.agentColor = agentColor
-        self.heuristic = Heuristic(gameController.getBoard(), agentColor)
         self.gameController = gameController
-        
+        self.heuristic = Heuristic(gameController, agentColor)
+
     @abstractmethod
     def getBestMove(self,  maxDepth: int, timeLimit: float) -> tuple:
         """
