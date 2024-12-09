@@ -20,12 +20,19 @@ class Cell:
         """
         self.pieces.pop()
 
-    def getPieces(self):
+    def getPiece(self):
         """
-        Returns the pieces in the cell
+        Returns the top piece in the cell
 
         """
         return self.pieces[-1]
+    
+    def getPiecesList(self):
+        """
+        Returns all the pieces in the cell
+
+        """
+        return self.pieces
 
     def __len__(self):
         return len(self.pieces)

@@ -138,3 +138,6 @@ class GameController:
             elif self.status.getCurrentPlayer() == self.black_player:
                 return 2
         return 0
+
+    def get_board(self):
+        return self.board

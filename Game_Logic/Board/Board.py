@@ -17,7 +17,7 @@ class Board:
         self.addPiece(piece, q, r)
         
     def hasPieceAt(self, q,r) -> bool:
-        return ((q,r) in self.grid.keys() and len(self.grid[(q,r)]) > 0)
+        return ((q,r) in self.grid.keys() and len(self.grid[(q,r)].getPiecesList()) > 0)
 
     def getNeighbors(self, position:tuple) -> list:
         """
@@ -54,5 +54,5 @@ class Board:
         return self.grid
     
     def getPieceAt(self, q, r):
-        return self.grid[(q,r)].getPieces()
+        return self.grid[(q,r)].getPiece()
     
