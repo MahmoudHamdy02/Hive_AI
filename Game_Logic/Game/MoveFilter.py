@@ -135,22 +135,29 @@ class MoveFilter:
     def can_slide_in(target_q, target_r, board):
         """
         Checks if a piece can slide into the target position.
-        A piece can slide into the position if it is surrounded by fewer than 5 neighbors.
+        A piece can slide into the position if:
+        1. It has fewer than 5 occupied neighbors.
+        2. The path into the hex is not obstructed.
         """
         neighbors = MoveFilter.get_adjacent_hexes(target_q, target_r)
         
-        # Check if the target position is in the list of neighbors
+        # Count occupied neighbors
+        occupied_neighbors = sum(1 for q, r in neighbors if board.hasPieceAt(q, r))
+        if occupied_neighbors >= 5:
+            return False
+
+        # Check for unobstructed sliding path
         for i, (neighbor_q, neighbor_r) in enumerate(neighbors):
-            if target_q == neighbor_q and target_r == neighbor_r:
-                # Find the left and right neighbors in the circular list
-                left = neighbors[i - 1] if i - 1 >= 0 else neighbors[-1]
-                right = neighbors[(i + 1) % len(neighbors)]
-                
-                # Check if the adjacent positions on the left and right are valid for a move
+            left = neighbors[i - 1] if i - 1 >= 0 else neighbors[-1]
+            right = neighbors[(i + 1) % len(neighbors)]
+            
+            # If the target is free and adjacent to a sliding path
+            if not board.hasPieceAt(neighbor_q, neighbor_r):
                 if not board.hasPieceAt(left[0], left[1]) and not board.hasPieceAt(right[0], right[1]):
                     return True
-        
-        return False  # Move is invalid if it doesn't pass the checks
+
+        return False
+
 
     
     @staticmethod
