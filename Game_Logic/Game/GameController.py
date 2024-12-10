@@ -3,6 +3,7 @@ from Game_Logic.Game.GameStatus import GameStatus
 from Game_Logic.Board.Board import Board
 from Game_Logic.Player.Player import Player
 from Game_Logic.Player.Color import Color
+import copy
 
 class GameController:
     def __init__(self):
@@ -191,3 +192,6 @@ class GameController:
                 if piece.getOwner() == self.status.getCurrentPlayer() and piece == 'bee':
                     count = len(self.board.getNeighbors((q,r)))
         return count
+    
+    def clone (self):
+        return copy.deepcopy(self)

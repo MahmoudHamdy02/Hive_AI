@@ -27,13 +27,16 @@ from Game_Logic.Game.GameController import GameController
 controller = GameController()
 # PLayer1
 # print(controller.get_valid_adds())
-controller.add_piece('bee', (0, 0))
+controller.add_piece('ant', (0, 0))
 # PLayer2
 
 # # print(controller.get_valid_adds())
-controller.add_piece('bee', (0, 1))
-print(controller.get_valid_moves((0,0)))
-print(controller.get_all_possible_adds())
+controller.add_piece('ant', (0, 1))
+controller.add_piece('bee', (0,-1 ))
+controller.add_piece('bee', (0, 2))
+controller.add_piece('ant', (1,-1))
+controller.get_valid_moves((0,0))
+# print(controller.get_all_possible_adds())
 # # PLayer1
 # # print(controller.get_valid_adds())
 #controller.add_piece('ant', (0, -1))
@@ -52,7 +55,7 @@ board=controller.get_board()
 # controller.add_piece('ant', (-1,-1))
 
 # controller.add_piece('ant', (1, 1))
-print(controller.get_all_possible_moves(board))
+# print(controller.get_all_possible_moves(board))
 #controller.move_piece((0, 2), (0,-3))
 
 

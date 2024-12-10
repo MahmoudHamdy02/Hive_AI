@@ -23,27 +23,28 @@ def ai_play(game_controller, max_time=1.0):  # max_time is in seconds
             # Check if we've exceeded the allowed time
             if time.time() - start_time > max_time:
                 break  # Stop if the time limit is exceeded
-            simulated_board = orignal_board.clone()
-
-            game_controller.change_board(simulated_board)
+            
+            simulated_controller = game_controller.clone()
+            
             # print(move[0],move[1])
-            m=move[0]
+            #m=move[0]
             # print(simulated_board.getPieceAt(m[0],m[1]))
-            print(move[0],move[1])
-            simulated_board.getPieceAt(m[0],m[1])
-            game_controller.move_piece(move[0], move[1])
-            score = minimax(simulated_board, depth, False,game_controller)
-            print('Score=',score)
+            #print(move[0],move[1])
+            
+            simulated_controller.move_piece(move[0], move[1])
+            score = minimax( depth, False,simulated_controller)
+           
             if score > best_score:
                 best_score = score
                 best_move = move
 
-        depth += 1  # Increase depth after each iteration
+        # depth += 1  # Increase depth after each iteration
 
     # If the best move is found, execute it
-    gameController.change_board(orignal_board)
+    
     if best_move:
-        game_controller.move_piece(best_move)
+        print('Best move')
+        game_controller.move_piece(best_move[0],best_move[1])
 
     return best_move
 
@@ -52,11 +53,11 @@ def ai_play(game_controller, max_time=1.0):  # max_time is in seconds
 
 
 
-def minimax(board,depth,ismaxmise,game_controller):
+def minimax(depth,ismaxmise,game_controller):
     #score=nom of pieces around opposite 's queen - number of pieces around my queen 
     score=game_controller.count_pieces_around_opposite_queen() - game_controller.count_pieces_around_my_queen()
-    
-    print (score)
+    print('Score=',score)
+    #print (score)
     
     
     
@@ -73,10 +74,11 @@ def minimax(board,depth,ismaxmise,game_controller):
         bestscore=-10000000
         all_possible_moves =gameController.get_all_possible_moves(gameController.get_board())
         for move in all_possible_moves:
-            simulated_board = board.clone()  # Clone the board for simulation
-            gameController.change_board(simulated_board)
-            gameController.move_piece(move)  # Apply the move
-            score=minimax(board,depth-1,False)
+            
+            simulated_controller=game_controller.clone()
+            
+            simulated_controller.move_piece(move)  # Apply the move
+            score=minimax(depth-1,False,simulated_controller)
             #undo move #make function
             bestscore=max(score,bestscore)
         return bestscore
@@ -85,10 +87,9 @@ def minimax(board,depth,ismaxmise,game_controller):
         #try every single move the opp could do
         all_possible_moves =gameController.get_all_possible_moves(gameController.get_board())
         for move in all_possible_moves:
-            simulated_board = board.clone()  # Clone the board for simulation
-            gameController.change_board(simulated_board)
-            gameController.move_piece(move)  # Apply the move
-            score=minimax(board,depth-1,True)
+            simulated_controller=game_controller.clone()
+            simulated_controller.move_piece(move)  # Apply the move
+            score=minimax(depth-1,True,simulated_controller)
             #undo move #make function
             bestscore=min(score,bestscore)
             print("bestscore from min " , bestscore)
