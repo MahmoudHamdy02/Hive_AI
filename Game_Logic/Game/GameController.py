@@ -141,3 +141,28 @@ class GameController:
 
     def get_board(self):
         return self.board
+    
+
+    def get_all_possible_moves(self,board):
+        """
+        Returns a list of all valid moves for all pieces of the current player on the board.
+        """
+        moves = []
+        for (q, r) in board.getGrid().keys():
+            piece = board.getPieceAt(q, r)
+            if piece and piece.getOwner() == self.status.getCurrentPlayer():
+                # Get all valid moves for this piece
+                piece_moves = self.get_valid_moves((q, r))
+                # Store these moves
+                for move in piece_moves:
+                    moves.append((piece, (q, r), move))  # (piece, current_position, target_position)
+        return moves
+    
+    def get_all_possible_adds(self):
+        adds = []
+        for piece_type, remaining_pieces in self.status.getCurrentPlayer().get_remaining_pieces().items():
+            if remaining_pieces:  # Check if there are any pieces left of this type
+                valid_add_positions = self.get_valid_adds(piece_type)
+                for position in valid_add_positions:
+                    adds.append((piece_type, position))  # (piece_type, target_position)
+        return adds

@@ -26,27 +26,37 @@ from Game_Logic.Game.GameController import GameController
 controller = GameController()
 # PLayer1
 # print(controller.get_valid_adds())
-controller.add_piece('ant', (0, 0))
+controller.add_piece('bee', (0, 0))
 # PLayer2
 
-# print(controller.get_valid_adds())
-controller.add_piece('ant', (0, 1))
-# PLayer1
-# print(controller.get_valid_adds())
-controller.add_piece('ant', (0, -1))
-# # PLayer2
-controller.add_piece('grasshopper', (0, 2))
+# # print(controller.get_valid_adds())
+controller.add_piece('bee', (0, 1))
+# # PLayer1
+# # print(controller.get_valid_adds())
+# controller.add_piece('ant', (0, -1))
+# # # PLayer2
+# controller.add_piece('grasshopper', (0, 2))
 
-controller.add_piece('ant', (0, -2))
+# controller.add_piece('ant', (0, -2))
+m=152
+print(str(m))
+# #PLayer2
+board=controller.get_board()
 
-#PLayer2
-print(controller.get_valid_moves((0, 2)))
-controller.move_piece((0, 2), (0,-3))
+# controller.add_piece('spider', (-1,0))
+# print (controller.get_valid_adds('spider'))
+# controller.add_piece('spider', (0,2))
+# print (controller.get_valid_adds('ant'))
+# controller.add_piece('ant', (-1,-1))
+# print (controller.get_valid_moves((-1,-1)))
+# controller.add_piece('ant', (1, 1))
+print(controller.get_all_possible_moves(board))
+#controller.move_piece((0, 2), (0,-3))
 
 
 # # PLayer1
 # print("Turn 4")
 # print(controller.get_valid_adds())
-# controller.add_piece('ant', (0, 4))
+
 
 # print(controller.hasPlay())

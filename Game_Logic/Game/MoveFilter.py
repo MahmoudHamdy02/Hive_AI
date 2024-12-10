@@ -74,34 +74,34 @@ class MoveFilter:
             return False
         
 
-    # @staticmethod
-    # def can_slide_in(target_q, target_r, board):
-    #     """
-    #     Checks if a piece can slide into the target position.
-    #     A piece can slide into the position if it is surrounded by fewer than 5 neighbors.
+    @staticmethod
+    def can_slide_in(target_q, target_r, board):
+        """
+        Checks if a piece can slide into the target position.
+        A piece can slide into the position if it is surrounded by fewer than 5 neighbors.
 
-    #     :param target_q: The q-coordinate of the target hex.
-    #     :param target_r: The r-coordinate of the target hex.
-    #     :param board: The current board state.
-    #     :return: True if the piece can slide into the position, False otherwise.
-    #     """
-    #     # Count the number of occupied neighbors around the target position
-    #     occupied_neighbors = 0
+        :param target_q: The q-coordinate of the target hex.
+        :param target_r: The r-coordinate of the target hex.
+        :param board: The current board state.
+        :return: True if the piece can slide into the position, False otherwise.
+        """
+        # Count the number of occupied neighbors around the target position
+        occupied_neighbors = 0
 
-    #     for dq, dr in MoveFilter.ADJACENT_HEXES:
-    #         adjacent_q = target_q + dq
-    #         adjacent_r = target_r + dr
+        for dq, dr in MoveFilter.ADJACENT_HEXES:
+            adjacent_q = target_q + dq
+            adjacent_r = target_r + dr
 
-    #         # Check if there is a piece in this adjacent hex
-    #         if board.hasPieceAt(adjacent_q, adjacent_r):
-    #             occupied_neighbors += 1
+            # Check if there is a piece in this adjacent hex
+            if board.hasPieceAt(adjacent_q, adjacent_r):
+                occupied_neighbors += 1
 
-    #         # If already surrounded by 5 or more neighbors, return False early
-    #         if occupied_neighbors >= 5:
-    #             return False
+            # If already surrounded by 5 or more neighbors, return False early
+            if occupied_neighbors >= 5:
+                return False
 
-    #     # If fewer than 5 neighbors are occupied, the piece can slide in
-    #     return True
+        # If fewer than 5 neighbors are occupied, the piece can slide in
+        return True
     
     # @staticmethod
     # def can_slide_in(target_q, target_r, board):
@@ -131,26 +131,26 @@ class MoveFilter:
         # return True  # Move is valid if it passes all checks
   
     
-    @staticmethod
-    def can_slide_in(target_q, target_r, board):
-        """
-        Checks if a piece can slide into the target position.
-        A piece can slide into the position if it is surrounded by fewer than 5 neighbors.
-        """
-        neighbors = MoveFilter.get_adjacent_hexes(target_q, target_r)
+    # @staticmethod
+    # def can_slide_in(target_q, target_r, board):
+    #     """
+    #     Checks if a piece can slide into the target position.
+    #     A piece can slide into the position if it is surrounded by fewer than 5 neighbors.
+    #     """
+    #     neighbors = MoveFilter.get_adjacent_hexes(target_q, target_r)
         
-        # Check if the target position is in the list of neighbors
-        for i, (neighbor_q, neighbor_r) in enumerate(neighbors):
-            if target_q == neighbor_q and target_r == neighbor_r:
-                # Find the left and right neighbors in the circular list
-                left = neighbors[i - 1] if i - 1 >= 0 else neighbors[-1]
-                right = neighbors[(i + 1) % len(neighbors)]
+    #     # Check if the target position is in the list of neighbors
+    #     for i, (neighbor_q, neighbor_r) in enumerate(neighbors):
+    #         if target_q == neighbor_q and target_r == neighbor_r:
+    #             # Find the left and right neighbors in the circular list
+    #             left = neighbors[i - 1] if i - 1 >= 0 else neighbors[-1]
+    #             right = neighbors[(i + 1) % len(neighbors)]
                 
-                # Check if the adjacent positions on the left and right are valid for a move
-                if not board.hasPieceAt(left[0], left[1]) and not board.hasPieceAt(right[0], right[1]):
-                    return True
+    #             # Check if the adjacent positions on the left and right are valid for a move
+    #             if not board.hasPieceAt(left[0], left[1]) and not board.hasPieceAt(right[0], right[1]):
+    #                 return True
         
-        return False  # Move is invalid if it doesn't pass the checks
+    #     return False  # Move is invalid if it doesn't pass the checks
 
     
     @staticmethod

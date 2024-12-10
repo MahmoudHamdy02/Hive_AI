@@ -56,3 +56,10 @@ class Board:
     def getPieceAt(self, q, r):
         return self.grid[(q,r)].getPiece()
     
+    def get_all_possible_moves(self):
+        moves = {}
+        for (q, r) in self.board.getGrid().keys():
+            for piece in self.board.getPieceAt(q, r):
+                if piece.getOwner() == self.status.getCurrentPlayer():
+                    moves[(q,r)] = self.get_valid_moves(piece)
+        return moves
