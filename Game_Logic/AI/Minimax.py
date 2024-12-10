@@ -7,8 +7,6 @@ gameController = GameController()
 
 def ai_play(game_controller, max_time=1.0):  # max_time is in seconds
     orignal_board = gameController.get_board()
-    current_player = game_controller.get_current_player()
-    opponent = 1 if current_player == 2 else 2
 
     
     #start_time = time()  # Start the timer
@@ -28,9 +26,9 @@ def ai_play(game_controller, max_time=1.0):  # max_time is in seconds
 
             simulated_board = game_controller.board.clone()
             game_controller.change_board(simulated_board)
-            print(move[0],move[1])
-            m=move[0]
-            print(simulated_board.getPieceAt(m[0],m[1]))
+            # print(move[0],move[1])
+            # m=move[0]
+            # print(simulated_board.getPieceAt(m[0],m[1]))
             game_controller.move_piece(move[0], move[1])
             score = minimax(simulated_board, depth, False)
 
