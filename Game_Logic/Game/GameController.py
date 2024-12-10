@@ -68,9 +68,9 @@ class GameController:
     
     def move_piece(self, position, move):
         piece = self.board.getPieceAt(position[0], position[1])
-        print(position)
-        print(piece)
-        print(self.get_valid_moves(position))
+        # print(position)
+        # print(piece)
+        # print(self.get_valid_moves(position))
         if move in self.get_valid_moves(position):
              self.board.movePiece(piece, move[0], move[1])
              self.status.nextTurn()
@@ -172,3 +172,22 @@ class GameController:
     
     def change_board(self, new_board):
         self.board = new_board
+
+    
+    def count_pieces_around_opposite_queen(self):
+        count = 0
+        for (q, r) in self.board.getGrid().keys():
+            if self.board.hasPieceAt(q, r):
+                piece = self.board.getPieceAt(q, r)
+                if piece.getOwner() != self.status.getCurrentPlayer() and piece == 'bee':
+                    count = len(self.board.getNeighbors((q,r)))
+        return count
+
+    def count_pieces_around_my_queen(self):
+        count = 0
+        for (q, r) in self.board.getGrid().keys():
+            if self.board.hasPieceAt(q, r):
+                piece = self.board.getPieceAt(q, r)
+                if piece.getOwner() == self.status.getCurrentPlayer() and piece == 'bee':
+                    count = len(self.board.getNeighbors((q,r)))
+        return count

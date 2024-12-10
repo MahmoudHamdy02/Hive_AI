@@ -1,0 +1,2 @@
+ma=[]
+print (len(ma))

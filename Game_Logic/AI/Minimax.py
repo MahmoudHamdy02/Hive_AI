@@ -7,7 +7,7 @@ gameController = GameController()
 
 def ai_play(game_controller, max_time=1.0):  # max_time is in seconds
     orignal_board = gameController.get_board()
-
+    best_score = float('-inf')
     
     #start_time = time()  # Start the timer
     start_time = time.time()
@@ -23,15 +23,17 @@ def ai_play(game_controller, max_time=1.0):  # max_time is in seconds
             # Check if we've exceeded the allowed time
             if time.time() - start_time > max_time:
                 break  # Stop if the time limit is exceeded
+            simulated_board = orignal_board.clone()
 
-            simulated_board = game_controller.board.clone()
             game_controller.change_board(simulated_board)
             # print(move[0],move[1])
-            # m=move[0]
+            m=move[0]
             # print(simulated_board.getPieceAt(m[0],m[1]))
+            print(move[0],move[1])
+            simulated_board.getPieceAt(m[0],m[1])
             game_controller.move_piece(move[0], move[1])
-            score = minimax(simulated_board, depth, False)
-
+            score = minimax(simulated_board, depth, False,game_controller)
+            print('Score=',score)
             if score > best_score:
                 best_score = score
                 best_move = move
@@ -50,11 +52,11 @@ def ai_play(game_controller, max_time=1.0):  # max_time is in seconds
 
 
 
-def minimax(board,depth,ismaxmise):
+def minimax(board,depth,ismaxmise,game_controller):
     #score=nom of pieces around opposite 's queen - number of pieces around my queen 
-    score=board.count_pieces_around_opposite_queen() - board.count_pieces_around_my_queen()
+    score=game_controller.count_pieces_around_opposite_queen() - game_controller.count_pieces_around_my_queen()
     
-
+    print (score)
     
     
     
@@ -89,6 +91,7 @@ def minimax(board,depth,ismaxmise):
             score=minimax(board,depth-1,True)
             #undo move #make function
             bestscore=min(score,bestscore)
+            print("bestscore from min " , bestscore)
         
         return bestscore
 
