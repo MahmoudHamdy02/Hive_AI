@@ -11,34 +11,33 @@ def ai_play(game_controller, max_time=1.0):  # max_time is in seconds
     
     #start_time = time()  # Start the timer
     start_time = time.time()
-    depth = 1  # Start with depth 1
+    depth = 2  # Start with depth 1
 
 
     # Progressive deepening: Increase depth until time is up
-    while time.time() - start_time < max_time:
-        # Iterate over all valid moves
+  
 
-        all_possible_moves =game_controller.get_all_possible_moves(game_controller.get_board())
-        for move in all_possible_moves:
-            # Check if we've exceeded the allowed time
-            if time.time() - start_time > max_time:
-                break  # Stop if the time limit is exceeded
-            
-            simulated_controller = game_controller.clone()
-            
-            # print(move[0],move[1])
-            #m=move[0]
-            # print(simulated_board.getPieceAt(m[0],m[1]))
-            #print(move[0],move[1])
-            
-            simulated_controller.move_piece(move[0], move[1])
-            score = minimax( depth, False,simulated_controller)
-           
-            if score > best_score:
-                best_score = score
-                best_move = move
+    all_possible_moves =game_controller.get_all_possible_moves(game_controller.get_board())
+    for move in all_possible_moves:
+        # Check if we've exceeded the allowed time
+        if time.time() - start_time > max_time:
+            break  # Stop if the time limit is exceeded
+        
+        simulated_controller = game_controller.clone()
+        
+        # print(move[0],move[1])
+        #m=move[0]
+        # print(simulated_board.getPieceAt(m[0],m[1]))
+        #print(move[0],move[1])
+        
+        simulated_controller.move_piece(move[0], move[1])
+        score = minimax( depth, False,simulated_controller)
+        
+        if score > best_score:
+            best_score = score
+            best_move = move
 
-        # depth += 1  # Increase depth after each iteration
+    depth += 1  # Increase depth after each iteration
 
     # If the best move is found, execute it
     
@@ -54,6 +53,7 @@ def ai_play(game_controller, max_time=1.0):  # max_time is in seconds
 
 
 def minimax(depth,ismaxmise,game_controller):
+    
     #score=nom of pieces around opposite 's queen - number of pieces around my queen 
     score=game_controller.count_pieces_around_opposite_queen() - game_controller.count_pieces_around_my_queen()
     print('Score=',score)
@@ -85,6 +85,7 @@ def minimax(depth,ismaxmise,game_controller):
     else:
         bestscore=10000000
         #try every single move the opp could do
+        print (bestscore)
         all_possible_moves =gameController.get_all_possible_moves(gameController.get_board())
         for move in all_possible_moves:
             simulated_controller=game_controller.clone()

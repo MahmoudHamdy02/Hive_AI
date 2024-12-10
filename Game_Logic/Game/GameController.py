@@ -75,7 +75,7 @@ class GameController:
         if move in self.get_valid_moves(position):
              self.board.movePiece(piece, move[0], move[1])
              self.status.nextTurn()
-             print(f"{self.status.getCurrentPlayer().get_color} moved {piece} to {move}.")
+             print(f"{self.get_current_player()} moved {piece} to {move}.")
         else:
              raise ValueError(f"Unknown piece type: {piece}")
 
