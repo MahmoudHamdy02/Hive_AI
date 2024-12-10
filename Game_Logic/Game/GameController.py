@@ -68,7 +68,9 @@ class GameController:
     
     def move_piece(self, position, move):
         piece = self.board.getPieceAt(position[0], position[1])
-            
+        print(position)
+        print(piece)
+        print(self.get_valid_moves(position))
         if move in self.get_valid_moves(position):
              self.board.movePiece(piece, move[0], move[1])
              self.status.nextTurn()
@@ -149,13 +151,14 @@ class GameController:
         """
         moves = []
         for (q, r) in board.getGrid().keys():
-            piece = board.getPieceAt(q, r)
-            if piece and piece.getOwner() == self.status.getCurrentPlayer():
-                # Get all valid moves for this piece
-                piece_moves = self.get_valid_moves((q, r))
-                # Store these moves
-                for move in piece_moves:
-                    moves.append((piece, (q, r), move))  # (piece, current_position, target_position)
+            if board.hasPieceAt(q, r):
+                piece = board.getPieceAt(q, r)
+                if piece and piece.getOwner() == self.status.getCurrentPlayer():
+                    # Get all valid moves for this piece
+                    piece_moves = self.get_valid_moves((q, r))
+                    # Store these moves
+                    for move in piece_moves:
+                        moves.append(((q, r), move))
         return moves
     
     def get_all_possible_adds(self):
@@ -166,3 +169,6 @@ class GameController:
                 for position in valid_add_positions:
                     adds.append((piece_type, position))  # (piece_type, target_position)
         return adds
+    
+    def change_board(self, new_board):
+        self.board = new_board

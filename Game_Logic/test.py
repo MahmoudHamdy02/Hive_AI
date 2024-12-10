@@ -1,9 +1,10 @@
 import sys
 import os
 
+
 # Add the root directory of the project to the sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
-
+from Game_Logic.AI.Minimax import ai_play
 from Game_Logic.Game.GameController import GameController
 
 # board=Board()
@@ -31,15 +32,16 @@ controller.add_piece('bee', (0, 0))
 
 # # print(controller.get_valid_adds())
 controller.add_piece('bee', (0, 1))
+print(controller.get_valid_moves((0,0)))
+print(controller.get_all_possible_adds())
 # # PLayer1
 # # print(controller.get_valid_adds())
-# controller.add_piece('ant', (0, -1))
+#controller.add_piece('ant', (0, -1))
 # # # PLayer2
 # controller.add_piece('grasshopper', (0, 2))
 
-# controller.add_piece('ant', (0, -2))
-m=152
-print(str(m))
+#controller.add_piece('ant', (0, -2))
+
 # #PLayer2
 board=controller.get_board()
 
@@ -48,7 +50,7 @@ board=controller.get_board()
 # controller.add_piece('spider', (0,2))
 # print (controller.get_valid_adds('ant'))
 # controller.add_piece('ant', (-1,-1))
-# print (controller.get_valid_moves((-1,-1)))
+
 # controller.add_piece('ant', (1, 1))
 print(controller.get_all_possible_moves(board))
 #controller.move_piece((0, 2), (0,-3))
@@ -60,3 +62,4 @@ print(controller.get_all_possible_moves(board))
 
 
 # print(controller.hasPlay())
+ai_play(controller)

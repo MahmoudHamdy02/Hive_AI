@@ -31,7 +31,7 @@ class MoveFilter:
                         dfs(neighbor)
 
             dfs(start)
-            print(len(visited), board.noOfPieces)
+            #print(len(visited), board.noOfPieces)
             return len(visited) == board.noOfPieces
 
         # Temporarily apply the move
@@ -131,7 +131,7 @@ class MoveFilter:
         # return True  # Move is valid if it passes all checks
   
     
-<<<<<<< HEAD
+
     # @staticmethod
     # def can_slide_in(target_q, target_r, board):
     #     """
@@ -152,7 +152,7 @@ class MoveFilter:
     #                 return True
         
     #     return False  # Move is invalid if it doesn't pass the checks
-=======
+
     @staticmethod
     def can_slide_in(target_q, target_r, board):
         """
@@ -180,7 +180,7 @@ class MoveFilter:
 
         return False
 
->>>>>>> main
+
 
     
     @staticmethod

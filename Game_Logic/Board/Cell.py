@@ -37,3 +37,8 @@ class Cell:
     def __len__(self):
         return len(self.pieces)
         
+    def clone(self):
+        """
+        Creates a deep copy of the cell
+        """
+        return Cell(self.pieces.copy())
