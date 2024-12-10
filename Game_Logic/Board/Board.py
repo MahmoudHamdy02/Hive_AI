@@ -1,5 +1,6 @@
 from Game_Logic.Piece.Piece import Piece
 from Game_Logic.Board.Cell import Cell
+import copy
 
 class Board:
     def __init__(self) -> None:
@@ -57,6 +58,7 @@ class Board:
         return self.grid[(q,r)].getPiece()
     
     def clone(self):
-        cloned_board = Board()
-        cloned_board.grid = {pos: cell.clone() for pos, cell in self.grid.items()}
-        return cloned_board
+        # cloned_board = Board()
+        # cloned_board.grid = {pos: cell.clone() for pos, cell in self.grid.items()}
+        # return cloned_board
+        return copy.deepcopy(self)
