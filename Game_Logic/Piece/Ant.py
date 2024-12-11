@@ -42,7 +42,7 @@ class Ant(Piece):
             print(len(visited), board.noOfPieces)
             return len(visited) == board.noOfPieces
         
-        board.addPiece(self,self.position)
+        board.addPiece(self, *self.position)
 
         if not is_hive_continuous:
             return []

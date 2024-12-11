@@ -242,6 +242,25 @@ class MoveFilter:
         valid_move_sequences = []
         
         cq,cr=current_position
+        # Check if it is trapped
+        around = MoveFilter.get_adjacent_hexes(cq, cr)
+        if len(board.getNeighbors(current_position)) > 1:
+            for neighbor in board.getNeighbors(current_position):
+                nq, nr = neighbor
+                neighbor_direction_q=nq-cq
+                neighbor_direction_r=nr-cr
+                isolated = True
+                index=-1
+                for i in range(len(MoveFilter.ADJACENT_HEXES)):
+                    if neighbor_direction_q == MoveFilter.ADJACENT_HEXES[i][0] and neighbor_direction_r == MoveFilter.ADJACENT_HEXES[i][1]:
+                        index=i
+                left_of_neighbor=around[(index-1+len(around))%len(around)]
+                right_of_neighbor=around[(index+1+len(around))%len(around)]
+                if board.hasPieceAt(*left_of_neighbor) or board.hasPieceAt(*right_of_neighbor):
+                    isolated = False
+                if isolated:
+                    print("piece trapped")
+                    return []
         #each element is a list of paths 
 
          # [1,2,3] -> [[1],[2],[3]]
@@ -266,9 +285,7 @@ class MoveFilter:
                 #     valid_sequence = False
                 #     break
 
-                if not MoveFilter.can_slide_out(cq, cr, board) or not MoveFilter.can_slide_in(cq,cr,q, r, board):
-                    valid_sequence = False
-                    break
+
                 # if not MoveFilter.is_it_sliding(current_position, move, board):
                 #     valid_sequence = False
                 #     break
