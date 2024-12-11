@@ -24,11 +24,13 @@ class GameStatus:
         return: True if the opponent's Queen Bee is surrounded, False otherwise.
         """
         for (q, r) in self.board.getGrid().keys():
-            piece = self.board.getPieceAt(q, r)
-            # If board has a queen bee at q, r and it is the opponent's queen bee
-            if (isinstance(piece, Bee) and (piece.getOwner() != self.current_player)):
-                # Check if the opponent's Queen Bee is surrounded
-                if len(self.board.getNeighbors((q, r))) == 6:
-                    return True
+            if self.board.hasPieceAt(q, r):
+            
+                piece = self.board.getPieceAt(q, r)
+                # If board has a queen bee at q, r and it is the opponent's queen bee
+                if (isinstance(piece, Bee) and (piece.getOwner() != self.current_player)):
+                    # Check if the opponent's Queen Bee is surrounded
+                    if len(self.board.getNeighbors((q, r))) == 6:
+                        return True
         return False
     

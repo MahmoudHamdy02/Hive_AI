@@ -74,8 +74,9 @@ class GameController:
         # print(self.get_valid_moves(position))
         if move in self.get_valid_moves(position):
              self.board.movePiece(piece, move[0], move[1])
-             self.status.nextTurn()
              print(f"{self.get_current_player()} moved {piece} to {move}.")
+             self.status.nextTurn()
+             
         else:
              raise ValueError(f"Unknown piece type: {piece}")
 
@@ -146,14 +147,16 @@ class GameController:
         return self.board
     
 
-    def get_all_possible_moves(self,board):
+    def get_all_possible_moves(self):
         """
         Returns a list of all valid moves for all pieces of the current player on the board.
         """
         moves = []
-        for (q, r) in board.getGrid().keys():
-            if board.hasPieceAt(q, r):
-                piece = board.getPieceAt(q, r)
+        keys = list(self.board.getGrid().keys())
+        for (q, r) in keys:
+            if self.board.hasPieceAt(q, r):
+                piece = self.board.getPieceAt(q, r)
+                # print(f"Piece at ({q}, {r}): {piece} and owner: {piece.getOwner()}")
                 if piece and piece.getOwner() == self.status.getCurrentPlayer():
                     # Get all valid moves for this piece
                     piece_moves = self.get_valid_moves((q, r))
