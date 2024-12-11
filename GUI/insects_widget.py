@@ -10,10 +10,10 @@ class InsectWidget:
         self.image = None  # Default image initialization
 
         if self.color == Color.Black and self.count:
-            self.image = pygame.image.load(IMAGES_PATH_2+f"/b_insects/b-{self.name}.png")
+            self.image = pygame.image.load(f"{GUI_PATH}/images/b_insects/b-{self.name}.png")
 
         elif self.color == Color.White and self.count:
-            self.image = pygame.image.load(IMAGES_PATH_2+f"/w_insects/w-{self.name}.png")
+            self.image = pygame.image.load(f"{GUI_PATH}/images/w_insects/w-{self.name}.png")
 
         if self.image:  # Ensure image is not None
             self.image = pygame.transform.scale(self.image, (110, 110))

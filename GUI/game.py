@@ -59,7 +59,7 @@ def start_game(game_parameters: GameParameters):
     clock = pygame.time.Clock()
     running = True
 
-    bg_image = pygame.image.load("images/bg.jpg")
+    bg_image = pygame.image.load(f"{GUI_PATH}/images/bg.jpg")
     bg_image = pygame.transform.scale(bg_image, (640, 1280))
 
     current_state: State = State.Nothing_selected
