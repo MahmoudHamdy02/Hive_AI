@@ -132,31 +132,45 @@ class MoveFilter:
   
     
     @staticmethod
-    def can_slide_in(target_q, target_r, board):
+    def can_slide_in(current_q,current_r,target_q, target_r, board):
         """
         Checks if a piece can slide into the target position.
         A piece can slide into the position if:
         1. It has fewer than 5 occupied neighbors.
         2. The path into the hex is not obstructed.
         """
-        neighbors = MoveFilter.get_adjacent_hexes(target_q, target_r)
+        neighbors = MoveFilter.get_adjacent_hexes(current_q, current_r)
+        neighbors2 = MoveFilter.get_adjacent_hexes(target_q, target_r)
         
         # Count occupied neighbors
-        occupied_neighbors = sum(1 for q, r in neighbors if board.hasPieceAt(q, r))
-        if occupied_neighbors >= 5:
+        occupied_neighbors = sum(1 for q, r in neighbors2 if board.hasPieceAt(q, r))
+        if occupied_neighbors >= 6:
+            return False
+        if occupied_neighbors == 5 and not (current_q,current_r) in neighbors:
             return False
 
         # Check for unobstructed sliding path
-        for i, (neighbor_q, neighbor_r) in enumerate(neighbors):
-            left = neighbors[i - 1] if i - 1 >= 0 else neighbors[-1]
-            right = neighbors[(i + 1) % len(neighbors)]
+        # for i, (neighbor_q, neighbor_r) in enumerate(neighbors):
+        #     left = neighbors[i - 1] if i - 1 >= 0 else neighbors[-1]
+        #     right = neighbors[(i + 1) % len(neighbors)]
             
-            # If the target is free and adjacent to a sliding path
-            if not board.hasPieceAt(neighbor_q, neighbor_r):
-                if not board.hasPieceAt(left[0], left[1]) and not board.hasPieceAt(right[0], right[1]):
-                    return True
+        #     # If the target is free and adjacent to a sliding path
+        #     if not board.hasPieceAt(neighbor_q, neighbor_r):
+        #         if not board.hasPieceAt(left[0], left[1]) and not board.hasPieceAt(right[0], right[1]):
+        #             return True
+        path_direction_q=target_q-current_q
+        path_direction_r=target_r-current_r
+        hexes_length=len(MoveFilter.ADJACENT_HEXES)
+        index=-1
+        for i in range(hexes_length):
+            if path_direction_q == MoveFilter.ADJACENT_HEXES[i][0] and path_direction_r == MoveFilter.ADJACENT_HEXES[i][1]:
+             index=i
+        left_piece=neighbors[(index-1+hexes_length)%hexes_length]
+        right_piece=neighbors[(index+1+hexes_length)%hexes_length]
+        if board.hasPieceAt(left_piece[0], left_piece[1]) and  board.hasPieceAt(right_piece[0], right_piece[1]):
+            return False
 
-        return False
+        return True
 
 
     
@@ -252,7 +266,7 @@ class MoveFilter:
                 #     valid_sequence = False
                 #     break
 
-                if not MoveFilter.can_slide_out(cq, cr, board) or not MoveFilter.can_slide_in(q, r, board):
+                if not MoveFilter.can_slide_out(cq, cr, board) or not MoveFilter.can_slide_in(cq,cr,q, r, board):
                     valid_sequence = False
                     break
                 # if not MoveFilter.is_it_sliding(current_position, move, board):
