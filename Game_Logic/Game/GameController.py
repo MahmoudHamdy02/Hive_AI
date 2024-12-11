@@ -14,7 +14,6 @@ class GameController:
         self.black_player = Player(Color.BLACK)
         self.status = GameStatus(self.board, self.white_player, self.black_player)
 
-
     def get_valid_adds(self, piece_type: str):
         if self.status.turn_count == 0:
             return [(0, 0)]
@@ -67,21 +66,26 @@ class GameController:
         return MoveFilter.filter_moves(self.board, potential_moves, position)
     
     def move_piece(self, position, move):
+        if not self.board.hasPieceAt(position[0], position[1]):
+            print(f"No piece at {position}.")
+            return False
         piece = self.board.getPieceAt(position[0], position[1])
             
         if move in self.get_valid_moves(position):
              self.board.movePiece(piece, move[0], move[1])
              self.status.nextTurn()
              print(f"{self.status.getCurrentPlayer().get_color} moved {piece} to {move}.")
+             return True
         else:
-             raise ValueError(f"Unknown piece type: {piece}")
+             print(f"Unknown piece type: {piece}")
+             return False
 
     def add_piece(self, piece_type: str, target_position):
             q,r=target_position
 
             if len(self.status.getCurrentPlayer().get_remaining_pieces()[piece_type]) <= 0:
                 print(f"No more {piece_type}s available for {self.status.current_player}.")
-                return
+                return False
             # Needed to be checked 
             # Check for no two-hex rule: player cannot place the first piece on the second turn.
             # if self.turn_count == 1 and (piece == 'bee' and self.pieces[self.current_player]['bee'] == 1):
@@ -101,7 +105,7 @@ class GameController:
                
             if target_position not in self.get_valid_adds(piece_type):
                 print(f"Cannot place piece at ({q}, {r})")
-                return
+                return False
             
             piece = self.status.getCurrentPlayer().get_remaining_pieces()[piece_type].pop()
 
@@ -112,6 +116,7 @@ class GameController:
             self.board.noOfPieces += 1
             print(f"{self.status.getCurrentPlayer().get_color} placed {piece} at {target_position}.")
             self.status.nextTurn()
+            return True
 
     def hasPlay(self) -> bool:
         for piece in self.status.getCurrentPlayer().get_remaining_pieces().values():
@@ -141,3 +146,51 @@ class GameController:
 
     def get_board(self):
         return self.board
+    
+    def get_status(self):
+        return self.status
+
+    def get_all_moves_and_adds(self) -> list:
+        all_moves_and_adds = []
+        
+        # Get moves
+        grid_keys = list(self.board.getGrid().keys())
+        for current_position in grid_keys:
+            if not self.board.hasPieceAt(current_position[0], current_position[1]):
+                continue
+
+            piece = self.board.getPieceAt(current_position[0], current_position[1])
+            if not piece or piece.getOwner() != self.status.getCurrentPlayer():
+                continue
+                
+            valid_moves = self.get_valid_moves(current_position)
+            if valid_moves: 
+                for new_position in valid_moves:
+                    all_moves_and_adds.append([
+                        piece.__class__.__name__.lower(),
+                        current_position,
+                        new_position
+                    ])
+        
+        # Get adds
+        for piece_type, pieces in self.status.getCurrentPlayer().get_remaining_pieces().items():
+            if len(pieces) == 0: 
+                continue
+                
+            valid_adds = self.get_valid_adds(piece_type)
+            if valid_adds:
+                for new_position in valid_adds:
+                    all_moves_and_adds.append([
+                        piece_type,
+                        None,
+                        new_position
+                    ])
+
+        return all_moves_and_adds
+    
+    def restore_state(self, state):
+        self.status.setCurrentPlayer(state['player'])
+        self.status.setTurnNumber(state['turn'])
+        self.board.setGrid(state['grid'])
+        self.white_player.set_remaining_pieces(state['pieces']['white'])
+        self.black_player.set_remaining_pieces(state['pieces']['black'])

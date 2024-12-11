@@ -14,8 +14,8 @@ class Heuristic:
         self.agentColor = agentColor
         
         self.weights = {
-            'win': 1e6,
-            'loss': -1e6,
+            'win': float('inf'),
+            'loss': float('-inf'),
             'queen_surroundings': 10,
             'on_board_pieces': 1,
             'blocked_pieces': 5,
@@ -29,7 +29,7 @@ class Heuristic:
             'Spider': 1
         }
 
-    def calculateBoardScore(self) -> int:
+    def calculateBoardScore(self) -> float:
         """ 
         Calculate the score of the board based on the following metrics:
         1. win and loss evaluation
@@ -38,7 +38,6 @@ class Heuristic:
         5. blocked pieces on the board
 
         """
-
         # if the last move was a winning move for the current agent then return the maximum score
         winner = self.gemeController.get_winner()
         if winner:
@@ -51,17 +50,20 @@ class Heuristic:
         score = self._calculate_queen_surroundings() + self._calculate_on_board_pieces() + self._calculate_blocked_pieces()
         return score
 
-    def _calculate_queen_surroundings(self):
+    def _calculate_queen_surroundings(self) -> float:
         """
         Calculate the score based on the number of surrounding pieces of the queen
         
         """
-
         grid = self.gemeController.get_board().getGrid()
+        grid_items = list(grid.items())
         own_queen_neighbors = 0
         opponent_queen_neighbors = 0
 
-        for position, cell in grid.items():
+        for position, cell in grid_items:
+            if len(cell.getPiecesList()) == 0:
+                continue
+
             current_piece = cell.getPiece()
 
             if current_piece is None:
@@ -78,16 +80,16 @@ class Heuristic:
         return self.weights['queen_surroundings'] * (opponent_queen_neighbors - own_queen_neighbors)
 
 
-    def _calculate_on_board_pieces(self):
+    def _calculate_on_board_pieces(self) -> float:
         """ 
         Calculate the score based on the number of onboard pieces of the agent
 
         """
-
         grid = self.gemeController.get_board().getGrid()
+        grid_values = list(grid.values())
         num_on_board_pieces = 0
 
-        for cell in grid.values():
+        for cell in grid_values:
             pieces = cell.getPiecesList()
             
             for piece in pieces:
@@ -96,17 +98,20 @@ class Heuristic:
         
         return self.weights['on_board_pieces'] * num_on_board_pieces
     
-    def _calculate_blocked_pieces(self):
+    def _calculate_blocked_pieces(self) -> float:
         """ 
         Calculate the score based on the number of blocked pieces on the board
 
         """
-
         grid = self.gemeController.get_board().getGrid()
+        grid_items = list(grid.items())
         own_blocked_score = 0
         opponent_blocked_score = 0
 
-        for position, cell in grid.items():
+        for position, cell in grid_items:
+            if len(cell.getPiecesList()) == 0:
+                continue
+            
             current_piece = cell.getPiece()
 
             if current_piece is None:

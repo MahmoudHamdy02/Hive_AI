@@ -8,9 +8,6 @@ class GameStatus:
         self.current_player = whitePlayer
         self.winner = None
     
-
-
-
     def nextTurn(self):
         self.turn_count += 1
         self.current_player = self.players[self.turn_count % 2]
@@ -24,6 +21,9 @@ class GameStatus:
         return: True if the opponent's Queen Bee is surrounded, False otherwise.
         """
         for (q, r) in self.board.getGrid().keys():
+            if not self.board.hasPieceAt(q, r):
+                continue
+
             piece = self.board.getPieceAt(q, r)
             # If board has a queen bee at q, r and it is the opponent's queen bee
             if (isinstance(piece, Bee) and (piece.getOwner() != self.current_player)):
@@ -32,3 +32,11 @@ class GameStatus:
                     return True
         return False
     
+    def getTurnNumber(self):
+        return self.turn_count
+
+    def setCurrentPlayer(self, player):
+        self.current_player = player
+    
+    def setTurnNumber(self, turn):
+        self.turn_count = turn

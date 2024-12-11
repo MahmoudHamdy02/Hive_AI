@@ -56,3 +56,5 @@ class Board:
     def getPieceAt(self, q, r):
         return self.grid[(q,r)].getPiece()
     
+    def setGrid(self, grid):
+        self.grid = grid
