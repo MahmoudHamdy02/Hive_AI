@@ -3,6 +3,7 @@ from Game_Logic.Game.GameStatus import GameStatus
 from Game_Logic.Board.Board import Board
 from Game_Logic.Player.Player import Player
 from Game_Logic.Player.Color import Color
+from Game_Logic.Piece.Bee import Bee
 import copy
 
 class GameController:
@@ -183,7 +184,7 @@ class GameController:
         for (q, r) in self.board.getGrid().keys():
             if self.board.hasPieceAt(q, r):
                 piece = self.board.getPieceAt(q, r)
-                if piece.getOwner() != self.status.getCurrentPlayer() and piece == 'bee':
+                if piece.getOwner() != self.status.getCurrentPlayer() and isinstance(piece, Bee):
                     count = len(self.board.getNeighbors((q,r)))
         return count
 
@@ -192,7 +193,7 @@ class GameController:
         for (q, r) in self.board.getGrid().keys():
             if self.board.hasPieceAt(q, r):
                 piece = self.board.getPieceAt(q, r)
-                if piece.getOwner() == self.status.getCurrentPlayer() and piece == 'bee':
+                if piece.getOwner() == self.status.getCurrentPlayer() and isinstance(piece, Bee):
                     count = len(self.board.getNeighbors((q,r)))
         return count
     

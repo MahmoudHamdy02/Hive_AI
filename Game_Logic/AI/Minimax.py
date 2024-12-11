@@ -9,7 +9,7 @@ def ai_play(game_controller, max_time=1.0):  # max_time is in seconds
     
     #start_time = time()  # Start the timer
     start_time = time.time()
-    depth = 2  # Start with depth 1
+    depth = 5  # Start with depth 1
 
 
     # Progressive deepening: Increase depth until time is up
@@ -18,8 +18,8 @@ def ai_play(game_controller, max_time=1.0):  # max_time is in seconds
     all_possible_moves =game_controller.get_all_possible_moves()
     for move in all_possible_moves:
         # Check if we've exceeded the allowed time
-        # if time.time() - start_time > max_time:
-        #     break  # Stop if the time limit is exceeded
+        if time.time() - start_time > max_time:
+            break  # Stop if the time limit is exceeded
         
         simulated_controller = game_controller.clone()
 
@@ -42,6 +42,7 @@ def ai_play(game_controller, max_time=1.0):  # max_time is in seconds
     
     if best_move:
         print('Best move')
+        print(best_score)
         game_controller.move_piece(best_move[0],best_move[1])
 
     return best_move
@@ -72,26 +73,38 @@ def minimax(depth,ismaxmise,game_controller):
     if (ismaxmise):
         bestscore=-10000000
         all_possible_moves =game_controller.get_all_possible_moves()
+        if len(all_possible_moves)==0: 
+            print("end turn")
+            game_controller.status.nextTurn()
+            return score
         for move in all_possible_moves:
             
             simulated_controller=game_controller.clone()
             
             simulated_controller.move_piece(*move)  # Apply the move
+            print("max")
             score=minimax(depth-1,False,simulated_controller)
             #undo move #make function
             bestscore=max(score,bestscore)
+            
+        print("bestscore from max " , bestscore)
         return bestscore
     else:
         bestscore=10000000
         #try every single move the opp could do
         all_possible_moves =game_controller.get_all_possible_moves()
+        if len(all_possible_moves)==0:
+            print("end turn")
+            game_controller.status.nextTurn()
+            return score
         for move in all_possible_moves:
             simulated_controller=game_controller.clone()
             simulated_controller.move_piece(*move)  # Apply the move
+            print("min")
             score=minimax(depth-1,True,simulated_controller)
             #undo move #make function
             bestscore=min(score,bestscore)
-            print("bestscore from min " , bestscore)
+        print("bestscore from min " , bestscore)
         
         return bestscore
 
