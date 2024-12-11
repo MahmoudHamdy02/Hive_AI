@@ -72,7 +72,7 @@ class HexagonTile(Hexagon):
         self.image = None
         if self.insect:
             c = "b" if self.color == Color.Black else "w"
-            self.image = pygame.image.load(IMAGES_PATH_2+f"/{c}_insects/{c}-{self.insect}.png")
+            self.image = pygame.image.load(f"{GUI_PATH}/images/{c}_insects/{c}-{self.insect}.png")
             self.image = pygame.transform.scale(self.image, (105, 105))
             self.image = pygame.transform.rotate(self.image, 90)
 
