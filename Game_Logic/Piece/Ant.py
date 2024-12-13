@@ -40,7 +40,7 @@ class Ant(Piece):
 
             dfs(start)
             print(len(visited), board.noOfPieces)
-            return len(visited) == board.noOfPieces
+            return len(visited) == board.noOfPieces -1
         
         continuous = is_hive_continuous()
         
