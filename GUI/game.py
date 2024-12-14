@@ -107,6 +107,7 @@ def start_game(game_parameters: GameParameters):
                         if tile.contains_point(mouse_pos) and tile.color == current_player.color:
                             selected_tile = tile
                             moveOutlines=controller.get_valid_moves(tile.axial_coordinates)
+                            print("current outlines: ", moveOutlines)
                             if len(moveOutlines) >0:
                                 tile.selected = True
                                 current_state = State.Existing_piece_selected

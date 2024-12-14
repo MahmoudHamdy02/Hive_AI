@@ -69,24 +69,40 @@ class HexagonTile(Hexagon):
         self.selected = False
         self.color = color
         self.insect = insect
+        self.beetles=[] # stack of beetles in the hexagon 
         self.image = None
         if self.insect:
             c = "b" if self.color == Color.Black else "w"
             self.image = pygame.image.load(f"{GUI_PATH}/images/{c}_insects/{c}-{self.insect}.png")
             self.image = pygame.transform.scale(self.image, (105, 105))
             self.image = pygame.transform.rotate(self.image, 90)
+    def __get_image(insect, color,scale=0.9):
+        image 
+        c = "b" if color == Color.Black else "w"
+        image = pygame.image.load(f"{GUI_PATH}/images/{c}_insects/{c}-{insect}.png")
+        image = pygame.transform.scale(image, (105*scale, 105*scale))
+        image = pygame.transform.rotate(image, 90)
+        return image
 
+    
     def render(self, screen) -> None:
         """Renders the hexagon on the screen"""
 
         pygame.draw.polygon(screen, (150,150,150), self.vertices)
         pygame.draw.aalines(screen, (25, 25, 25), closed=True, points=self.vertices)
-        if self.insect:
+        
+        if self.insect and len(self.beetles)==0:
             if self.selected:
                 self.image.set_alpha(128)
             else:
                 self.image.set_alpha(255)
             screen.blit(self.image, (self.position[0]-53 , self.position[1] ))
+        elif self.insect and len(self.beetles)>0:
+            screen.blit(self.image, (self.position[0]-53 , self.position[1] ))
+            for i in range(len(self.beetles)):
+                image=self.__get_image("beetle", self.beetles[i],scale=1-0.1*(i+1))
+                screen.blit(image, (self.position[0]-53 , self.position[1] ))
+                
 
 
 
