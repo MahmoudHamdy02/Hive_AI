@@ -18,6 +18,7 @@ class MoveFilter:
         # piece = board.grid[current_position]
 
         def is_hive_continuous():
+            len_visted=[0]
             visited = set()
             iterator = iter(board.grid.keys())
             start = next(iterator)  # Get the first hex in the grid
@@ -26,13 +27,17 @@ class MoveFilter:
 
             def dfs(node):
                 visited.add(node)
+                for i in range(board.getNoOfPiecesAt(*node)):
+                    len_visted[0]+=1
                 for neighbor in MoveFilter.get_adjacent_hexes(*node):
                     if board.hasPieceAt(*neighbor) and neighbor not in visited:
                         dfs(neighbor)
 
             dfs(start)
-            print(len(visited), board.noOfPieces)
-            return len(visited) == board.noOfPieces
+            # print(len(visited), board.noOfPieces)
+            # return len(visited) == board.noOfPieces
+            # print(len_visted[0], board.noOfPieces)
+            return len_visted[0] == board.noOfPieces
 
         # Temporarily apply the move
         board.movePiece(piece, *target_position)

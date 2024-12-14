@@ -33,6 +33,13 @@ class Cell:
 
         """
         return self.pieces
+    
+    def noOfPieces(self):
+        """
+        Returns the number of pieces in the cell
+
+        """
+        return len(self.pieces)
 
     def __len__(self):
         return len(self.pieces)
