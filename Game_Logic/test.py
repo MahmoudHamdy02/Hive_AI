@@ -1,6 +1,7 @@
 import sys
 import os
 from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
+from Game_Logic.AI.MiniMaxAgent import MiniMaxAgent
 from Game_Logic.Player.Color import Color
 # Add the root directory of the project to the sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
@@ -40,7 +41,7 @@ controller.add_piece('bee', (0, 2))
 
 controller.add_piece('ant', (1, 1))
 
-agent = AlphaBetaAgent(controller,Color.WHITE , 5 , 1)
+agent = MiniMaxAgent(controller,Color.WHITE , 5,1)
 bestMove=agent.getBestMove()
 print(bestMove)
 # #PLayer2
