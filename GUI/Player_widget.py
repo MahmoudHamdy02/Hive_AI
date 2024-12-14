@@ -55,8 +55,9 @@ class PlayerWidget:
 
                 # Store the box in the dictionary
                 self.insectsBoxes[insect_name] = insect_box
-                
                 i+=1
+
+                
 
     def handle_click(self, position) -> str | None:
         """

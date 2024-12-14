@@ -90,6 +90,8 @@ def start_game(game_parameters: GameParameters):
                     # If yes, get the clicked insect
                     if current_player == player1 and pygame.Rect(0, 0, 250, HEIGHT).collidepoint(mouse_pos) or current_player == player2 and pygame.Rect(WIDTH - 250, 0, 250, HEIGHT).collidepoint(mouse_pos):
                         new_insect = current_player.handle_click(mouse_pos)
+                        if new_insect is None:
+                            continue
                         print(hex_manager.outlines)
                         moveOutlines=controller.get_valid_adds(new_insect)
                         print(moveOutlines)
