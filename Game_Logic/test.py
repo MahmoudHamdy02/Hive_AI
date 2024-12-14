@@ -1,6 +1,7 @@
 import sys
 import os
-
+from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
+from Game_Logic.Player.Color import Color
 # Add the root directory of the project to the sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
@@ -33,22 +34,25 @@ controller.add_piece('ant', (0, 0))
 controller.add_piece('ant', (0, 1))
 # PLayer1
 # print(controller.get_valid_adds())
-controller.add_piece('ant', (0, -1))
+controller.add_piece('bee', (0, -1))
 # # PLayer2
-controller.add_piece('grasshopper', (0, 2))
+controller.add_piece('bee', (0, 2))
 
-controller.add_piece('ant', (0, -2))
+controller.add_piece('ant', (1, 1))
 
-#PLayer2
-print(controller.get_valid_moves((0, 2)))
-controller.move_piece((0, 2), (0,-3))
+agent = AlphaBetaAgent(controller,Color.WHITE , 5 , 1)
+bestMove=agent.getBestMove()
+print(bestMove)
+# #PLayer2
+# print(controller.get_valid_moves((0, 2)))
+# controller.move_piece((0, 2), (0,-3))
 
 
-# # PLayer1
-# print("Turn 4")
-# print(controller.get_valid_adds())
-# controller.add_piece('ant', (0, 4))
+# # # PLayer1
+# # print("Turn 4")
+# # print(controller.get_valid_adds())
+# # controller.add_piece('ant', (0, 4))
 
-print(controller.hasPlay())
+# print(controller.hasPlay())
 
 
