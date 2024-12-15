@@ -16,7 +16,6 @@ class AlphaBetaAgent(Agent):
         beta = float('inf')
         moves = self.gameController.get_all_moves_and_adds()
         self.move_history.clear()  
-        
         for move in moves:
             if not self.doMove(move):  
                 continue  
@@ -34,7 +33,6 @@ class AlphaBetaAgent(Agent):
         Returns the best value that maximizer can obtain
         """
         moves = self.gameController.get_all_moves_and_adds()
-
         if depth <= 0 or len(moves) == 0:
             return self.heuristic.calculateBoardScore()
     

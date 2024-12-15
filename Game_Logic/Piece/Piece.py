@@ -42,6 +42,13 @@ class Piece:
 
         """
         self.position = (q, r)
+    
+    def __eq__(self, other):
+        return (
+            isinstance(other, Piece) and
+            self.owner == other.owner
+        )
 
-
+    def __hash__(self):
+        return hash(self.owner)
 

@@ -43,4 +43,3 @@ class Cell:
 
     def __len__(self):
         return len(self.pieces)
-        
