@@ -248,24 +248,24 @@ class MoveFilter:
         
         cq,cr=current_position
         # Check if it is trapped
-        around = MoveFilter.get_adjacent_hexes(cq, cr)
-        if len(board.getNeighbors(current_position)) > 1:
-            for neighbor in board.getNeighbors(current_position):
-                nq, nr = neighbor
-                neighbor_direction_q=nq-cq
-                neighbor_direction_r=nr-cr
-                isolated = True
-                index=-1
-                for i in range(len(MoveFilter.ADJACENT_HEXES)):
-                    if neighbor_direction_q == MoveFilter.ADJACENT_HEXES[i][0] and neighbor_direction_r == MoveFilter.ADJACENT_HEXES[i][1]:
-                        index=i
-                left_of_neighbor=around[(index-1+len(around))%len(around)]
-                right_of_neighbor=around[(index+1+len(around))%len(around)]
-                if board.hasPieceAt(*left_of_neighbor) or board.hasPieceAt(*right_of_neighbor):
-                    isolated = False
-                if isolated:
-                    print("piece trapped")
-                    return []
+        # around = MoveFilter.get_adjacent_hexes(cq, cr)
+        # if len(board.getNeighbors(current_position)) > 1:
+        #     for neighbor in board.getNeighbors(current_position):
+        #         nq, nr = neighbor
+        #         neighbor_direction_q=nq-cq
+        #         neighbor_direction_r=nr-cr
+        #         isolated = True
+        #         index=-1
+        #         for i in range(len(MoveFilter.ADJACENT_HEXES)):
+        #             if neighbor_direction_q == MoveFilter.ADJACENT_HEXES[i][0] and neighbor_direction_r == MoveFilter.ADJACENT_HEXES[i][1]:
+        #                 index=i
+        #         left_of_neighbor=around[(index-1+len(around))%len(around)]
+        #         right_of_neighbor=around[(index+1+len(around))%len(around)]
+        #         if board.hasPieceAt(*left_of_neighbor) or board.hasPieceAt(*right_of_neighbor):
+        #             isolated = False
+        #         if isolated:
+        #             print("piece trapped")
+        #             return []
         #each element is a list of paths 
 
         
@@ -314,13 +314,13 @@ class MoveFilter:
             board.movePiece(piece, *current_position)
             
         valid_move_ins = []
+        if piece.get_piece_type() == "Beetle":
+            return valid_move_sequences
         for move in valid_move_sequences:
             slide_in = False
             has_move_neighbor = False
             # Get adjacent moves
             adjacent_moves = MoveFilter.get_adjacent_hexes(*move)
-            if move == (1,0):
-                print("neighbor move",adjacent_moves, valid_move_sequences)
             for neighbor in adjacent_moves:
                 if neighbor in valid_move_sequences:
                     has_move_neighbor = True
@@ -331,6 +331,7 @@ class MoveFilter:
             # if not slide_in and has_move_neighbor:
             #     valid_move_sequences.remove(move)
             if slide_in or not has_move_neighbor:
+                # print(move ,"add")
                 valid_move_ins.append(move)
 
         valid_move_sequences = valid_move_ins

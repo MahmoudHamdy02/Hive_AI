@@ -51,4 +51,11 @@ class Piece:
 
     def __hash__(self):
         return hash(self.owner)
+    
+    def get_piece_type(self) -> str:
+        """
+        Returns the type of the piece
+
+        """
+        return self.__class__.__name__
 
