@@ -26,7 +26,7 @@ class HexManager:
         """
         for hexagon in self.hexagons:
             if hexagon.axial_coordinates == (q, r):
-                if insect is "beetle":
+                if insect == "beetle":
                     hexagon.beetles.append(color)
                 else:
                     raise Exception("Tile already exists at specified axial coordinates")
