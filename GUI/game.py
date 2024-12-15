@@ -1,5 +1,7 @@
 import sys
 import os
+from typing import List
+from hex import HexagonTile
 
 # Add the root directory of the project to the sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
@@ -116,18 +118,27 @@ def start_game(game_parameters: GameParameters):
                         continue
 
                     # Select existing tile from board
+                    clicked_tiles: List[HexagonTile] = []
                     for tile in hex_manager.hexagons:
-                        if tile.contains_point(mouse_pos) and tile.color == current_player.color:
-                            selected_tile = tile
-                            moveOutlines=controller.get_valid_moves(tile.axial_coordinates)
+                        if tile.contains_point(mouse_pos):
+                            clicked_tiles.append(tile)
+                            print("clicked tile z: ", tile.insect,tile.z)
+                    if len(clicked_tiles) > 0:
+                        selected_tile = clicked_tiles[0]
+                        for clicked_tile in clicked_tiles:
+                            if clicked_tile.z > selected_tile.z:
+                                selected_tile = clicked_tile
+                        print("selected tile: ",selected_tile.insect)
+
+                        if selected_tile.color == current_player.color:
+                            moveOutlines=controller.get_valid_moves(selected_tile.axial_coordinates)
                             print("current outlines: ", moveOutlines)
                             if len(moveOutlines) >0:
-                                tile.selected = True
+                                selected_tile.selected = True
                                 current_state = State.Existing_piece_selected
                                 for i in moveOutlines:
                                     hex_manager.drawOutline(i[0],i[1])
                             print(current_state, selected_tile.insect)
-                            break
 
                 elif current_state == State.New_piece_selected:
                     # If another new piece is clicked, select it instead
@@ -164,26 +175,10 @@ def start_game(game_parameters: GameParameters):
                             current_player = player2 if current_player == player1 else player1
                             # endTurn()
                             new_insect = None
+                            
                             current_state = State.Nothing_selected
                     print(current_state)
                 elif current_state == State.Existing_piece_selected:
-                    # If another tile is clicked, select it instead
-                    tile_clicked = False
-                    for tile in hex_manager.hexagons:
-                        if tile.contains_point(mouse_pos) and tile.color == current_player.color:
-                            tile_clicked = True
-                            selected_tile.selected = False
-                            selected_tile = tile
-                            hex_manager.removeAllOutlines()
-                            moveOutlines=controller.get_valid_moves(tile.axial_coordinates)
-                            if len(moveOutlines) >0:
-                                tile.selected = True
-                                for i in moveOutlines:
-                                    hex_manager.drawOutline(i[0],i[1])
-                            current_state = State.Existing_piece_selected
-                            print(current_state, selected_tile.insect)
-                            break
-
                     # Move selected tile to clicked outline
                     outline_clicked = False
                     for outline in hex_manager.outlines:
@@ -200,6 +195,23 @@ def start_game(game_parameters: GameParameters):
                             current_turn += 1
                             # endTurn()
                             current_state = State.Nothing_selected
+
+                    # If another tile is clicked, select it instead
+                    tile_clicked = False
+                    for tile in hex_manager.hexagons:
+                        if tile.contains_point(mouse_pos) and tile.color == current_player.color:
+                            tile_clicked = True
+                            selected_tile.selected = False
+                            selected_tile = tile
+                            hex_manager.removeAllOutlines()
+                            moveOutlines=controller.get_valid_moves(tile.axial_coordinates)
+                            if len(moveOutlines) >0:
+                                tile.selected = True
+                                for i in moveOutlines:
+                                    hex_manager.drawOutline(i[0],i[1])
+                            current_state = State.Existing_piece_selected
+                            print(current_state, selected_tile.insect)
+                            break
 
                     # If neither tile nor outline is clicked, remove selection
                     if tile_clicked == False and outline_clicked == False:
