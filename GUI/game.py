@@ -86,13 +86,9 @@ def start_game(game_parameters: GameParameters):
             elif event.type==pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
 
-                # TODO: Place first piece automatically at (0, 0)
-
                 # This currently force the turn order
                 # TODO: A turn must be skipped if there are no available moves
                 # Create end_turn() function to handle logic
-
-                # TODO: Create a visual effect to indicate a piece is selected
 
                 if current_state == State.Nothing_selected:
                     # Check if player area 1 or 2 was clicked in the correct turn
