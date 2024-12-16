@@ -65,24 +65,49 @@ def start_game(game_parameters: GameParameters):
     current_player = player1
     player1_bee_played = False
     player2_bee_played = False
+    winner = None
 
     ai_move = None
     ai_thread = None
-
+    def check_victory():
+        global winner
+        loser = controller.get_loser()
+        print("loser: ", loser)
+        if loser == 2:
+            winner = "white"
+            print("winner: ", winner)
+            display_winner(screen, f"{player1.name} (White) wins!")
+            return "white"
+        elif loser == 1:
+            winner = "black"
+            print("winner: ", winner)
+            display_winner(screen, f"{player2.name} (Black) wins!")
+            return "black"
+            
     def endTurn():
         # End turn and set current player
         # If current player has no moves, swap back to previous player
-        nonlocal current_turn, current_player
+        nonlocal current_turn, current_player, winner
         current_turn += 1
         current_player = player2 if current_player == player1 else player1
         if not controller.hasPlay():
             current_player = player2 if current_player == player1 else player1
-        winner = controller.get_winner()
-        if winner == 1:
-            display_winner(screen, f"{player1.name} (White) wins!")
-        elif winner == 2:
-            display_winner(screen, f"{player2.name} (Black) wins!")
-            running = False
+
+        check_victory()
+        # loser = controller.get_loser()
+        # print("loser: ", loser)
+        # if loser == Color.Black:
+        #     winner = "white"
+        # elif loser == Color.White:
+        #     winner = "black"
+
+        # winner = controller.get_winner()
+        # print("winner: ", winner)
+        # if winner == Color.White:
+        #     display_winner(screen, f"{player1.name} (White) wins!")
+        # elif winner == Color.Black:
+        #     display_winner(screen, f"{player2.name} (Black) wins!")
+
         
     # Display winner on screen
     def display_winner(screen, message):
@@ -90,8 +115,9 @@ def start_game(game_parameters: GameParameters):
         text = font.render(message, True, (0, 255, 0))
         text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2-HEIGHT/4))
         screen.blit(text, text_rect)
+
         pygame.display.flip()
-        pygame.time.wait(3000)  # Display message for 3 seconds
+        pygame.time.wait(3000)
 
 
     # Run in separate thread, send result back to main thread
@@ -141,6 +167,7 @@ def start_game(game_parameters: GameParameters):
         else:
             # Disable clicking when AI is playing
             for event in events:
+                
                 if event.type==pygame.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
 
@@ -292,4 +319,4 @@ def start_game(game_parameters: GameParameters):
         pygame.display.flip()
 
         clock.tick(60)  # limits FPS to 60
-# start_game(GameParameters())
+start_game(GameParameters())
