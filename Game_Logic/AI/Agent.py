@@ -34,39 +34,11 @@ class Agent(ABC):
         else:
             return gameController.move_piece(old_pos, new_pos)
 
-    # def doMove(self, move: list):
-    #     """Applies a move to the game board"""
-    #     current_state = {
-    #         'move': move,
-    #         'player_color': self.gameController.get_status().getCurrentPlayer().color,
-    #         'turn': self.gameController.get_status().getTurnNumber(),
-    #         'grid': deepcopy(self.gameController.get_board().getGrid()),
-    #         'pieces': {
-    #             'white': deepcopy(self.gameController.white_player.get_remaining_pieces()),
-    #             'black': deepcopy(self.gameController.black_player.get_remaining_pieces())
-    #         }
-    #     }
-        
-    #     piece_type, old_pos, new_pos = move
-
-    #     success = False
-    #     if old_pos is None:
-    #         success = self.gameController.add_piece(piece_type, new_pos)
-    #     else:
-    #         success = self.gameController.move_piece(old_pos, new_pos)
-            
-    #     if success:
-    #         self.move_history.append(current_state)
-
-    #     return success
-
-    # def undoMove(self):
-    #     """Restore game state before last move"""
-    #     if not self.move_history:
-    #         return False
-            
-    #     state = self.move_history.pop()
-    #     self.gameController.restore_state(state)
-    #     return True
+    def undoMove(self, move):
+        piece_type, old_pos, new_pos = move
+        if old_pos is None:
+            self.originalGameController.undoAdd(piece_type,new_pos)
+        else:
+            self.originalGameController.undoMove(new_pos, old_pos)
 
 

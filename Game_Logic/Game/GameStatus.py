@@ -11,6 +11,10 @@ class GameStatus:
     def nextTurn(self):
         self.turn_count += 1
         self.current_player = self.players[self.turn_count % 2]
+
+    def prevTurn(self):
+        self.turn_count -= 1
+        self.current_player = self.players[self.turn_count % 2]
     
     def getCurrentPlayer(self):
         return self.current_player

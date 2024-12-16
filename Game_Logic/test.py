@@ -1,9 +1,9 @@
-import sys
-import os
-from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
-from Game_Logic.Player.Color import Color
-# Add the root directory of the project to the sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
+# import sys
+# import os
+# from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
+# from Game_Logic.Player.Color import Color
+# # Add the root directory of the project to the sys.path
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 #
 # from Game_Logic.Game.GameController import GameController
 # from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
@@ -180,10 +180,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
 #print(controller.hasPlay())
 
-# import sys
-# import os
+import sys
+import os
 # Add the root directory of the project to the sys.path
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(_file_), '../')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
 from Game_Logic.Game.GameController import GameController
 from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
@@ -214,22 +214,33 @@ controller.add_piece('ant', (0, 0))
 # PLayer2
 
 # print(controller.get_valid_adds())
-controller.add_piece('ant', (0, 1))
+controller.add_piece('ant', (1, 0))
 # PLayer1
 # print(controller.get_valid_adds())
-controller.add_piece('bee', (0, -1))
+controller.add_piece('bee', (-1, 0))
 # # PLayer2
-controller.add_piece('bee', (0, 2))
+controller.add_piece('bee', (2, 0))
 
-controller.add_piece('ant', (1, 1))
+controller.add_piece('ant', (0,-1))
+
+controller.add_piece("beetle", (2, 1))
+
+controller.move_piece((0, -1), (3,1))
+
+controller.add_piece("ant", (1, 2))
+
+controller.add_piece("ant", (-1, -1))
+
+controller.add_piece("ant", (-1, 1))
+
 
 start = time.time()
-agent = AlphaBetaAgent(controller,Color.WHITE , 3, 1)
+agent = AlphaBetaAgent(controller,Color.WHITE , 4, 1)
 bestMove=agent.getBestMove()
 end = time.time()
 print(bestMove)
 print("Time taken:", end - start)
-# #PLayer2
+#PLayer2
 # print(controller.get_valid_moves((0, 2)))
 # controller.move_piece((0, 2), (0,-3))
 

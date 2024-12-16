@@ -73,7 +73,7 @@ class GameController:
             
         if move in self.get_valid_moves(position):
              self.board.movePiece(piece, move[0], move[1])
-             print(f"{self.status.getCurrentPlayer().get_color()} moved {piece} to {move}.")
+            #  print(f"{self.status.getCurrentPlayer().get_color()} moved {piece} to {move}.")
              self.status.nextTurn()
              return True
         else:
@@ -86,22 +86,6 @@ class GameController:
             if len(self.status.getCurrentPlayer().get_remaining_pieces()[piece_type]) <= 0:
                 print(f"No more {piece_type}s available for {self.status.current_player}.")
                 return False
-            # Needed to be checked 
-            # Check for no two-hex rule: player cannot place the first piece on the second turn.
-            # if self.turn_count == 1 and (piece == 'bee' and self.pieces[self.current_player]['bee'] == 1):
-            #     print(f"Cannot place a piece on a hex adjacent to another piece. This violates the no-two-hex rule.")
-            #     return
-            
-            # Ensure the Queen Bee must be placed by turn 4 but can be placed before.
-                # piece_type = "bee"
-
-            # if self.board and not any((nq, nr) in self.board.grid.keys for nq, nr in MoveFilter.get_adjacent_hexes(q, r)):
-            #     print(f"Cannot place piece at ({q}, {r}): must be adjacent to an existing piece.")
-            #     return
-
-            # Ensure the placement doesn't connect with the opponent's pieces on turn 1
-        
-                 # Enforces rule after both players' first moves
                
             if target_position not in self.get_valid_adds(piece_type):
                 print(f"Cannot place piece at ({q}, {r})")
@@ -114,9 +98,20 @@ class GameController:
             # current_player.update_remaining_pieces(piece)
             self.board.addPiece(piece, q, r)
             self.board.noOfPieces += 1
-            print(f"{self.status.getCurrentPlayer().get_color()} placed {piece} at {target_position}.")
+            # print(f"{self.status.getCurrentPlayer().get_color()} placed {piece} at {target_position}.")
             self.status.nextTurn()
             return True
+    
+    def undoAdd(self, piece_type, target_position):
+        self.status.prevTurn()
+        piece = self.board.getPieceAt(target_position[0], target_position[1])
+        self.status.getCurrentPlayer().get_remaining_pieces()[piece_type].append(piece)
+        self.board.removePieceTemp(target_position[0], target_position[1])
+        piece.position = None
+    def undoMove(self, move, old_position):
+        self.status.prevTurn()
+        piece = self.board.getPieceAt(move[0], move[1])
+        self.board.movePiece(piece, old_position[0], old_position[1])
 
     def hasPlay(self) -> bool:
         for piece in self.status.getCurrentPlayer().get_remaining_pieces().values():
