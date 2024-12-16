@@ -325,7 +325,10 @@ def start_game(game_parameters: GameParameters):
             screen.blit(text, text_rect)
         else:
             font = pygame.font.Font(None, 50)
-            text = font.render(f"{current_player.name} is the winner!", True, (0, 255, 0))
+            winning_player = player1
+            if winner == "black":
+                winning_player = player2
+            text = font.render(f"{winning_player.name} is the winner!", True, (0, 255, 0))
             text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2-HEIGHT/4))
             screen.blit(text, text_rect)
 
