@@ -59,6 +59,14 @@ def start_game(game_parameters: GameParameters):
     player1_bee_played = False
     player2_bee_played = False
 
+    def endTurn():
+        # End turn and set current player
+        # If current player has no moves, swap back to previous player
+        nonlocal current_turn, current_player
+        current_turn += 1
+        current_player = player2 if current_player == player1 else player1
+        if not controller.hasPlay():
+            current_player = player2 if current_player == player1 else player1
 
     while running:
 
@@ -204,13 +212,12 @@ def start_game(game_parameters: GameParameters):
                             hex_manager.createHexagonTile(q, r, new_insect, current_player.color)
                             controller.add_piece(new_insect, (q, r))
                             current_player.insects[new_insect] -= 1  # Decrement insect count
-                            #if not controller.hasPlay():
-                            current_turn += 1
-                            current_player = player2 if current_player == player1 else player1
-                            # endTurn()
+                            # current_turn += 1
+                            # current_player = player2 if current_player == player1 else player1
                             new_insect = None
                             
                             current_state = State.Nothing_selected
+                            endTurn()
                     print(current_state)
                 elif current_state == State.Existing_piece_selected:
                     # Move selected tile to clicked outline
@@ -225,10 +232,10 @@ def start_game(game_parameters: GameParameters):
                             hex_manager.removeHexagonTile(tile_q, tile_r)
                             hex_manager.createHexagonTile(q, r, selected_tile.insect, current_player.color)
                             selected_tile = None
-                            current_player = player2 if current_player == player1 else player1
-                            current_turn += 1
-                            # endTurn()
+                            # current_player = player2 if current_player == player1 else player1
+                            # current_turn += 1
                             current_state = State.Nothing_selected
+                            endTurn()
                             break
                     if outline_clicked: continue
 
