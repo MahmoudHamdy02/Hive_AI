@@ -1,16 +1,17 @@
 from Game_Logic.AI.Agent import Agent
 import time
+import copy
 
 class IterativeDeepeningAgent(Agent):
-    """AI agent that uses the iterative deepening algorithm to make decisions"""
-    
-    def __init__(self, gameController, agentColor, maxDepth, timeLimit):
-        super().__init__(gameController, agentColor, maxDepth, timeLimit)
-        self.bestMove = None  # Stores the best move across all iterations
+    """AI agent that uses the iterative deepening algorithm with alpha-beta pruning."""
+
+    def __init__(self, originalGameController, agentColor, maxDepth, timeLimit):
+        super().__init__(originalGameController, agentColor, maxDepth, timeLimit)
+        # self.bestMove = None  # Stores the best move across all iterations
 
     def getBestMove(self) -> list | None:
-        """ 
-        Returns the best move for the agent using the alpha-beta pruning algorithm 
+        """
+        Returns the best move for the agent using the alpha-beta pruning algorithm
         with iterative deepening.
         """
         self.bestMove = None
@@ -40,17 +41,21 @@ class IterativeDeepeningAgent(Agent):
         bestValue = float('-inf')
         alpha = float('-inf')
         beta = float('inf')
-        moves = self.gameController.get_all_moves_and_adds()
-        self.move_history.clear()
+
+        # Start with a deepcopy of the original game controller
+        gameControllerCopy = copy.deepcopy(self.originalGameController)
+        moves = gameControllerCopy.get_all_moves_and_adds()
 
         for move in moves:
             if time.time() - start_time >= self.timeLimit:
                 raise TimeoutError("Time limit exceeded during alpha-beta search")
 
-            if not self.doMove(move):  
-                continue  
-            value = self._alphaBeta(depth - 1, alpha, beta, False, start_time)
-            self.undoMove()
+            # Create a new copy for each move
+            GC_copy = copy.deepcopy(gameControllerCopy)
+            if not self.doMove(GC_copy, move):  
+                continue
+
+            value = self._alphaBeta(GC_copy, depth - 1, alpha, beta, False, start_time)
 
             if value > bestValue:
                 bestValue = value
@@ -62,36 +67,40 @@ class IterativeDeepeningAgent(Agent):
 
         return bestMove, bestValue
 
-    def _alphaBeta(self, depth: int, alpha: float, beta: float, maximizingPlayer: bool, start_time: float) -> float:
+    def _alphaBeta(self, gameController, depth: int, alpha: float, beta: float, maximizingPlayer: bool, start_time: float) -> float:
         """
         Recursive alpha-beta pruning function.
         """
         if time.time() - start_time >= self.timeLimit:
             raise TimeoutError("Time limit exceeded during alpha-beta search")
 
-        moves = self.gameController.get_all_moves_and_adds()
-
+        moves = gameController.get_all_moves_and_adds()
         if depth <= 0 or len(moves) == 0:
-            return self.heuristic.calculateBoardScore()
-        
+            return self.heuristic.calculateBoardScore(gameController)
+
         if maximizingPlayer:
             for move in moves:
-                if not self.doMove(move):  
-                    continue  
-                value = self._alphaBeta(depth - 1, alpha, beta, False, start_time)
-                self.undoMove()
+                # Create a new copy for each recursive call
+                GC_copy = copy.deepcopy(gameController)
+                if not self.doMove(GC_copy, move):  
+                    continue
+
+                value = self._alphaBeta(GC_copy, depth - 1, alpha, beta, False, start_time)
 
                 alpha = max(alpha, value)
                 if alpha >= beta:
                     break
 
             return alpha
+
         else:
             for move in moves:
-                if not self.doMove(move):  
-                    continue  
-                value = self._alphaBeta(depth - 1, alpha, beta, True, start_time)
-                self.undoMove()
+              
+                GC_copy = copy.deepcopy(gameController)
+                if not self.doMove(GC_copy, move):  
+                    continue
+
+                value = self._alphaBeta(GC_copy, depth - 1, alpha, beta, True, start_time)
 
                 beta = min(beta, value)
                 if alpha >= beta:

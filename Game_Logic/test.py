@@ -182,10 +182,11 @@
 import sys
 import os
 # Add the root directory of the project to the sys.path
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(_file_), '../')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
 from Game_Logic.Game.GameController import GameController
 from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
+from Game_Logic.AI.IterativeDeepeningAgent import IterativeDeepeningAgent
 from Game_Logic.Player.Color import Color
 import time
 
@@ -206,28 +207,69 @@ import time
   # controller.add_piece(game,board,'ant',(0,0),white_player)
   # controller.add_piece(game,board,'ant',(0,0),white_player)
 
+# controller = GameController()
+# # PLayer1
+# # print(controller.get_valid_adds())
+# controller.add_piece('ant', (0, 0))
+# # PLayer2
+
+# # print(controller.get_valid_adds())
+# controller.add_piece('ant', (0, 1))
+# # PLayer1
+# # print(controller.get_valid_adds())
+# controller.add_piece('bee', (0, -1))
+# # # PLayer2
+# controller.add_piece('bee', (0, 2))
+
+# controller.add_piece('ant', (1, 1))
+
 controller = GameController()
+
+
 # PLayer1
 # print(controller.get_valid_adds())
 controller.add_piece('ant', (0, 0))
 # PLayer2
 
 # print(controller.get_valid_adds())
-controller.add_piece('ant', (0, 1))
+controller.add_piece('ant', (1, 0))
 # PLayer1
 # print(controller.get_valid_adds())
-controller.add_piece('bee', (0, -1))
+controller.add_piece('bee', (-1, 0))
 # # PLayer2
-controller.add_piece('bee', (0, 2))
+controller.add_piece('bee', (2, 0))
 
-controller.add_piece('ant', (1, 1))
+controller.add_piece('ant', (0,-1))
 
-agent = AlphaBetaAgent(controller,Color.WHITE , 3, 1)
-bestMove=agent.getBestMove()
-print(bestMove)
+controller.add_piece("beetle", (2, 1))
+
+controller.move_piece((0, -1), (3,1))
+
+controller.add_piece("ant", (1, 2))
+
+controller.add_piece("ant", (-1, -1))
+
+controller.add_piece("ant", (-1, 1))
+
+# pieces = controller.white_player.get_remaining_pieces()
+# for piece_type, pieces in pieces.items():
+#     print(f"{piece_type}: {len(pieces)}")
+
+
+start = time.time()
+agent = IterativeDeepeningAgent(controller,Color.WHITE , 3, 100000000)
+agent2 = AlphaBetaAgent(controller,Color.WHITE , 3, 100000000)
+
+# bestMove=agent.getBestMove()
+bestMove2=agent2.getBestMove()
+
+# print("iterative" ,bestMove)
+print("ALPHa" ,bestMove2)
 # #PLayer2
 # print(controller.get_valid_moves((0, 2)))
 # controller.move_piece((0, 2), (0,-3))
+end = time.time()-start
+print(end)
 
 
 # # # PLayer1
