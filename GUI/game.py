@@ -26,6 +26,7 @@ def get_player_dict():
         "grasshopper": 3, 
         "beetle": 2
     }
+winner = None
 
 hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
 controller=GameController()
@@ -65,7 +66,6 @@ def start_game(game_parameters: GameParameters):
     current_player = player1
     player1_bee_played = False
     player2_bee_played = False
-    winner = None
 
     ai_move = None
     ai_thread = None
@@ -87,7 +87,7 @@ def start_game(game_parameters: GameParameters):
     def endTurn():
         # End turn and set current player
         # If current player has no moves, swap back to previous player
-        nonlocal current_turn, current_player, winner
+        nonlocal current_turn, current_player
         current_turn += 1
         current_player = player2 if current_player == player1 else player1
         if not controller.hasPlay():
@@ -133,7 +133,9 @@ def start_game(game_parameters: GameParameters):
             if event.type == pygame.QUIT:
                 running = False
 
-        if current_player.name == "Computer1" or current_player.name == "Computer2":
+        if winner is not None:
+            pass
+        elif current_player.name == "Computer1" or current_player.name == "Computer2":
             try:
                 ai_move = ai_queue.get_nowait()
                 print("Move received: ", ai_move)
@@ -314,6 +316,12 @@ def start_game(game_parameters: GameParameters):
         hex_manager.render(screen)
         player1.render(screen)
         player2.render(screen)
+        if winner is  None: # needs fixing
+            # Render the current player's turn
+            font = pygame.font.Font(None, 50)
+            text = font.render(f"{current_player.name}'s turn", True, (50, 50, 50))
+            text_rect = text.get_rect(center=(WIDTH // 2, 50))
+            screen.blit(text, text_rect)
 
         # Render the changes on the screen
         pygame.display.flip()

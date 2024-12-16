@@ -103,9 +103,9 @@ class GameController:
         
                  # Enforces rule after both players' first moves
                
-            if target_position not in self.get_valid_adds(piece_type):
-                print(f"Cannot place piece at ({q}, {r})")
-                return False
+            # if target_position not in self.get_valid_adds(piece_type):
+                # print(f"Cannot place piece at ({q}, {r})")
+                # return False
             
             piece = self.status.getCurrentPlayer().get_remaining_pieces()[piece_type].pop()
 
