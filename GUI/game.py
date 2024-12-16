@@ -6,8 +6,6 @@ from hex import HexagonTile
 # Add the root directory of the project to the sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
-
-
 import pygame
 from hex_manager import HexManager
 from constants import *
@@ -27,29 +25,7 @@ def get_player_dict():
     }
 
 hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
-#hex_manager.createHexagonTile(0,0)
-#hex_manager.createHexagonTile(-1,0)
-#hex_manager.createHexagonTile(0,-1)
-#hex_manager.createHexagonTile(-1,-1)
-#hex_manager.createHexagonTile(0,1)
-
-#hex_manager.createHexagonTile(2,2)
-#hex_manager.removeHexagonTile(2,2)
-#hex_manager.drawOutline(1,1)
-#hex_manager.drawOutline(2,2)
-#hex_manager.drawOutline(2,1)
-#hex_manager.drawOutline(0,2)
-
 controller=GameController()
-vAntMoves=[(0,0),(-1,0),(2,0)]
-#for i in vAntMoves:
-    #hex_manager.drawOutline(i[0],i[1])
-
-# def endTurn(current_turn, current_player):
-#         # check no available moves
-
-#         current_turn += 1
-#         current_player = player2 if current_player == player1 else player1
 
 def start_game(game_parameters: GameParameters):
     name1 = name2 = "Computer"
@@ -183,7 +159,6 @@ def start_game(game_parameters: GameParameters):
                     outline_clicked = False
                     for outline in hex_manager.outlines:
                         if outline.contains_point(mouse_pos):
-                            print("outline clicked")
                             outline_clicked = True
                             q, r = outline.axial_coordinates
                             controller.move_piece(selected_tile.axial_coordinates, (q, r))
@@ -228,7 +203,7 @@ def start_game(game_parameters: GameParameters):
         # RENDER GAME HERE
         screen.fill((0,0,0))
 
-        # HACK: render bg twice side by side to avoid low resolution
+        # HACK: render bg multiple times to avoid low resolution
         screen.blit(bg_image, (0,0))
         screen.blit(bg_image, (640,0))
         screen.blit(bg_image, (640*2,0))
