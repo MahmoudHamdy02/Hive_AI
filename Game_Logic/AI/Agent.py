@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from Game_Logic.AI.Heuristic import Heuristic
 from Game_Logic.Player.Color import Color
 from Game_Logic.Game.GameController import GameController
+from copy import deepcopy
 
 class Agent(ABC):
     """Abstract parent class for AI agents"""
@@ -26,12 +27,12 @@ class Agent(ABC):
         """Applies a move to the game board"""
         current_state = {
             'move': move,
-            'player': self.gameController.get_status().getCurrentPlayer(),
+            'player_color': self.gameController.get_status().getCurrentPlayer().color,
             'turn': self.gameController.get_status().getTurnNumber(),
-            'grid': self.gameController.get_board().getGrid().copy(),
+            'grid': deepcopy(self.gameController.get_board().getGrid()),
             'pieces': {
-                'white': self.gameController.white_player.get_remaining_pieces().copy(),
-                'black': self.gameController.black_player.get_remaining_pieces().copy()
+                'white': deepcopy(self.gameController.white_player.get_remaining_pieces()),
+                'black': deepcopy(self.gameController.black_player.get_remaining_pieces())
             }
         }
         
@@ -56,7 +57,4 @@ class Agent(ABC):
         state = self.move_history.pop()
         self.gameController.restore_state(state)
         return True
-            
-        
-
 

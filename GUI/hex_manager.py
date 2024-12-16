@@ -24,14 +24,28 @@ class HexManager:
             Returns the created hexagon.\n
             Throws an error if a tile or outline already exists in the provided position.
         """
-        # for hexagon in self.hexagons:
-        #     if hexagon.axial_coordinates == (q, r):
-        #         raise Exception("Tile already exists at specified axial coordinates")
+        top_z = 0
+        # If new piece is not a beetle, throw an error if a piece already exists at that position
+        if insect != "beetle":
+            for hexagon in self.hexagons:
+                if hexagon.axial_coordinates == (q, r):
+                    raise Exception("Tile already exists at specified axial coordinates")
+        # If it is a beetle, get the z of the top tile 
+        else:
+            tiles_at_position: List[HexagonTile] = []
+            for hexagon in self.hexagons:
+                if hexagon.axial_coordinates == (q, r):
+                    tiles_at_position.append(hexagon)
+            if len(tiles_at_position) > 0:
+                for tile in tiles_at_position:
+                    if tile.z > top_z:
+                        top_z = tile.z
+                top_z = top_z + 1
 
+        print("placed z: ", top_z)
         pixels = self.__axialToPixels(q, r)
         position = (self.origin[0]+pixels[0], self.origin[1]+pixels[1])
-        
-        hexagon = HexagonTile((q,r), position, insect, color)
+        hexagon = HexagonTile((q,r), position, insect, color, top_z)
         self.hexagons.append(hexagon)
         return hexagon
 
@@ -41,11 +55,18 @@ class HexManager:
             Returns the deleted hexagon.\n
             Throws an error if no tile exists in the provided position.
         """
+        tiles_at_position: List[HexagonTile] = []
         for hexagon in self.hexagons:
             if hexagon.axial_coordinates == (q, r):
-                self.hexagons.remove(hexagon)
-                return hexagon
-        raise Exception("No tile exists at specified axial coordinates")
+                tiles_at_position.append(hexagon)
+        if len(tiles_at_position) == 0:
+            raise Exception("No tile exists at specified axial coordinates")
+        top_tile = tiles_at_position[0]
+        for tile in tiles_at_position:
+            if tile.z > top_tile.z:
+                top_tile = tile
+        self.hexagons.remove(top_tile)
+        return top_tile
 
     def drawOutline(self, q: int, r: int) -> HexagonOutline:
         """ 

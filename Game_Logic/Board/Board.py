@@ -58,3 +58,6 @@ class Board:
     
     def setGrid(self, grid):
         self.grid = grid
+
+    def getNoOfPiecesAt(self, q, r):
+        return self.grid[(q,r)].noOfPieces()

@@ -43,19 +43,21 @@ class PlayerWidget:
         screen.blit(name_text, (rect_x + 10, rect_y + 10))
         i=1
         for insect_name, count in self.insects.items():
+            if count > 0:
+                box_x = rect_x + 10
+                box_y = rect_y + 40 * i + (i - 1) * INSECT_BOX_Y
+                insect_box = pygame.Rect(box_x, box_y, INSECT_BOX_X, INSECT_BOX_Y)
 
-            box_x = rect_x + 10
-            box_y = rect_y + 40 * i + (i - 1) * INSECT_BOX_Y
-            insect_box = pygame.Rect(box_x, box_y, INSECT_BOX_X, INSECT_BOX_Y)
+                insect = insects_widget.InsectWidget(insect_name,self.color,count,(box_x,box_y))
+                insect.render(screen)
+                # count_text = pygame.font.SysFont("Arial", 24).render(f"x{1}", True, (0, 0, 0))  
+                # screen.blit(count_text, (rect_x+10 + INSECT_BOX_X-30, INSECT_BOX_Y+5))
 
-            insect = insects_widget.InsectWidget(insect_name,self.color,count,(box_x,box_y))
-            insect.render(screen)
-            # count_text = pygame.font.SysFont("Arial", 24).render(f"x{1}", True, (0, 0, 0))  
-            # screen.blit(count_text, (rect_x+10 + INSECT_BOX_X-30, INSECT_BOX_Y+5))
+                # Store the box in the dictionary
+                self.insectsBoxes[insect_name] = insect_box
+                i+=1
 
-            # Store the box in the dictionary
-            self.insectsBoxes[insect_name] = insect_box
-            i+=1
+                
 
     def handle_click(self, position) -> str | None:
         """

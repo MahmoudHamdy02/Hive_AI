@@ -64,29 +64,31 @@ class Hexagon(ABC):
 class HexagonTile(Hexagon):
     """ Hexagon tile that represents an insect piece """
 
-    def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float], insect: str = None, color: int = None):
+    def __init__(self, axial_coordinates: Tuple[int,int], position: Tuple[float, float], insect: str = None, color: int = None, z: int = 0):
         super().__init__(axial_coordinates, position)
         self.selected = False
         self.color = color
         self.insect = insect
         self.image = None
+        self.z = z
         if self.insect:
             c = "b" if self.color == Color.Black else "w"
             self.image = pygame.image.load(f"{GUI_PATH}/images/{c}_insects/{c}-{self.insect}.png")
             self.image = pygame.transform.scale(self.image, (105, 105))
             self.image = pygame.transform.rotate(self.image, 90)
-
+    
     def render(self, screen) -> None:
         """Renders the hexagon on the screen"""
 
         pygame.draw.polygon(screen, (150,150,150), self.vertices)
         pygame.draw.aalines(screen, (25, 25, 25), closed=True, points=self.vertices)
-        if self.insect:
-            if self.selected:
-                self.image.set_alpha(128)
-            else:
-                self.image.set_alpha(255)
-            screen.blit(self.image, (self.position[0]-53 , self.position[1] ))
+        
+        if self.selected:
+            self.image.set_alpha(128)
+        else:
+            self.image.set_alpha(255)
+        screen.blit(self.image, (self.position[0]-53 , self.position[1]))
+                
 
 
 

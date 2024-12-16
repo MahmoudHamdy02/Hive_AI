@@ -63,3 +63,10 @@ class Player:
         Clears all positions associated with the player.
         """
         self.positions = []
+    
+    
+    def __eq__(self, other):
+        return isinstance(other, Player) and self.color == other.color
+
+    def __hash__(self):
+        return hash(self.color)

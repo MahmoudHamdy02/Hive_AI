@@ -42,6 +42,20 @@ class Piece:
 
         """
         self.position = (q, r)
+    
+    def __eq__(self, other):
+        return (
+            isinstance(other, Piece) and
+            self.owner == other.owner
+        )
 
+    def __hash__(self):
+        return hash(self.owner)
+    
+    def get_piece_type(self) -> str:
+        """
+        Returns the type of the piece
 
+        """
+        return self.__class__.__name__
 

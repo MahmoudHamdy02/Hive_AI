@@ -74,7 +74,7 @@ class GameController:
         if move in self.get_valid_moves(position):
              self.board.movePiece(piece, move[0], move[1])
              self.status.nextTurn()
-             print(f"{self.status.getCurrentPlayer().get_color} moved {piece} to {move}.")
+             print(f"{self.status.getCurrentPlayer().get_color()} moved {piece} to {move}.")
              return True
         else:
              print(f"Unknown piece type: {piece}")
@@ -114,7 +114,7 @@ class GameController:
             # current_player.update_remaining_pieces(piece)
             self.board.addPiece(piece, q, r)
             self.board.noOfPieces += 1
-            print(f"{self.status.getCurrentPlayer().get_color} placed {piece} at {target_position}.")
+            print(f"{self.status.getCurrentPlayer().get_color()} placed {piece} at {target_position}.")
             self.status.nextTurn()
             return True
 
@@ -164,7 +164,7 @@ class GameController:
                 continue
                 
             valid_moves = self.get_valid_moves(current_position)
-            if valid_moves: 
+            if valid_moves:
                 for new_position in valid_moves:
                     all_moves_and_adds.append([
                         piece.__class__.__name__.lower(),
@@ -189,7 +189,11 @@ class GameController:
         return all_moves_and_adds
     
     def restore_state(self, state):
-        self.status.setCurrentPlayer(state['player'])
+        if state['player_color'] == Color.WHITE:
+            self.status.setCurrentPlayer(self.white_player)
+        else:
+            self.status.setCurrentPlayer(self.black_player)
+
         self.status.setTurnNumber(state['turn'])
         self.board.setGrid(state['grid'])
         self.white_player.set_remaining_pieces(state['pieces']['white'])
