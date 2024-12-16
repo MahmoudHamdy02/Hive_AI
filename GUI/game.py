@@ -75,14 +75,14 @@ def start_game(game_parameters: GameParameters):
         print("loser: ", loser)
         if loser == 2:
             winner = "white"
-            print("winner: ", winner)
-            display_winner(screen, f"{player1.name} (White) wins!")
-            return "white"
+            # print("winner: ", winner)
+            # display_winner(screen, f"{player1.name} (White) wins!")
+            # return "white"
         elif loser == 1:
             winner = "black"
-            print("winner: ", winner)
-            display_winner(screen, f"{player2.name} (Black) wins!")
-            return "black"
+            # print("winner: ", winner)
+            # display_winner(screen, f"{player2.name} (Black) wins!")
+            # return "black"
             
     def endTurn():
         # End turn and set current player
@@ -316,11 +316,17 @@ def start_game(game_parameters: GameParameters):
         hex_manager.render(screen)
         player1.render(screen)
         player2.render(screen)
+        
         if winner is  None: # needs fixing
             # Render the current player's turn
             font = pygame.font.Font(None, 50)
             text = font.render(f"{current_player.name}'s turn", True, (50, 50, 50))
             text_rect = text.get_rect(center=(WIDTH // 2, 50))
+            screen.blit(text, text_rect)
+        else:
+            font = pygame.font.Font(None, 50)
+            text = font.render(f"{current_player.name} is the winner!", True, (0, 255, 0))
+            text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2-HEIGHT/4))
             screen.blit(text, text_rect)
 
         # Render the changes on the screen
