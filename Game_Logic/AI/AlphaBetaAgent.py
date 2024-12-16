@@ -44,27 +44,31 @@ class AlphaBetaAgent(Agent):
             return self.heuristic.calculateBoardScore(gameController)
     
         if maximizingPlayer:
+            maxValue = float('-inf')
             for move in moves:
                 if not self.doMove(self.originalGameController, move):  
                     continue  
                 value = self._alphaBeta(self.originalGameController, depth - 1, alpha, beta, False)
                 self.undoMove(move)
 
+                maxValue = max(maxValue, value)
                 alpha = max(alpha, value)
                 if alpha >= beta:
                     break
 
-            return alpha
+            return maxValue
         
         else:
+            minValue = float('inf')
             for move in moves:
                 if not self.doMove(self.originalGameController, move):  
                     continue
                 value = self._alphaBeta(self.originalGameController, depth - 1, alpha, beta, True)
                 self.undoMove(move)
 
+                minValue = min(minValue, value)
                 beta = min(beta, value)
                 if alpha >= beta:
                     break
 
-            return beta
+            return minValue

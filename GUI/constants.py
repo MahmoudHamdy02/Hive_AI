@@ -3,8 +3,8 @@ from enum import Enum
 import os
 
 GUI_PATH = os.path.dirname(__file__) # Path to inside the GUI folder, doesn't include trailing "/"
-WIDTH = 1000  #1920
-HEIGHT = 800  #1080
+WIDTH = 1920  #1920
+HEIGHT = 1080  #1080
 CENTER_X = WIDTH / 2
 CENTER_Y = HEIGHT / 2
 RADIUS = 50 # Outer circle: from center to vertex
