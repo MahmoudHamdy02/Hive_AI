@@ -1,3 +1,4 @@
+import queue
 import sys
 import os
 import threading
@@ -28,7 +29,7 @@ def get_player_dict():
 
 hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
 controller=GameController()
-
+ai_queue = queue.Queue()
 
 def start_game(game_parameters: GameParameters):
     name1 = "Computer1"
@@ -36,6 +37,7 @@ def start_game(game_parameters: GameParameters):
     agent1 = agent2 = None
     if game_parameters.selected_mode == Gamemode.PvP:
         name1 = game_parameters.name1
+        name2 = game_parameters.name2
     elif game_parameters.selected_mode == Gamemode.PvC:
         name1 = game_parameters.name1
         agent2 = AlphaBetaAgent(controller,Color.Black , 3, 1)
@@ -64,6 +66,9 @@ def start_game(game_parameters: GameParameters):
     player1_bee_played = False
     player2_bee_played = False
 
+    ai_move = None
+    ai_thread = None
+
     def endTurn():
         # End turn and set current player
         # If current player has no moves, swap back to previous player
@@ -73,36 +78,46 @@ def start_game(game_parameters: GameParameters):
         if not controller.hasPlay():
             current_player = player2 if current_player == player1 else player1
 
-    #test for computer_move function:
-    def computer_move(agent: Agent, hex_manager: HexManager, controller: GameController):
-        print("Computer move")
-        # Use the AI agent to decide the best move
+    # Run in separate thread, send result back to main thread
+    def get_best_move(agent: Agent):
         move = agent.getBestMove()
-
-        # There is available move
-        if move[1] is not None:
-            # Apply the move using the game controller
-            controller.move_piece(move[1], move[2])
-
-            # Update the HexManager to reflect the move visually
-            hex_manager.removeHexagonTile(move[1][0], move[1][1])
-            hex_manager.createHexagonTile(move[2][0], move[2][1], move[0], agent.agentColor)
-
-            print(f"Computer moved {move[0]} from {move[1]} to {move[2]}")
-        # There is no available move and computer will add new piece 
-        else:
-            controller.add_piece(move[0], move[2])
-            hex_manager.createHexagonTile(move[2][0], move[2][1], move[0], agent.agentColor)
-        endTurn()
+        ai_queue.put(move)
 
     while running:
+
+        if current_player.name == "Computer1" or current_player.name == "Computer2":
+            try:
+                ai_move = ai_queue.get_nowait()
+                print("Move received: ", ai_move)
+                if ai_move:
+                    if ai_move[1] is not None:
+                        # Apply the ai_move using the game controller
+                        controller.move_piece(ai_move[1], ai_move[2])
+
+                        # Update the HexManager to reflect the ai_move visually
+                        hex_manager.removeHexagonTile(ai_move[1][0], ai_move[1][1])
+                        hex_manager.createHexagonTile(ai_move[2][0], ai_move[2][1], ai_move[0], current_player.agent.agentColor)
+
+                        print(f"Computer moved {ai_move[0]} from {ai_move[1]} to {ai_move[2]}")
+                    # There is no available ai_move and computer will add new piece 
+                    else:
+                        controller.add_piece(ai_move[0], ai_move[2])
+                        hex_manager.createHexagonTile(ai_move[2][0], ai_move[2][1], ai_move[0], current_player.agent.agentColor)
+                    ai_move = None
+                    endTurn()
+                    print("Turn ended, next player: ", current_player.name)
+                    continue
+            except queue.Empty:
+                pass
+
+            if ai_thread is None or not ai_thread.is_alive():
+                if ai_move is None:  # Only start if no pending AI move
+                    ai_thread = threading.Thread(target=get_best_move, args=(current_player.agent,))
+                    ai_thread.start()
+                    print("Thread started")
+
         # poll for events
         # pygame.QUIT event means the user clicked X to close your window
-        if current_player.name == "Computer1" or current_player.name == "Computer2":
-            print("before", current_player.name)
-            computer_move(current_player.agent, hex_manager, controller)
-            print("after", current_player.name)
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -117,9 +132,9 @@ def start_game(game_parameters: GameParameters):
                         if new_insect is None:
                             continue
                         for tile in hex_manager.hexagons:
-                            if tile.color == Color.Black and tile.insect == "bee":
+                            if tile.color == player1.color and tile.insect == "bee":
                                 player1_bee_played = True
-                            if tile.color == Color.White and tile.insect == "bee":
+                            if tile.color == player2.color and tile.insect == "bee":
                                 player2_bee_played = True
                         if new_insect != "bee" and ((current_turn == 6 and current_player == player1 and not player1_bee_played) or (current_turn == 7 and current_player == player2 and not player2_bee_played)):
                             continue
