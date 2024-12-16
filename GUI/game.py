@@ -1,5 +1,6 @@
 import sys
 import os
+import threading
 from typing import List
 from hex import HexagonTile
 
@@ -11,6 +12,8 @@ from hex_manager import HexManager
 from constants import *
 from Player_widget import PlayerWidget
 from GameParameters import GameParameters
+from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
+
 
 from Game_Logic.Game.GameController import GameController
 
@@ -27,6 +30,7 @@ def get_player_dict():
 hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
 controller=GameController()
 
+
 def start_game(game_parameters: GameParameters):
     name1 = name2 = "Computer"
     if game_parameters.selected_mode == Gamemode.PvP or game_parameters.selected_mode == Gamemode.PvC:
@@ -34,8 +38,8 @@ def start_game(game_parameters: GameParameters):
     if game_parameters.selected_mode == Gamemode.PvP:
         name2 = game_parameters.name2
     
-    player1 = PlayerWidget(name1, (255, 0, 0) , get_player_dict(), Color.Black)
-    player2 = PlayerWidget(name2, (0, 0, 255) , get_player_dict(), Color.White)  
+    player1 = PlayerWidget(name1, (255, 0, 0) , get_player_dict(), Color.White)
+    player2 = PlayerWidget(name2, (0, 0, 255) , get_player_dict(), Color.Black)  
     
     # pygame setup
     pygame.init()
@@ -55,7 +59,61 @@ def start_game(game_parameters: GameParameters):
     player1_bee_played = False
     player2_bee_played = False
 
+
     while running:
+
+        #test for computer_move function:
+        def computer_move(agent, hex_manager, controller):
+            # Use the AI agent to decide the best move
+            move = agent.getBestMove()
+
+            # There is available move
+            if move[1] is not None:
+                # Apply the move using the game controller
+                controller.move_piece(move[1], move[2])
+
+                # Update the HexManager to reflect the move visually
+                hex_manager.removeHexagonTile(move[1][0], move[1][1])
+                hex_manager.createHexagonTile(move[2][0], move[2][1], move[0], agent.agentColor)
+
+                print(f"Computer moved {move[0]} from {move[1]} to {move[2]}")
+            # There is no available move and computer will add new piece 
+            else:
+               controller.add_piece(move[0], move[2])
+               hex_manager.createHexagonTile(move[2][0], move[2][1], move[0], agent.agentColor)
+
+        # PvC Mode: Player vs Computer
+        # Check if computer's turn in PvC mode
+        if game_parameters.selected_mode == Gamemode.PvC and current_player.name == "Computer":
+            print("Computer's turn...")
+            agent = AlphaBetaAgent(controller,Color.Black , 3, 1)  # Second Player "white"
+            #computer_move(agent, hex_manager, controller)
+            ai_thread = threading.Thread(target=computer_move, args=(agent,hex_manager, controller))
+            ai_thread.start()
+            current_turn += 1
+            current_player = player2 if current_player == player1 else player1
+            current_state = State.Nothing_selected
+            continue
+
+         # CvC Mode: Computer vs Computer
+        elif game_parameters.selected_mode == Gamemode.CvC:
+            agent1 = AlphaBetaAgent(controller,Color.Black , 3, 1)
+            agent2 = AlphaBetaAgent(controller,Color.White , 3, 1)
+            print(f"{current_player.name}'s turn...")  # Show which computer is playing
+            # Decide which agent to use
+            if current_player == player1:
+                computer_move(agent1, hex_manager, controller)  # Computer 1's move
+            else:
+                computer_move(agent2, hex_manager, controller)  # Computer 2's move
+                
+
+            # Switch turns between player1 (Computer 1) and player2 (Computer 2)
+            current_turn += 1
+            current_player = player2 if current_player == player1 else player1
+            current_state = State.Nothing_selected
+            continue
+
+
         # poll for events
         # pygame.QUIT event means the user clicked X to close your window
         for event in pygame.event.get():
