@@ -2,9 +2,13 @@ import math
 from enum import Enum
 import os
 
+import pygame
+
+
 GUI_PATH = os.path.dirname(__file__) # Path to inside the GUI folder, doesn't include trailing "/"
-WIDTH = 1920  #1920
-HEIGHT = 1080  #1080
+pygame.display.init()
+WIDTH=pygame.display.Info().current_w-50
+HEIGHT=pygame.display.Info().current_h-50
 CENTER_X = WIDTH / 2
 CENTER_Y = HEIGHT / 2
 RADIUS = 50 # Outer circle: from center to vertex

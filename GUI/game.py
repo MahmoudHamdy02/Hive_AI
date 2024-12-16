@@ -79,6 +79,22 @@ def start_game(game_parameters: GameParameters):
         current_player = player2 if current_player == player1 else player1
         if not controller.hasPlay():
             current_player = player2 if current_player == player1 else player1
+        winner = controller.get_winner()
+        if winner == 1:
+            display_winner(screen, f"{player1.name} (White) wins!")
+        elif winner == 2:
+            display_winner(screen, f"{player2.name} (Black) wins!")
+            running = False
+        
+    # Display winner on screen
+    def display_winner(screen, message):
+        font = pygame.font.Font(None, 50)
+        text = font.render(message, True, (0, 255, 0))
+        text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2-HEIGHT/4))
+        screen.blit(text, text_rect)
+        pygame.display.flip()
+        pygame.time.wait(3000)  # Display message for 3 seconds
+
 
     # Run in separate thread, send result back to main thread
     def get_best_move(agent: Agent):

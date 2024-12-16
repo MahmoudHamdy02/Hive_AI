@@ -189,7 +189,7 @@ from Game_Logic.Game.GameController import GameController
 from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
 from Game_Logic.Player.Color import Color
 import time
-
+from Game_Logic.AI.MiniMaxAgent import MiniMaxAgent
 # board=Board()
 # white_player=Player(Color.WHITE)
 # black_player=Player(Color.BLACK)
