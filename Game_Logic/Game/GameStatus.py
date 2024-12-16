@@ -1,5 +1,5 @@
 from Game_Logic.Piece import Bee
-
+from Game_Logic.Player.Color import Color
 class GameStatus:
     def __init__(self, board, whitePlayer, blackPlayer):
         self.board = board
@@ -19,7 +19,7 @@ class GameStatus:
     def getCurrentPlayer(self):
         return self.current_player
     
-    def check_victory(self) -> bool:
+    def check_defeat(self) -> int:
         """
         Check if the opponent's Queen Bee is surrounded and thus the game is over.
         return: True if the opponent's Queen Bee is surrounded, False otherwise.
@@ -30,10 +30,14 @@ class GameStatus:
 
             piece = self.board.getPieceAt(q, r)
             # If board has a queen bee at q, r and it is the opponent's queen bee
-            if (isinstance(piece, Bee) and (piece.getOwner() != self.current_player)):
+            if (isinstance(piece, Bee)):
                 # Check if the opponent's Queen Bee is surrounded
                 if len(self.board.getNeighbors((q, r))) == 6:
-                    return True
+                    if piece.getOwner().color == Color.BLACK:
+                        return 2
+                    elif piece.getOwner().color == Color.WHITE:
+                        return 1
+                    
         return False
     
     def getTurnNumber(self):

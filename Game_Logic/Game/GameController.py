@@ -87,9 +87,9 @@ class GameController:
                 print(f"No more {piece_type}s available for {self.status.current_player}.")
                 return False
                
-            if target_position not in self.get_valid_adds(piece_type):
-                print(f"Cannot place piece at ({q}, {r})")
-                return False
+            # if target_position not in self.get_valid_adds(piece_type):
+                # print(f"Cannot place piece at ({q}, {r})")
+                # return False
             
             piece = self.status.getCurrentPlayer().get_remaining_pieces()[piece_type].pop()
 
@@ -133,13 +133,14 @@ class GameController:
         elif self.status.getCurrentPlayer() == self.black_player:
             return 2
     
-    def get_winner(self):
-        if self.status.check_victory():
-            if self.status.getCurrentPlayer() == self.white_player:
-                return 1
-            elif self.status.getCurrentPlayer() == self.black_player:
-                return 2
-        return 0
+    def get_loser(self) -> int:
+        # if self.status.check_victory():
+        #     if self.status.getCurrentPlayer() == self.white_player:
+        #         return 1
+        #     elif self.status.getCurrentPlayer() == self.black_player:
+        #         return 2
+        # return 0
+        return self.status.check_defeat()
 
     def get_board(self):
         return self.board
