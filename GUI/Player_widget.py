@@ -6,9 +6,10 @@ import insects_widget
 
 class PlayerWidget:
 
-    def __init__(self,name: str, border_color: Tuple[float, float, float],insects: dict, color: int):
+    def __init__(self,name: str, border_color: Tuple[float, float, float],insects: dict, color: int, agent = None):
         
         self.name = name
+        self.agent = agent
         self.border_color = border_color
         self.insects = insects
         self.color = color

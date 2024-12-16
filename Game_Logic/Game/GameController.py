@@ -20,7 +20,7 @@ class GameController:
         valid_adds = []
         valid = True
         if self.status.turn_count >= 6 and len(self.status.getCurrentPlayer().get_remaining_pieces()["bee"]) == 1 and piece_type!= 'bee':
-            print("Queen Bee must be placed by the end of your fourth turn!")
+            # print("Queen Bee must be placed by the end of your fourth turn!")
             return None
         for position in self.board.getGrid().keys():
             if not self.board.hasPieceAt(position[0], position[1]):

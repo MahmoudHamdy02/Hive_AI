@@ -42,7 +42,6 @@ class HexManager:
                         top_z = tile.z
                 top_z = top_z + 1
 
-        print("placed z: ", top_z)
         pixels = self.__axialToPixels(q, r)
         position = (self.origin[0]+pixels[0], self.origin[1]+pixels[1])
         hexagon = HexagonTile((q,r), position, insect, color, top_z)

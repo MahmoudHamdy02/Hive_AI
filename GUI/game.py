@@ -1,5 +1,6 @@
 import sys
 import os
+import threading
 from typing import List
 from hex import HexagonTile
 
@@ -11,7 +12,8 @@ from hex_manager import HexManager
 from constants import *
 from Player_widget import PlayerWidget
 from GameParameters import GameParameters
-
+from Game_Logic.AI.Agent import Agent
+from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
 from Game_Logic.Game.GameController import GameController
 
 # Get a copy of the dict to avoid pass-by-sharing
@@ -27,16 +29,23 @@ def get_player_dict():
 hex_manager = HexManager(ORIGIN, RADIUS, MINIMAL_RADIUS)
 controller=GameController()
 
+
 def start_game(game_parameters: GameParameters):
-    name1 = name2 = "Computer"
-    if game_parameters.selected_mode == Gamemode.PvP or game_parameters.selected_mode == Gamemode.PvC:
-        name1 = game_parameters.name1
+    name1 = "Computer1"
+    name2 = "Computer2"
+    agent1 = agent2 = None
     if game_parameters.selected_mode == Gamemode.PvP:
-        name2 = game_parameters.name2
+        name1 = game_parameters.name1
+    elif game_parameters.selected_mode == Gamemode.PvC:
+        name1 = game_parameters.name1
+        agent2 = AlphaBetaAgent(controller,Color.Black , 3, 1)
+    elif game_parameters.selected_mode == Gamemode.CvC:
+        agent1 = AlphaBetaAgent(controller,Color.White , 3, 1)
+        agent2 = AlphaBetaAgent(controller,Color.Black , 3, 1)
     
-    player1 = PlayerWidget(name1, (255, 0, 0) , get_player_dict(), Color.Black)
-    player2 = PlayerWidget(name2, (0, 0, 255) , get_player_dict(), Color.White)  
-    
+    player1 = PlayerWidget(name1, (255, 0, 0) , get_player_dict(), Color.White, agent1)
+    player2 = PlayerWidget(name2, (0, 0, 255) , get_player_dict(), Color.Black, agent2)
+
     # pygame setup
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -55,18 +64,50 @@ def start_game(game_parameters: GameParameters):
     player1_bee_played = False
     player2_bee_played = False
 
+    def endTurn():
+        # End turn and set current player
+        # If current player has no moves, swap back to previous player
+        nonlocal current_turn, current_player
+        current_turn += 1
+        current_player = player2 if current_player == player1 else player1
+        if not controller.hasPlay():
+            current_player = player2 if current_player == player1 else player1
+
+    #test for computer_move function:
+    def computer_move(agent: Agent, hex_manager: HexManager, controller: GameController):
+        print("Computer move")
+        # Use the AI agent to decide the best move
+        move = agent.getBestMove()
+
+        # There is available move
+        if move[1] is not None:
+            # Apply the move using the game controller
+            controller.move_piece(move[1], move[2])
+
+            # Update the HexManager to reflect the move visually
+            hex_manager.removeHexagonTile(move[1][0], move[1][1])
+            hex_manager.createHexagonTile(move[2][0], move[2][1], move[0], agent.agentColor)
+
+            print(f"Computer moved {move[0]} from {move[1]} to {move[2]}")
+        # There is no available move and computer will add new piece 
+        else:
+            controller.add_piece(move[0], move[2])
+            hex_manager.createHexagonTile(move[2][0], move[2][1], move[0], agent.agentColor)
+        endTurn()
+
     while running:
         # poll for events
         # pygame.QUIT event means the user clicked X to close your window
+        if current_player.name == "Computer1" or current_player.name == "Computer2":
+            print("before", current_player.name)
+            computer_move(current_player.agent, hex_manager, controller)
+            print("after", current_player.name)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type==pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
-
-                # This currently force the turn order
-                # TODO: A turn must be skipped if there are no available moves
-                # Create end_turn() function to handle logic
 
                 if current_state == State.Nothing_selected:
                     # Check if player area 1 or 2 was clicked in the correct turn
@@ -82,9 +123,9 @@ def start_game(game_parameters: GameParameters):
                                 player2_bee_played = True
                         if new_insect != "bee" and ((current_turn == 6 and current_player == player1 and not player1_bee_played) or (current_turn == 7 and current_player == player2 and not player2_bee_played)):
                             continue
-                        print(hex_manager.outlines)
+                        # print(hex_manager.outlines)
                         moveOutlines=controller.get_valid_adds(new_insect)
-                        print(moveOutlines)
+                        # print(moveOutlines)
                         if len(moveOutlines) >0:
                             current_state = State.New_piece_selected
                             for i in moveOutlines:
@@ -146,13 +187,12 @@ def start_game(game_parameters: GameParameters):
                             hex_manager.createHexagonTile(q, r, new_insect, current_player.color)
                             controller.add_piece(new_insect, (q, r))
                             current_player.insects[new_insect] -= 1  # Decrement insect count
-                            #if not controller.hasPlay():
-                            current_turn += 1
-                            current_player = player2 if current_player == player1 else player1
-                            # endTurn()
+                            # current_turn += 1
+                            # current_player = player2 if current_player == player1 else player1
                             new_insect = None
                             
                             current_state = State.Nothing_selected
+                            endTurn()
                     print(current_state)
                 elif current_state == State.Existing_piece_selected:
                     # Move selected tile to clicked outline
@@ -167,10 +207,10 @@ def start_game(game_parameters: GameParameters):
                             hex_manager.removeHexagonTile(tile_q, tile_r)
                             hex_manager.createHexagonTile(q, r, selected_tile.insect, current_player.color)
                             selected_tile = None
-                            current_player = player2 if current_player == player1 else player1
-                            current_turn += 1
-                            # endTurn()
+                            # current_player = player2 if current_player == player1 else player1
+                            # current_turn += 1
                             current_state = State.Nothing_selected
+                            endTurn()
                             break
                     if outline_clicked: continue
 
@@ -217,4 +257,4 @@ def start_game(game_parameters: GameParameters):
         pygame.display.flip()
 
         clock.tick(60)  # limits FPS to 60
-start_game(GameParameters())
+# start_game(GameParameters())
