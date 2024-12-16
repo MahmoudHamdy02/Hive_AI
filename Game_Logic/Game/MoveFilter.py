@@ -38,6 +38,11 @@ class MoveFilter:
             # return len(visited) == board.noOfPieces
             # print(len_visted[0], board.noOfPieces)
             return len_visted[0] == board.noOfPieces
+        
+        #Check continuity if we temporarly removed the piece
+        board.removePieceTemp(*current_position)
+        removed_continuity = is_hive_continuous()
+        board.addPieceTemp(piece, *current_position)
 
         # Temporarily apply the move
         board.movePiece(piece, *target_position)
@@ -45,12 +50,12 @@ class MoveFilter:
         # board.grid.pop(current_position)  # Remove the piece from its current position
         # board.grid[target_position] = piece  # Place the piece at the new position
 
+
         # Check continuity
         is_continuous = is_hive_continuous()
-
         
 
-        return is_continuous
+        return is_continuous and removed_continuity
 
 
 

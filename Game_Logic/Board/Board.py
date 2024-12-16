@@ -61,3 +61,11 @@ class Board:
 
     def getNoOfPiecesAt(self, q, r):
         return self.grid[(q,r)].noOfPieces()
+    
+    def removePieceTemp(self, q, r):
+        self.grid[(q,r)].removePiece()
+        self.noOfPieces -= 1
+
+    def addPieceTemp(self, piece, q, r):
+        self.grid[(q,r)].addPiece(piece)
+        self.noOfPieces += 1
