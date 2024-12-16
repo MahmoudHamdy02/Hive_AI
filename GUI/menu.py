@@ -5,6 +5,7 @@ from game import start_game
 from GameParameters import GameParameters
 import sys
 
+
 pygame.init()
 surface = pygame.display.set_mode((WIDTH, HEIGHT))
 
