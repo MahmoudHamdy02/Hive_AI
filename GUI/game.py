@@ -40,10 +40,10 @@ def start_game(game_parameters: GameParameters):
         name2 = game_parameters.name2
     elif game_parameters.selected_mode == Gamemode.PvC:
         name1 = game_parameters.name1
-        agent2 = AlphaBetaAgent(controller,Color.Black , 3, 1)
+        agent2 = AlphaBetaAgent(controller,Color.Black , 2, 1)
     elif game_parameters.selected_mode == Gamemode.CvC:
-        agent1 = AlphaBetaAgent(controller,Color.White , 3, 1)
-        agent2 = AlphaBetaAgent(controller,Color.Black , 3, 1)
+        agent1 = AlphaBetaAgent(controller,Color.White , 2, 1)
+        agent2 = AlphaBetaAgent(controller,Color.Black , 2, 1)
     
     player1 = PlayerWidget(name1, (255, 0, 0) , get_player_dict(), Color.White, agent1)
     player2 = PlayerWidget(name2, (0, 0, 255) , get_player_dict(), Color.Black, agent2)
@@ -109,6 +109,7 @@ def start_game(game_parameters: GameParameters):
                     else:
                         controller.add_piece(ai_move[0], ai_move[2])
                         hex_manager.createHexagonTile(ai_move[2][0], ai_move[2][1], ai_move[0], current_player.agent.agentColor)
+                        current_player.insects[ai_move[0]] -= 1
                     ai_move = None
                     endTurn()
                     print("Turn ended, next player: ", current_player.name)
