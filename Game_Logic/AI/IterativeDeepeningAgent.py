@@ -54,7 +54,7 @@ class IterativeDeepeningAgent(Agent):
             if not self.doMove(self.originalGameController, move):  
                 continue
 
-            value = self._alphaBeta(self.originalGameController, depth - 1, alpha, beta, False)
+            value = self._alphaBeta(self.originalGameController, depth - 1, alpha, beta, False, start_time)
             self.undoMove( move)
 
             if value > bestValue:

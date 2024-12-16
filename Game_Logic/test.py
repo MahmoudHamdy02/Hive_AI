@@ -187,6 +187,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
 from Game_Logic.Game.GameController import GameController
 from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
+from Game_Logic.AI.IterativeDeepeningAgent import IterativeDeepeningAgent
 from Game_Logic.Player.Color import Color
 import time
 from Game_Logic.AI.MiniMaxAgent import MiniMaxAgent
@@ -235,7 +236,7 @@ controller.add_piece("ant", (-1, 1))
 
 
 start = time.time()
-agent = AlphaBetaAgent(controller,Color.WHITE , 2, 1)
+agent = IterativeDeepeningAgent(controller,Color.WHITE , 1 , 30)
 bestMove=agent.getBestMove()
 end = time.time()
 print(bestMove)
