@@ -119,9 +119,11 @@ class GameController:
                 return True
             
         for (q, r) in self.board.getGrid().keys():
-            for piece in self.board.getPieceAt(q, r):
-                if ((piece.getOwner() == self.status.getCurrentPlayer()) and self.get_valid_moves() > 0):
-                    return True
+            if not self.board.hasPieceAt(q, r):
+                continue
+            piece = self.board.getPieceAt(q, r)
+            if ((piece.getOwner() == self.status.getCurrentPlayer()) and len(self.get_valid_moves((q,r))) > 0):
+                return True
         self.status.nextTurn()
         return False
     
