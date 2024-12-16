@@ -183,6 +183,7 @@ def start_game(game_parameters: GameParameters):
                     outline_clicked = False
                     for outline in hex_manager.outlines:
                         if outline.contains_point(mouse_pos):
+                            print("outline clicked")
                             outline_clicked = True
                             q, r = outline.axial_coordinates
                             controller.move_piece(selected_tile.axial_coordinates, (q, r))
@@ -195,6 +196,8 @@ def start_game(game_parameters: GameParameters):
                             current_turn += 1
                             # endTurn()
                             current_state = State.Nothing_selected
+                            break
+                    if outline_clicked: continue
 
                     # If another tile is clicked, select it instead
                     tile_clicked = False
