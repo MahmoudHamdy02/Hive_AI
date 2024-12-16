@@ -283,7 +283,7 @@ class MoveFilter:
         if all(isinstance(move, tuple) for move in moves):
             moves = [[move] for move in moves]
 
-        print(len(moves))
+        # print(len(moves))
         for move_sequence in moves:
             valid_sequence = True
             temporary_position=current_position

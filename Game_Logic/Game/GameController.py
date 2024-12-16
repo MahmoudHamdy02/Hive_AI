@@ -20,7 +20,7 @@ class GameController:
         valid_adds = []
         valid = True
         if self.status.turn_count >= 6 and len(self.status.getCurrentPlayer().get_remaining_pieces()["bee"]) == 1 and piece_type!= 'bee':
-            print("Queen Bee must be placed by the end of your fourth turn!")
+            # print("Queen Bee must be placed by the end of your fourth turn!")
             return None
         for position in self.board.getGrid().keys():
             if not self.board.hasPieceAt(position[0], position[1]):
@@ -73,7 +73,7 @@ class GameController:
             
         if move in self.get_valid_moves(position):
              self.board.movePiece(piece, move[0], move[1])
-             print(f"{self.status.getCurrentPlayer().get_color()} moved {piece} to {move}.")
+            #  print(f"{self.status.getCurrentPlayer().get_color()} moved {piece} to {move}.")
              self.status.nextTurn()
              return True
         else:
@@ -114,7 +114,7 @@ class GameController:
             # current_player.update_remaining_pieces(piece)
             self.board.addPiece(piece, q, r)
             self.board.noOfPieces += 1
-            print(f"{self.status.getCurrentPlayer().get_color()} placed {piece} at {target_position}.")
+            # print(f"{self.status.getCurrentPlayer().get_color()} placed {piece} at {target_position}.")
             self.status.nextTurn()
             return True
 
