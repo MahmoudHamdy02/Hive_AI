@@ -336,4 +336,4 @@ def start_game(game_parameters: GameParameters):
         pygame.display.flip()
 
         clock.tick(60)  # limits FPS to 60
-start_game(GameParameters())
+#start_game(GameParameters())
