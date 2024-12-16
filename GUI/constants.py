@@ -7,8 +7,8 @@ import pygame
 
 GUI_PATH = os.path.dirname(__file__) # Path to inside the GUI folder, doesn't include trailing "/"
 pygame.display.init()
-WIDTH=pygame.display.Info().current_w-50
-HEIGHT=pygame.display.Info().current_h-50
+WIDTH=pygame.display.Info().current_w-300
+HEIGHT=pygame.display.Info().current_h-300
 CENTER_X = WIDTH / 2
 CENTER_Y = HEIGHT / 2
 RADIUS = 50 # Outer circle: from center to vertex

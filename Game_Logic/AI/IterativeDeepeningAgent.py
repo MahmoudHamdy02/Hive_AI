@@ -27,6 +27,7 @@ class IterativeDeepeningAgent(Agent):
                 bestMove, bestValue = self._alphaBetaIterative(depth, start_time)
                 self.bestMove = bestMove
             except TimeoutError:
+                print(f"Time limit exceeded for depth {depth}")
                 break
 
             depth += 1
