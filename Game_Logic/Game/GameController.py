@@ -142,6 +142,14 @@ class GameController:
         # return 0
         return self.status.check_defeat()
 
+    def get_winner(self) -> int:
+        if self.status.check_victory():
+            if self.status.getCurrentPlayer() == self.white_player:
+                return 1
+            elif self.status.getCurrentPlayer() == self.black_player:
+                return 2
+        return 0
+
     def get_board(self):
         return self.board
     

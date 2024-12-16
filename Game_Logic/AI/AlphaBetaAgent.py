@@ -26,8 +26,10 @@ class AlphaBetaAgent(Agent):
         for move in moves:
             if not self.doMove(self.originalGameController, move):  
                 continue  
-            value = self._alphaBeta(self.originalGameController, self.maxDepth - 1, alpha, beta, False)
+            value = self._alphaBeta(self.maxDepth - 1, alpha, beta, False)
             self.undoMove(move)
+            if value == float('inf'):
+                return move
 
             if value > bestValue:
                 bestValue = value
@@ -35,13 +37,13 @@ class AlphaBetaAgent(Agent):
 
         return bestMove
     
-    def _alphaBeta(self, gameController: GameController, depth: int, alpha: float, beta: float, maximizingPlayer: bool) -> float:
+    def _alphaBeta(self, depth: int, alpha: float, beta: float, maximizingPlayer: bool) -> float:
         """
         Returns the best value that maximizer can obtain
         """
-        moves = gameController.get_all_moves_and_adds()
+        moves = self.originalGameController.get_all_moves_and_adds()
         if depth <= 0 or len(moves) == 0:
-            return self.heuristic.calculateBoardScore(gameController)
+            return self.heuristic.calculateBoardScore(self.originalGameController)
     
         if maximizingPlayer:
             maxValue = float('-inf')
@@ -50,6 +52,8 @@ class AlphaBetaAgent(Agent):
                     continue  
                 value = self._alphaBeta(self.originalGameController, depth - 1, alpha, beta, False)
                 self.undoMove(move)
+                if value == float('inf'):
+                    return value
 
                 maxValue = max(maxValue, value)
                 alpha = max(alpha, value)
@@ -65,6 +69,8 @@ class AlphaBetaAgent(Agent):
                     continue
                 value = self._alphaBeta(self.originalGameController, depth - 1, alpha, beta, True)
                 self.undoMove(move)
+                if value == float('-inf'):
+                    return value
 
                 minValue = min(minValue, value)
                 beta = min(beta, value)
