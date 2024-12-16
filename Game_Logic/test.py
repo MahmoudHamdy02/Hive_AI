@@ -1,8 +1,8 @@
-# import sys
-# import os
+import sys
+import os
 
 # Add the root directory of the project to the sys.path
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 #
 # from Game_Logic.Game.GameController import GameController
 # from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
@@ -179,8 +179,8 @@
 
 #print(controller.hasPlay())
 
-import sys
-import os
+# import sys
+# import os
 # Add the root directory of the project to the sys.path
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(_file_), '../')))
 
@@ -222,9 +222,12 @@ controller.add_piece('bee', (0, 2))
 
 controller.add_piece('ant', (1, 1))
 
+start = time.time()
 agent = AlphaBetaAgent(controller,Color.WHITE , 3, 1)
 bestMove=agent.getBestMove()
+end = time.time()
 print(bestMove)
+print("Time taken:", end - start)
 # #PLayer2
 # print(controller.get_valid_moves((0, 2)))
 # controller.move_piece((0, 2), (0,-3))
