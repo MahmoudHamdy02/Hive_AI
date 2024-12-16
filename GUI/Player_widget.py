@@ -30,7 +30,8 @@ class PlayerWidget:
             rect_x = 0  # Align to the left side of the screen
         else:
             rect_width = 250
-            rect_x = WIDTH-250
+            screen_width = screen.get_width()
+            rect_x = screen_width-250
 
         rect_y = 0
         rect_height = HEIGHT
