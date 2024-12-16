@@ -235,7 +235,7 @@ controller.add_piece("ant", (-1, 1))
 
 
 start = time.time()
-agent = AlphaBetaAgent(controller,Color.WHITE , 4, 1)
+agent = AlphaBetaAgent(controller,Color.WHITE , 2, 1)
 bestMove=agent.getBestMove()
 end = time.time()
 print(bestMove)
