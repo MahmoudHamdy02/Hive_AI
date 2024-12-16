@@ -189,7 +189,7 @@ from Game_Logic.Game.GameController import GameController
 from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
 from Game_Logic.Player.Color import Color
 import time
-
+from Game_Logic.AI.MiniMaxAgent import MiniMaxAgent
 # board=Board()
 # white_player=Player(Color.WHITE)
 # black_player=Player(Color.BLACK)
@@ -221,10 +221,10 @@ controller.add_piece('bee', (0, -1))
 # # PLayer2
 controller.add_piece('bee', (0, 2))
 
-controller.add_piece('ant', (1, 1))
+controller.add_piece('ant', (1, -1))
 
 start = time.time()
-agent = AlphaBetaAgent(controller,Color.WHITE , 3, 1)
+agent = MiniMaxAgent(controller,Color.WHITE , 3,1)
 bestMove=agent.getBestMove()
 end = time.time()
 print(bestMove)
