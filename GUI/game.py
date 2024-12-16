@@ -15,6 +15,7 @@ from Player_widget import PlayerWidget
 from GameParameters import GameParameters
 from Game_Logic.AI.Agent import Agent
 from Game_Logic.AI.AlphaBetaAgent import AlphaBetaAgent
+from Game_Logic.AI.IterativeDeepeningAgent import IterativeDeepeningAgent
 from Game_Logic.Game.GameController import GameController
 
 # Get a copy of the dict to avoid pass-by-sharing
@@ -40,7 +41,8 @@ def start_game(game_parameters: GameParameters):
         name2 = game_parameters.name2
     elif game_parameters.selected_mode == Gamemode.PvC:
         name1 = game_parameters.name1
-        agent2 = AlphaBetaAgent(controller,Color.Black , 2, 1)
+        # agent2 = AlphaBetaAgent(controller,Color.Black , 2, 1)
+        agent2 = IterativeDeepeningAgent(controller,Color.Black , 3, 150)
     elif game_parameters.selected_mode == Gamemode.CvC:
         agent1 = AlphaBetaAgent(controller,Color.White , 2, 1)
         agent2 = AlphaBetaAgent(controller,Color.Black , 2, 1)
