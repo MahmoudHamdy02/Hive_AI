@@ -250,6 +250,7 @@ class MoveFilter:
         - list: List of valid moves that pass all checks.
         """
         valid_move_sequences = []
+        piece = board.getPieceAt(*current_position)  # Initialize piece here
         
         cq,cr=current_position
         # Check if it is trapped
