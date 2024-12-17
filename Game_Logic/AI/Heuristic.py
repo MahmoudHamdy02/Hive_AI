@@ -16,16 +16,16 @@ class Heuristic:
         self.weights = {
             'win': float('inf'),
             'loss': float('-inf'),
-            'queen_surroundings': 30,
+            'queen_surroundings': 50,
             'on_board_pieces': 1,
             'blocked_pieces': 5,
         }
         
         self.piece_values = {
             'Bee': 5,
-            'Ant': 3,
+            'Ant': 2,
             'Beetle': 1,
-            'Grasshopper': 1,
+            'Grasshopper': 2,
             'Spider': 1
         }
 
@@ -39,6 +39,8 @@ class Heuristic:
 
         """
         # if the last move was a winning move for the current agent then return the maximum score
+        old_color = self.agentColor
+        self.agentColor = gameController.status.getCurrentPlayer().get_color()
         winner = gameController.get_winner()
         if winner:
             if (winner == 1 and self.agentColor == Color.WHITE) or (winner == 2 and self.agentColor == Color.BLACK):
@@ -48,6 +50,7 @@ class Heuristic:
 
         # the last move was not a winning or losing move, so we calculate the score based on the other metrices
         score = self._calculate_queen_surroundings(gameController) + self._calculate_on_board_pieces(gameController) + self._calculate_blocked_pieces(gameController)
+        self.agentColor = old_color
         return score
 
     def _calculate_queen_surroundings(self, gameController: GameController) -> float:
@@ -139,6 +142,6 @@ class Heuristic:
             score = self.calculateBoardScore(gameController)
             
             # Undo the move
-            gameController.undoMove2(move)
+            gameController.undoMove(move)
             
             return score

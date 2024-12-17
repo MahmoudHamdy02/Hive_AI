@@ -46,8 +46,8 @@ class AlphaBetaAgent(Agent):
         moves = self.originalGameController.get_all_moves_and_adds()
         # moves = self.order_moves(moves)
         # moves = moves[:10]
-        if len(moves) > 10:
-            moves = random.sample(moves, 10)
+        # if len(moves) > 10:
+        #     moves = random.sample(moves, 10)
         if depth <= 0 or len(moves) == 0:
             return self.heuristic.calculateBoardScore(self.originalGameController)
     

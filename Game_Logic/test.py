@@ -211,32 +211,51 @@ from Game_Logic.AI.MiniMaxAgent import MiniMaxAgent
 controller = GameController()
 # PLayer1
 # print(controller.get_valid_adds())
-controller.add_piece('ant', (0, 0))
-# PLayer2
-
-# print(controller.get_valid_adds())
-controller.add_piece('ant', (1, 0))
-# PLayer1
-# print(controller.get_valid_adds())
-controller.add_piece('bee', (-1, 0))
+# controller.add_piece('ant', (0, 0))
 # # PLayer2
-controller.add_piece('bee', (2, 0))
 
-controller.add_piece('ant', (0,-1))
+# # print(controller.get_valid_adds())
+# controller.add_piece('ant', (1, 0))
+# # PLayer1
+# # print(controller.get_valid_adds())
+# controller.add_piece('bee', (-1, 0))
+# # # PLayer2
+# controller.add_piece('bee', (2, 0))
 
-controller.add_piece("beetle", (2, 1))
+# controller.add_piece('ant', (0,-1))
 
-controller.move_piece((0, -1), (3,1))
+# controller.add_piece("beetle", (2, 1))
 
-controller.add_piece("ant", (1, 2))
+# controller.move_piece((0, -1), (3,1))
 
-controller.add_piece("ant", (-1, -1))
+# controller.add_piece("ant", (1, 2))
+
+# controller.add_piece("ant", (-1, -1))
+
+# controller.add_piece("ant", (-1, 1))
+
+controller.add_piece("bee", (0, 0))
+
+controller.add_piece("bee", (1, 0))
+
+controller.add_piece("ant", (-1, 0))
+
+controller.add_piece("ant", (2, 0))
+
+controller.add_piece("ant", (0, -1))
+
+controller.move_piece((2, 0), (1,-1))
 
 controller.add_piece("ant", (-1, 1))
 
+controller.add_piece("ant", (2, 0))
+
+controller.add_piece("beetle", (-2, 0))
+
+
 
 start = time.time()
-agent = IterativeDeepeningAgent(controller,Color.WHITE , 3 , 100)
+agent = IterativeDeepeningAgent(controller,Color.BLACK , 1 , 5000000)
 bestMove=agent.getBestMove()
 end = time.time()
 print(bestMove)

@@ -16,6 +16,7 @@ class IterativeDeepeningAgent(Agent):
         with iterative deepening.
         """
         self.bestMove = None
+        # self.lastMove = None
         start_time = time.time()
         depth = 1
 
@@ -54,7 +55,7 @@ class IterativeDeepeningAgent(Agent):
 
             if not self.doMove(self.originalGameController, move):  
                 continue
-
+            # self.lastMove = move
             value = self._alphaBeta(self.originalGameController, depth - 1, alpha, beta, False, start_time)
             self.undoMove(move)
 
@@ -74,6 +75,7 @@ class IterativeDeepeningAgent(Agent):
         Recursive alpha-beta pruning function.
         """
         if time.time() - start_time >= self.timeLimit:
+            # self.undoMove(self.lastMove)
             raise TimeoutError("Time limit exceeded during alpha-beta search")
 
         moves = gameController.get_all_moves_and_adds()
@@ -87,12 +89,13 @@ class IterativeDeepeningAgent(Agent):
             maxValue = float('-inf')
             for move in moves:
                 if time.time() - start_time >= self.timeLimit:
+                    # self.undoMove(self.lastMove)
                     raise TimeoutError("Time limit exceeded during alpha-beta search")
 
                 # Apply the move instead of deepcopy
                 if not self.doMove(gameController, move):  
                     continue
-
+                # self.lastMove = move
                 value = self._alphaBeta(gameController, depth - 1, alpha, beta, False, start_time)
                 self.undoMove(move)  # Undo the move
 
@@ -106,11 +109,12 @@ class IterativeDeepeningAgent(Agent):
             minValue = float('inf')
             for move in moves:
                 if time.time() - start_time >= self.timeLimit:
+                    # self.undoMove(self.lastMove)
                     raise TimeoutError("Time limit exceeded during alpha-beta search")
 
                 if not self.doMove(gameController, move):  
                     continue
-
+                # self.lastMove = move
                 value = self._alphaBeta(gameController, depth - 1, alpha, beta, True, start_time)
                 self.undoMove(move)  # Undo the move
 
