@@ -31,7 +31,7 @@ class IterativeDeepeningAgent(Agent):
                     return bestMove
                 self.bestMove = bestMove
             except TimeoutError:
-                print(f"Time limit exceeded for depth {depth}")
+                # print(f"Time limit exceeded for depth {depth}")
                 break
 
             depth += 1
@@ -60,9 +60,9 @@ class IterativeDeepeningAgent(Agent):
             self.originalGameController.status.prevTurn()
             winner = self.originalGameController.status.check_victory()
             if winner:
-                print("winner MAX", winner)
+                # print("winner MAX", winner)
                 # if (winner == 1 and self.agentColor == 0) or (winner == 2 and self.agentColor == 1):
-                print("I WIN", self.agentColor)
+                # print("I WIN", self.agentColor)
                 return move, float('inf')
             self.originalGameController.status.nextTurn()
             value = self._alphaBeta(self.originalGameController, depth - 1, alpha, beta, False, start_time)
@@ -115,7 +115,7 @@ class IterativeDeepeningAgent(Agent):
                 #     print("I WIN", self.agentColor)
                 #     return float('inf')
                 # self.originalGameController.status.nextTurn()
-                print(self.originalGameController.status.getCurrentPlayer().get_color())
+                # print(self.originalGameController.status.getCurrentPlayer().get_color())
                 value = self._alphaBeta(gameController, depth - 1, alpha, beta, False, start_time)
                 self.undoMove(move)  # Undo the move
                 if value == float('inf'):
@@ -124,7 +124,7 @@ class IterativeDeepeningAgent(Agent):
                 alpha = max(alpha, value)
                 if alpha >= beta:
                     break
-            print("max",maxValue)
+            # print("max",maxValue)
             return maxValue
         else:
             minValue = float('inf')
@@ -136,7 +136,7 @@ class IterativeDeepeningAgent(Agent):
                 if not self.doMove(gameController, move):  
                     continue
                 # self.lastMove = move
-                print(self.originalGameController.status.getCurrentPlayer().get_color())
+                # print(self.originalGameController.status.getCurrentPlayer().get_color())
                 value = self._alphaBeta(gameController, depth - 1, alpha, beta, True, start_time)
                 self.undoMove(move)  # Undo the move
 
@@ -144,7 +144,7 @@ class IterativeDeepeningAgent(Agent):
                 beta = min(beta, value)
                 if alpha >= beta:
                     break
-            print("min",minValue)
+            # print("min",minValue)
             return minValue
 
 
