@@ -76,7 +76,7 @@ def start_game(game_parameters: GameParameters):
     def check_victory():
         global winner
         loser = controller.get_loser()
-        print("loser: ", loser)
+        # print("loser: ", loser)
         if loser == 2:
             winner = "white"
             # print("winner: ", winner)

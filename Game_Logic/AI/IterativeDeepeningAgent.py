@@ -40,7 +40,6 @@ class IterativeDeepeningAgent(Agent):
         """
         Perform alpha-beta pruning for a given depth and track the best move.
         """
-        bestMove = None
         bestValue = float('-inf')
         alpha = float('-inf')
         beta = float('inf')
@@ -61,13 +60,13 @@ class IterativeDeepeningAgent(Agent):
 
             if value > bestValue:
                 bestValue = value
-                bestMove = move
+                self.bestMove = move
 
             alpha = max(alpha, bestValue)
             if alpha >= beta:
                 break
 
-        return bestMove, bestValue
+        return self.bestMove, bestValue
 
 
     def _alphaBeta(self, gameController, depth: int, alpha: float, beta: float, maximizingPlayer: bool, start_time: float) -> float:
