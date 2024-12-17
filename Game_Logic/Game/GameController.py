@@ -204,3 +204,20 @@ class GameController:
         self.board.setGrid(state['grid'])
         self.white_player.set_remaining_pieces(state['pieces']['white'])
         self.black_player.set_remaining_pieces(state['pieces']['black'])
+
+    def doMove(self, move: list):
+        """Applies a move to the provided game controller"""
+        piece_type, old_pos, new_pos = move
+
+        if old_pos is None:
+            return self.add_piece(piece_type, new_pos)
+        else:
+            return self.move_piece(old_pos, new_pos)
+
+    def undoMove2(self, move):
+        piece_type, old_pos, new_pos = move
+        if old_pos is None:
+            self.undoAdd(piece_type,new_pos)
+        else:
+            self.undoMove(new_pos, old_pos)
+

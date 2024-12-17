@@ -236,7 +236,7 @@ controller.add_piece("ant", (-1, 1))
 
 
 start = time.time()
-agent = IterativeDeepeningAgent(controller,Color.WHITE , 1 , 30)
+agent = IterativeDeepeningAgent(controller,Color.WHITE , 3 , 100)
 bestMove=agent.getBestMove()
 end = time.time()
 print(bestMove)
