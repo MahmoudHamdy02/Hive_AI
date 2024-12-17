@@ -63,11 +63,11 @@ class IterativeDeepeningAgent(Agent):
                 print("winner MAX", winner)
                 # if (winner == 1 and self.agentColor == 0) or (winner == 2 and self.agentColor == 1):
                 print("I WIN", self.agentColor)
-                return float('inf')
+                return move, float('inf')
             self.originalGameController.status.nextTurn()
             value = self._alphaBeta(self.originalGameController, depth - 1, alpha, beta, False, start_time)
             if value == float('inf'):
-                return value
+                return move, value
             self.undoMove(move)
 
             if value > bestValue:
@@ -107,14 +107,14 @@ class IterativeDeepeningAgent(Agent):
                 if not self.doMove(gameController, move):  
                     continue
                 # self.lastMove = move
-                self.originalGameController.status.prevTurn()
-                winner = self.originalGameController.status.check_victory()
-                if winner:
-                    print("winner MAX", winner)
-                    # if (winner == 1 and self.agentColor == 0) or (winner == 2 and self.agentColor == 1):
-                    print("I WIN", self.agentColor)
-                    return float('inf')
-                self.originalGameController.status.nextTurn()
+                # self.originalGameController.status.prevTurn()
+                # winner = self.originalGameController.status.check_victory()
+                # if winner:
+                #     print("winner MAX", winner)
+                #     # if (winner == 1 and self.agentColor == 0) or (winner == 2 and self.agentColor == 1):
+                #     print("I WIN", self.agentColor)
+                #     return float('inf')
+                # self.originalGameController.status.nextTurn()
                 print(self.agentColor)
                 value = self._alphaBeta(gameController, depth - 1, alpha, beta, False, start_time)
                 self.undoMove(move)  # Undo the move

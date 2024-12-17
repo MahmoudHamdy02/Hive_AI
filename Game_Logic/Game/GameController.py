@@ -104,10 +104,11 @@ class GameController:
     
     def undoAdd(self, piece_type, target_position):
         self.status.prevTurn()
-        piece = self.board.getPieceAt(target_position[0], target_position[1])
-        self.status.getCurrentPlayer().get_remaining_pieces()[piece_type].append(piece)
-        self.board.removePieceTemp(target_position[0], target_position[1])
-        piece.position = None
+        if self.board.hasPieceAt(target_position[0], target_position[1]):
+            piece = self.board.getPieceAt(target_position[0], target_position[1])
+            self.status.getCurrentPlayer().get_remaining_pieces()[piece_type].append(piece)
+            self.board.removePieceTemp(target_position[0], target_position[1])
+            piece.position = None
     def undoMove(self, move, old_position):
         self.status.prevTurn()
         piece = self.board.getPieceAt(move[0], move[1])
