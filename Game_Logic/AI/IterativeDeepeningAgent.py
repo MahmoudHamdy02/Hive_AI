@@ -115,7 +115,7 @@ class IterativeDeepeningAgent(Agent):
                 #     print("I WIN", self.agentColor)
                 #     return float('inf')
                 # self.originalGameController.status.nextTurn()
-                print(self.agentColor)
+                print(self.originalGameController.status.getCurrentPlayer().get_color())
                 value = self._alphaBeta(gameController, depth - 1, alpha, beta, False, start_time)
                 self.undoMove(move)  # Undo the move
                 if value == float('inf'):
@@ -136,6 +136,7 @@ class IterativeDeepeningAgent(Agent):
                 if not self.doMove(gameController, move):  
                     continue
                 # self.lastMove = move
+                print(self.originalGameController.status.getCurrentPlayer().get_color())
                 value = self._alphaBeta(gameController, depth - 1, alpha, beta, True, start_time)
                 self.undoMove(move)  # Undo the move
 
