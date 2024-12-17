@@ -16,7 +16,7 @@ class Heuristic:
         self.weights = {
             'win': float('inf'),
             'loss': float('-inf'),
-            'queen_surroundings': 10,
+            'queen_surroundings': 30,
             'on_board_pieces': 1,
             'blocked_pieces': 5,
         }
@@ -128,3 +128,17 @@ class Heuristic:
                     
         return self.weights['blocked_pieces'] * (opponent_blocked_score - own_blocked_score)
 
+    def evaluateMove(self, gameController, move):
+            """
+            Evaluate the given move and return a heuristic score.
+            """
+            # Apply the move
+            gameController.doMove(move)
+            
+            # Calculate the board score after the move
+            score = self.calculateBoardScore(gameController)
+            
+            # Undo the move
+            gameController.undoMove2(move)
+            
+            return score

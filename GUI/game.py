@@ -43,7 +43,7 @@ def start_game(game_parameters: GameParameters):
     elif game_parameters.selected_mode == Gamemode.PvC:
         name1 = game_parameters.name1
         # agent2 = AlphaBetaAgent(controller,Color.Black , 2, 1)
-        agent2 = IterativeDeepeningAgent(controller,Color.Black , 3, 100)
+        agent2 = IterativeDeepeningAgent(controller,Color.Black , 15, 60)
     elif game_parameters.selected_mode == Gamemode.CvC:
         agent1 = IterativeDeepeningAgent(controller,Color.White , 3, 100)
         agent2 = AlphaBetaAgent(controller,Color.Black , 2, 1)
