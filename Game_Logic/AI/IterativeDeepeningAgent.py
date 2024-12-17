@@ -97,12 +97,13 @@ class IterativeDeepeningAgent(Agent):
                 # self.lastMove = move
                 value = self._alphaBeta(gameController, depth - 1, alpha, beta, False, start_time)
                 self.undoMove(move)  # Undo the move
-
+                if value == float('inf'):
+                    return value
                 maxValue = max(maxValue, value)
                 alpha = max(alpha, value)
                 if alpha >= beta:
                     break
-
+            print("max",maxValue)
             return maxValue
         else:
             minValue = float('inf')
@@ -121,7 +122,7 @@ class IterativeDeepeningAgent(Agent):
                 beta = min(beta, value)
                 if alpha >= beta:
                     break
-
+            print("min",minValue)
             return minValue
 
 
