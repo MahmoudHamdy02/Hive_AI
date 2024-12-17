@@ -11,6 +11,10 @@ class GameStatus:
     def nextTurn(self):
         self.turn_count += 1
         self.current_player = self.players[self.turn_count % 2]
+
+    def prevTurn(self):
+        self.turn_count -= 1
+        self.current_player = self.players[self.turn_count % 2]
     
     def getCurrentPlayer(self):
         return self.current_player
@@ -35,6 +39,18 @@ class GameStatus:
                         return 1
                     
         return False
+    
+    def check_victory(self) -> bool:
+        for (q,r) in self.board.getGrid().keys():
+            if not self.board.hasPieceAt(q, r):
+                continue
+            piece = self.board.getPieceAt(q, r)
+            if (isinstance(piece, Bee) and (piece.getOwner() != self.current_player)):
+                if len(self.board.getNeighbors((q, r))) == 6:
+                    return True
+        return False
+                
+                
     
     def getTurnNumber(self):
         return self.turn_count

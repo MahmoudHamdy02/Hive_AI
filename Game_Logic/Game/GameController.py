@@ -86,22 +86,6 @@ class GameController:
             if len(self.status.getCurrentPlayer().get_remaining_pieces()[piece_type]) <= 0:
                 print(f"No more {piece_type}s available for {self.status.current_player}.")
                 return False
-            # Needed to be checked 
-            # Check for no two-hex rule: player cannot place the first piece on the second turn.
-            # if self.turn_count == 1 and (piece == 'bee' and self.pieces[self.current_player]['bee'] == 1):
-            #     print(f"Cannot place a piece on a hex adjacent to another piece. This violates the no-two-hex rule.")
-            #     return
-            
-            # Ensure the Queen Bee must be placed by turn 4 but can be placed before.
-                # piece_type = "bee"
-
-            # if self.board and not any((nq, nr) in self.board.grid.keys for nq, nr in MoveFilter.get_adjacent_hexes(q, r)):
-            #     print(f"Cannot place piece at ({q}, {r}): must be adjacent to an existing piece.")
-            #     return
-
-            # Ensure the placement doesn't connect with the opponent's pieces on turn 1
-        
-                 # Enforces rule after both players' first moves
                
             # if target_position not in self.get_valid_adds(piece_type):
                 # print(f"Cannot place piece at ({q}, {r})")
@@ -117,6 +101,17 @@ class GameController:
             # print(f"{self.status.getCurrentPlayer().get_color()} placed {piece} at {target_position}.")
             self.status.nextTurn()
             return True
+    
+    def undoAdd(self, piece_type, target_position):
+        self.status.prevTurn()
+        piece = self.board.getPieceAt(target_position[0], target_position[1])
+        self.status.getCurrentPlayer().get_remaining_pieces()[piece_type].append(piece)
+        self.board.removePieceTemp(target_position[0], target_position[1])
+        piece.position = None
+    def undoMove(self, move, old_position):
+        self.status.prevTurn()
+        piece = self.board.getPieceAt(move[0], move[1])
+        self.board.movePiece(piece, old_position[0], old_position[1])
 
     def hasPlay(self) -> bool:
         for piece in self.status.getCurrentPlayer().get_remaining_pieces().values():
@@ -127,7 +122,7 @@ class GameController:
             if not self.board.hasPieceAt(q, r):
                 continue
             piece = self.board.getPieceAt(q, r)
-            if ((piece.getOwner() == self.status.getCurrentPlayer()) and self.get_valid_moves() > 0):
+            if ((piece.getOwner() == self.status.getCurrentPlayer()) and len(self.get_valid_moves((q,r))) > 0):
                 return True
         self.status.nextTurn()
         return False
@@ -146,6 +141,14 @@ class GameController:
         #         return 2
         # return 0
         return self.status.check_defeat()
+
+    def get_winner(self) -> int:
+        if self.status.check_victory():
+            if self.status.getCurrentPlayer() == self.white_player:
+                return 1
+            elif self.status.getCurrentPlayer() == self.black_player:
+                return 2
+        return 0
 
     def get_board(self):
         return self.board
@@ -201,3 +204,20 @@ class GameController:
         self.board.setGrid(state['grid'])
         self.white_player.set_remaining_pieces(state['pieces']['white'])
         self.black_player.set_remaining_pieces(state['pieces']['black'])
+
+    def doMove(self, move: list):
+        """Applies a move to the provided game controller"""
+        piece_type, old_pos, new_pos = move
+
+        if old_pos is None:
+            return self.add_piece(piece_type, new_pos)
+        else:
+            return self.move_piece(old_pos, new_pos)
+
+    def undoMove2(self, move):
+        piece_type, old_pos, new_pos = move
+        if old_pos is None:
+            self.undoAdd(piece_type,new_pos)
+        else:
+            self.undoMove(new_pos, old_pos)
+
