@@ -19,7 +19,6 @@ def set_name2(value):
 
 def set_mode(value, mode):
     game_parameters.selected_mode = mode
-    print(f"Selected Mode: {value[0]}, Mode Value: {mode}")
 
 def set_difficulty1(value, difficulty):
     game_parameters.difficulty1 = difficulty

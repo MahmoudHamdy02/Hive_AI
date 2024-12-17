@@ -65,11 +65,8 @@ class AlphaBetaAgent(Agent):
                 maxValue = max(maxValue, value)
                 alpha = max(alpha, value)
                 if alpha >= beta:
-                    # print(alpha, beta)
-                    # print("pruning")
-                    print("pruned",len_moves)
+           
                     return maxValue
-            print("not pruned",len_moves)
             return maxValue
         
         else:
@@ -86,13 +83,9 @@ class AlphaBetaAgent(Agent):
                 minValue = min(minValue, value)
                 beta = min(beta, value)
                 if alpha >= beta:
-                    # print(alpha, beta)
-                    # print("pruning")
-                    print("pruned",len_moves)
+           
                     return minValue
             
-            # print(alpha, beta)
-            print("not pruned",len_moves)
             return minValue
         
     def order_moves(self, moves: list) -> list:
@@ -112,6 +105,5 @@ class AlphaBetaAgent(Agent):
         # Extract the sorted moves
         sorted_moves = [move for _, move in move_values]
         values = [value for value, _ in move_values]
-        print(values[:10])
         
         return sorted_moves

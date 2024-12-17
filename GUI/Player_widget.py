@@ -70,7 +70,6 @@ class PlayerWidget:
         """
         for insect_name, rect in self.insectsBoxes.items():
             if rect.collidepoint(position):
-                print(insect_name)
                 return insect_name
         return None
        

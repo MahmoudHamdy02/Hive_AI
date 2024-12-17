@@ -42,8 +42,7 @@ class Heuristic:
         gameController.status.prevTurn()
         winner = gameController.get_winner()
         if winner:
-            print("winner", winner)
-            print("self.agentColor", self.agentColor)
+           
             if (winner == 1 and self.agentColor == Color.WHITE) or (winner == 2 and self.agentColor == Color.BLACK):
                 return self.weights['win']
             else:

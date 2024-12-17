@@ -76,17 +76,12 @@ def start_game(game_parameters: GameParameters):
     def check_victory():
         global winner
         loser = controller.get_loser()
-        # print("loser: ", loser)
         if loser == 2:
             winner = "white"
-            # print("winner: ", winner)
-            # display_winner(screen, f"{player1.name} (White) wins!")
-            # return "white"
+
         elif loser == 1:
             winner = "black"
-            # print("winner: ", winner)
-            # display_winner(screen, f"{player2.name} (Black) wins!")
-            # return "black"
+
             
     def endTurn():
         # End turn and set current player
@@ -98,21 +93,7 @@ def start_game(game_parameters: GameParameters):
             current_player = player2 if current_player == player1 else player1
 
         check_victory()
-        # loser = controller.get_loser()
-        # print("loser: ", loser)
-        # if loser == Color.Black:
-        #     winner = "white"
-        # elif loser == Color.White:
-        #     winner = "black"
-
-        # winner = controller.get_winner()
-        # print("winner: ", winner)
-        # if winner == Color.White:
-        #     display_winner(screen, f"{player1.name} (White) wins!")
-        # elif winner == Color.Black:
-        #     display_winner(screen, f"{player2.name} (Black) wins!")
-
-        
+      
     # Display winner on screen
     def display_winner(screen, message):
         font = pygame.font.Font(None, 50)
@@ -142,7 +123,6 @@ def start_game(game_parameters: GameParameters):
         elif current_player.name == "Computer1" or current_player.name == "Computer2":
             try:
                 ai_move = ai_queue.get_nowait()
-                print("Move received: ", ai_move)
                 if ai_move:
                     if ai_move[1] is not None:
                         # Apply the ai_move using the game controller
@@ -152,7 +132,6 @@ def start_game(game_parameters: GameParameters):
                         hex_manager.removeHexagonTile(ai_move[1][0], ai_move[1][1])
                         hex_manager.createHexagonTile(ai_move[2][0], ai_move[2][1], ai_move[0], current_player.agent.agentColor)
 
-                        print(f"Computer moved {ai_move[0]} from {ai_move[1]} to {ai_move[2]}")
                     # There is no available ai_move and computer will add new piece 
                     else:
                         controller.add_piece(ai_move[0], ai_move[2])
@@ -160,7 +139,6 @@ def start_game(game_parameters: GameParameters):
                         current_player.insects[ai_move[0]] -= 1
                     ai_move = None
                     endTurn()
-                    print("Turn ended, next player: ", current_player.name)
                     continue
             except queue.Empty:
                 pass
@@ -169,7 +147,6 @@ def start_game(game_parameters: GameParameters):
                 if ai_move is None:  # Only start if no pending AI move
                     ai_thread = threading.Thread(target=get_best_move, args=(current_player.agent,))
                     ai_thread.start()
-                    print("Thread started")
         else:
             # Disable clicking when AI is playing
             for event in events:
@@ -191,15 +168,12 @@ def start_game(game_parameters: GameParameters):
                                     player2_bee_played = True
                             if new_insect != "bee" and ((current_turn == 6 and current_player == player1 and not player1_bee_played) or (current_turn == 7 and current_player == player2 and not player2_bee_played)):
                                 continue
-                            # print(hex_manager.outlines)
                             moveOutlines=controller.get_valid_adds(new_insect)
-                            # print(moveOutlines)
                             if len(moveOutlines) >0:
                                 current_state = State.New_piece_selected
                                 for i in moveOutlines:
                                     hex_manager.drawOutline(i[0],i[1])
 
-                            print(current_state)
                             continue
 
                         # Select existing tile from board
@@ -207,23 +181,19 @@ def start_game(game_parameters: GameParameters):
                         for tile in hex_manager.hexagons:
                             if tile.contains_point(mouse_pos):
                                 clicked_tiles.append(tile)
-                                print("clicked tile z: ", tile.insect,tile.z)
                         if len(clicked_tiles) > 0:
                             selected_tile = clicked_tiles[0]
                             for clicked_tile in clicked_tiles:
                                 if clicked_tile.z > selected_tile.z:
                                     selected_tile = clicked_tile
-                            print("selected tile: ",selected_tile.insect)
 
                             if selected_tile.color == current_player.color:
                                 moveOutlines=controller.get_valid_moves(selected_tile.axial_coordinates)
-                                print("current outlines: ", moveOutlines)
                                 if len(moveOutlines) >0:
                                     selected_tile.selected = True
                                     current_state = State.Existing_piece_selected
                                     for i in moveOutlines:
                                         hex_manager.drawOutline(i[0],i[1])
-                                print(current_state, selected_tile.insect)
 
                     elif current_state == State.New_piece_selected:
                         # If another new piece is clicked, select it instead
@@ -237,7 +207,6 @@ def start_game(game_parameters: GameParameters):
                                     player2_bee_played = True
                             if new_insect != "bee" and ((current_turn == 6 and current_player == player1 and not player1_bee_played) or (current_turn == 7 and current_player == player2 and not player2_bee_played)):
                                 new_insect = "bee"
-                            print(current_state)
                             continue
 
                         for tile in hex_manager.hexagons:
@@ -261,7 +230,6 @@ def start_game(game_parameters: GameParameters):
                                 
                                 current_state = State.Nothing_selected
                                 endTurn()
-                        print(current_state)
                     elif current_state == State.Existing_piece_selected:
                         # Move selected tile to clicked outline
                         outline_clicked = False
@@ -296,7 +264,6 @@ def start_game(game_parameters: GameParameters):
                                     for i in moveOutlines:
                                         hex_manager.drawOutline(i[0],i[1])
                                 current_state = State.Existing_piece_selected
-                                print(current_state, selected_tile.insect)
                                 break
 
                         # If neither tile nor outline is clicked, remove selection
@@ -305,7 +272,6 @@ def start_game(game_parameters: GameParameters):
                             selected_tile = None
                             hex_manager.removeAllOutlines()
                             current_state = State.Nothing_selected
-                        print(current_state)                                
 
 
         # RENDER GAME HERE

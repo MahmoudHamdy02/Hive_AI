@@ -20,7 +20,6 @@ class GameController:
         valid_adds = []
         valid = True
         if self.status.turn_count >= 6 and len(self.status.getCurrentPlayer().get_remaining_pieces()["bee"]) == 1 and piece_type!= 'bee':
-            # print("Queen Bee must be placed by the end of your fourth turn!")
             return None
         for position in self.board.getGrid().keys():
             if not self.board.hasPieceAt(position[0], position[1]):
@@ -60,20 +59,17 @@ class GameController:
             return []
         piece = self.board.getPieceAt(position[0], position[1])
         potential_moves =piece.getMoves(self.board)
-        # print(potential_moves, piece)
 
         # Filter the moves using the MoveFilter class
         return MoveFilter.filter_moves(self.board, potential_moves, position)
     
     def move_piece(self, position, move):
         if not self.board.hasPieceAt(position[0], position[1]):
-            print(f"No piece at {position}.")
             return False
         piece = self.board.getPieceAt(position[0], position[1])
             
         if move in self.get_valid_moves(position):
              self.board.movePiece(piece, move[0], move[1])
-            #  print(f"{self.status.getCurrentPlayer().get_color()} moved {piece} to {move}.")
              self.status.nextTurn()
              return True
         else:
@@ -84,21 +80,14 @@ class GameController:
             q,r=target_position
 
             if len(self.status.getCurrentPlayer().get_remaining_pieces()[piece_type]) <= 0:
-                print(f"No more {piece_type}s available for {self.status.current_player}.")
                 return False
                
             # if target_position not in self.get_valid_adds(piece_type):
-                # print(f"Cannot place piece at ({q}, {r})")
-                # return False
-            
+
             piece = self.status.getCurrentPlayer().get_remaining_pieces()[piece_type].pop()
 
-            # board[(q, r)] = (piece)
-            # current_player.add_position(target_position)
-            # current_player.update_remaining_pieces(piece)
             self.board.addPiece(piece, q, r)
             self.board.noOfPieces += 1
-            # print(f"{self.status.getCurrentPlayer().get_color()} placed {piece} at {target_position}.")
             self.status.nextTurn()
             return True
     
@@ -135,12 +124,7 @@ class GameController:
             return 2
     
     def get_loser(self) -> int:
-        # if self.status.check_victory():
-        #     if self.status.getCurrentPlayer() == self.white_player:
-        #         return 1
-        #     elif self.status.getCurrentPlayer() == self.black_player:
-        #         return 2
-        # return 0
+
         return self.status.check_defeat()
 
     def get_winner(self) -> int:
