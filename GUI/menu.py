@@ -38,7 +38,7 @@ def create_menu2():
         menu2.add.selector('Difficulty for Computer 2:', [('Hard', 3), ('Medium', 2),('Easy', 1)], default = game_parameters.difficulty2, onchange=set_difficulty2)
     elif game_parameters.selected_mode == Gamemode.PvC:
         menu2.add.text_input('Player 1 :', default=game_parameters.name1, onchange=set_name1)
-        menu2.add.selector('Difficulty :', [('Hard', 3), ('Medium', 2),('Easy', 1)], default = game_parameters.difficulty1, onchange=set_difficulty1)
+        menu2.add.selector('Difficulty :', [('Hard', 3), ('Medium', 2),('Easy', 1)], default = game_parameters.difficulty2, onchange=set_difficulty2)
     elif game_parameters.selected_mode == Gamemode.PvP:
         menu2.add.text_input('Player 1 :', default=game_parameters.name1, onchange=set_name1)
         menu2.add.text_input('Player 2 :', default=game_parameters.name2, onchange=set_name2)

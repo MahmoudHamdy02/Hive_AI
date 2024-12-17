@@ -44,10 +44,15 @@ def start_game(game_parameters: GameParameters):
     elif game_parameters.selected_mode == Gamemode.PvC:
         name1 = game_parameters.name1
         agent2 = IterativeDeepeningAgent(controller,Color.Black ,  game_parameters.difficulty2,120)
-
+        print("agent2 difficulty", game_parameters.difficulty2)
     elif game_parameters.selected_mode == Gamemode.CvC:
+        
         agent1 = IterativeDeepeningAgent(controller,Color.White , game_parameters.difficulty1, 120)
+        print("agent2 difficulty1", game_parameters.difficulty1)
+
         agent2 = IterativeDeepeningAgent(controller,Color.Black , 2, game_parameters.difficulty2,120)
+        print("agent2 difficulty2", game_parameters.difficulty2)
+
       
     
     player1 = PlayerWidget(name1, (255, 0, 0) , get_player_dict(), Color.White, agent1)
